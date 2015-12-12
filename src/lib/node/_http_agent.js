@@ -1,28 +1,9 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var net = require('net');
-var util = require('util');
-var EventEmitter = require('events').EventEmitter;
-var debug = util.debuglog('http');
+const net = require('net');
+const util = require('util');
+const EventEmitter = require('events');
+const debug = util.debuglog('http');
 
 // New Agent code.
 
@@ -84,7 +65,7 @@ function Agent(options) {
         if (self.sockets[name])
           count += self.sockets[name].length;
 
-        if (count >= self.maxSockets || freeLen >= self.maxFreeSockets) {
+        if (count > self.maxSockets || freeLen >= self.maxFreeSockets) {
           self.removeSocket(socket, options);
           socket.destroy();
         } else {
@@ -113,20 +94,16 @@ Agent.prototype.createConnection = net.createConnection;
 
 // Get the key for a given set of request options
 Agent.prototype.getName = function(options) {
-  var name = '';
-
-  if (options.host)
-    name += options.host;
-  else
-    name += 'localhost';
+  var name = options.host || 'localhost';
 
   name += ':';
   if (options.port)
     name += options.port;
+
   name += ':';
   if (options.localAddress)
     name += options.localAddress;
-  name += ':';
+
   return name;
 };
 
@@ -179,15 +156,18 @@ Agent.prototype.createSocket = function(req, options) {
   options = util._extend({}, options);
   options = util._extend(options, self.options);
 
-  options.servername = options.host;
-  if (req) {
-    var hostHeader = req.getHeader('host');
-    if (hostHeader) {
-      options.servername = hostHeader.replace(/:.*$/, '');
+  if (!options.servername) {
+    options.servername = options.host;
+    if (req) {
+      var hostHeader = req.getHeader('host');
+      if (hostHeader) {
+        options.servername = hostHeader.replace(/:.*$/, '');
+      }
     }
   }
 
   var name = self.getName(options);
+  options._agentKey = name;
 
   debug('createConnection', name, options);
   options.encoding = null;

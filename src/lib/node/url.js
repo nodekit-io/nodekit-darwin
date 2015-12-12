@@ -1,26 +1,6 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var punycode = require('punycode');
-var util = require('util');
+const punycode = require('punycode');
 
 exports.parse = urlParse;
 exports.resolve = urlResolve;
@@ -48,65 +28,65 @@ function Url() {
 
 // define these here so at least they only have to be
 // compiled once on the first module load.
-var protocolPattern = /^([a-z0-9.+-]+:)/i,
-    portPattern = /:[0-9]*$/,
+const protocolPattern = /^([a-z0-9.+-]+:)/i;
+const portPattern = /:[0-9]*$/;
 
-    // Special case for a simple path URL
-    simplePathPattern = /^(\/\/?(?!\/)[^\?\s]*)(\?[^\s]*)?$/,
+// Special case for a simple path URL
+const simplePathPattern = /^(\/\/?(?!\/)[^\?\s]*)(\?[^\s]*)?$/;
 
-    // RFC 2396: characters reserved for delimiting URLs.
-    // We actually just auto-escape these.
-    delims = ['<', '>', '"', '`', ' ', '\r', '\n', '\t'],
+// RFC 2396: characters reserved for delimiting URLs.
+// We actually just auto-escape these.
+const delims = ['<', '>', '"', '`', ' ', '\r', '\n', '\t'];
 
-    // RFC 2396: characters not allowed for various reasons.
-    unwise = ['{', '}', '|', '\\', '^', '`'].concat(delims),
+// RFC 2396: characters not allowed for various reasons.
+const unwise = ['{', '}', '|', '\\', '^', '`'].concat(delims);
 
-    // Allowed by RFCs, but cause of XSS attacks.  Always escape these.
-    autoEscape = ['\''].concat(unwise),
-    // Characters that are never ever allowed in a hostname.
-    // Note that any invalid chars are also handled, but these
-    // are the ones that are *expected* to be seen, so we fast-path
-    // them.
-    nonHostChars = ['%', '/', '?', ';', '#'].concat(autoEscape),
-    hostEndingChars = ['/', '?', '#'],
-    hostnameMaxLen = 255,
-    hostnamePartPattern = /^[+a-z0-9A-Z_-]{0,63}$/,
-    hostnamePartStart = /^([+a-z0-9A-Z_-]{0,63})(.*)$/,
-    // protocols that can allow "unsafe" and "unwise" chars.
-    unsafeProtocol = {
-      'javascript': true,
-      'javascript:': true
-    },
-    // protocols that never have a hostname.
-    hostlessProtocol = {
-      'javascript': true,
-      'javascript:': true
-    },
-    // protocols that always contain a // bit.
-    slashedProtocol = {
-      'http': true,
-      'https': true,
-      'ftp': true,
-      'gopher': true,
-      'file': true,
-      'http:': true,
-      'https:': true,
-      'ftp:': true,
-      'gopher:': true,
-      'file:': true
-    },
-    querystring = require('querystring');
+// Allowed by RFCs, but cause of XSS attacks.  Always escape these.
+const autoEscape = ['\''].concat(unwise);
+
+// Characters that are never ever allowed in a hostname.
+// Note that any invalid chars are also handled, but these
+// are the ones that are *expected* to be seen, so we fast-path them.
+const nonHostChars = ['%', '/', '?', ';', '#'].concat(autoEscape);
+const hostEndingChars = ['/', '?', '#'];
+const hostnameMaxLen = 255;
+const hostnamePartPattern = /^[+a-z0-9A-Z_-]{0,63}$/;
+const hostnamePartStart = /^([+a-z0-9A-Z_-]{0,63})(.*)$/;
+// protocols that can allow "unsafe" and "unwise" chars.
+const unsafeProtocol = {
+  'javascript': true,
+  'javascript:': true
+};
+// protocols that never have a hostname.
+const hostlessProtocol = {
+  'javascript': true,
+  'javascript:': true
+};
+// protocols that always contain a // bit.
+const slashedProtocol = {
+  'http': true,
+  'https': true,
+  'ftp': true,
+  'gopher': true,
+  'file': true,
+  'http:': true,
+  'https:': true,
+  'ftp:': true,
+  'gopher:': true,
+  'file:': true
+};
+const querystring = require('querystring');
 
 function urlParse(url, parseQueryString, slashesDenoteHost) {
-  if (url && util.isObject(url) && url instanceof Url) return url;
+  if (url instanceof Url) return url;
 
-  var u = new Url;
+  var u = new Url();
   u.parse(url, parseQueryString, slashesDenoteHost);
   return u;
 }
 
 Url.prototype.parse = function(url, parseQueryString, slashesDenoteHost) {
-  if (!util.isString(url)) {
+  if (typeof url !== 'string') {
     throw new TypeError("Parameter 'url' must be a string, not " + typeof url);
   }
 
@@ -182,7 +162,7 @@ Url.prototype.parse = function(url, parseQueryString, slashesDenoteHost) {
     //
     // ex:
     // http://a@b@c/ => user:a@b host:c
-    // http://a@b?@c => user:a host:c path:/?@c
+    // http://a@b?@c => user:a host:b path:/?@c
 
     // v0.12 TODO(isaacs): This is not quite how Chrome does things.
     // Review our test case against browsers more comprehensively.
@@ -296,7 +276,6 @@ Url.prototype.parse = function(url, parseQueryString, slashesDenoteHost) {
     var p = this.port ? ':' + this.port : '';
     var h = this.hostname || '';
     this.host = h + p;
-    this.href += this.host;
 
     // strip [ and ] from the hostname
     // the host field still retains them, though
@@ -372,8 +351,14 @@ function urlFormat(obj) {
   // If it's an obj, this is a no-op.
   // this way, you can call url_format() on strings
   // to clean up potentially wonky urls.
-  if (util.isString(obj)) obj = urlParse(obj);
-  if (!(obj instanceof Url)) return Url.prototype.format.call(obj);
+  if (typeof obj === 'string') obj = urlParse(obj);
+
+  else if (typeof obj !== 'object' || obj === null)
+    throw new TypeError("Parameter 'urlObj' must be an object, not " +
+                        obj === null ? 'null' : typeof obj);
+
+  else if (!(obj instanceof Url)) return Url.prototype.format.call(obj);
+
   return obj.format();
 }
 
@@ -402,8 +387,8 @@ Url.prototype.format = function() {
     }
   }
 
-  if (this.query &&
-      util.isObject(this.query) &&
+  if (this.query !== null &&
+      typeof this.query === 'object' &&
       Object.keys(this.query).length) {
     query = querystring.stringify(this.query);
   }
@@ -447,7 +432,7 @@ function urlResolveObject(source, relative) {
 }
 
 Url.prototype.resolveObject = function(relative) {
-  if (util.isString(relative)) {
+  if (typeof relative === 'string') {
     var rel = new Url();
     rel.parse(relative, false, true);
     relative = rel;
@@ -510,7 +495,9 @@ Url.prototype.resolveObject = function(relative) {
     }
 
     result.protocol = relative.protocol;
-    if (!relative.host && !hostlessProtocol[relative.protocol]) {
+    if (!relative.host &&
+        !/^file:?$/.test(relative.protocol) &&
+        !hostlessProtocol[relative.protocol]) {
       var relPath = (relative.pathname || '').split('/');
       while (relPath.length && !(relative.host = relPath.shift()));
       if (!relative.host) relative.host = '';
@@ -593,7 +580,7 @@ Url.prototype.resolveObject = function(relative) {
     srcPath = srcPath.concat(relPath);
     result.search = relative.search;
     result.query = relative.query;
-  } else if (!util.isNullOrUndefined(relative.search)) {
+  } else if (relative.search !== null && relative.search !== undefined) {
     // just pull out the search.
     // like href='?foo'.
     // Put this after the other two cases because it simplifies the booleans
@@ -612,7 +599,7 @@ Url.prototype.resolveObject = function(relative) {
     result.search = relative.search;
     result.query = relative.query;
     //to support http.request
-    if (!util.isNull(result.pathname) || !util.isNull(result.search)) {
+    if (result.pathname !== null || result.search !== null) {
       result.path = (result.pathname ? result.pathname : '') +
                     (result.search ? result.search : '');
     }
@@ -639,8 +626,8 @@ Url.prototype.resolveObject = function(relative) {
   // then it must NOT get a trailing slash.
   var last = srcPath.slice(-1)[0];
   var hasTrailingSlash = (
-      (result.host || relative.host) && (last === '.' || last === '..') ||
-      last === '');
+      (result.host || relative.host || srcPath.length > 1) &&
+      (last === '.' || last === '..') || last === '');
 
   // strip single dots, resolve double dots to parent dir
   // if the path tries to go above the root, `up` ends up > 0
@@ -648,12 +635,12 @@ Url.prototype.resolveObject = function(relative) {
   for (var i = srcPath.length; i >= 0; i--) {
     last = srcPath[i];
     if (last === '.') {
-      srcPath.splice(i, 1);
+      spliceOne(srcPath, i);
     } else if (last === '..') {
-      srcPath.splice(i, 1);
+      spliceOne(srcPath, i);
       up++;
     } else if (up) {
-      srcPath.splice(i, 1);
+      spliceOne(srcPath, i);
       up--;
     }
   }
@@ -706,7 +693,7 @@ Url.prototype.resolveObject = function(relative) {
   }
 
   //to support request.http
-  if (!util.isNull(result.pathname) || !util.isNull(result.search)) {
+  if (result.pathname !== null || result.search !== null) {
     result.path = (result.pathname ? result.pathname : '') +
                   (result.search ? result.search : '');
   }
@@ -728,3 +715,10 @@ Url.prototype.parseHost = function() {
   }
   if (host) this.hostname = host;
 };
+
+// About 1.5x faster than the two-arg version of Array#splice().
+function spliceOne(list, index) {
+  for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1)
+    list[i] = list[k];
+  list.pop();
+}

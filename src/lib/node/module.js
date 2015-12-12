@@ -1,30 +1,15 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var NativeModule = require('native_module');
-var util = require('util');
-var runInThisContext = require('vm').runInThisContext;
-var runInNewContext = require('vm').runInNewContext;
-var assert = require('assert').ok;
-var fs = require('fs');
+const NativeModule = require('native_module');
+const util = require('util');
+const internalModule = require('internal/module');
+const internalUtil = require('internal/util');
+const runInThisContext = require('vm').runInThisContext;
+const assert = require('assert').ok;
+const fs = require('fs');
+const path = require('path');
+const internalModuleReadFile = process.binding('fs').internalModuleReadFile;
+const internalModuleStat = process.binding('fs').internalModuleStat;
 
 
 // If obj.hasOwnProperty has been overridden, then calling
@@ -49,9 +34,6 @@ function Module(id, parent) {
 }
 module.exports = Module;
 
-// Set the environ variable NODE_MODULE_CONTEXTS=1 to make node load all
-// modules in their own context.
-Module._contextLoad = (+process.env['NODE_MODULE_CONTEXTS'] > 0);
 Module._cache = {};
 Module._pathCache = {};
 Module._extensions = {};
@@ -60,14 +42,11 @@ Module.globalPaths = [];
 
 Module.wrapper = NativeModule.wrapper;
 Module.wrap = NativeModule.wrap;
-
-var path = require('path');
-
 Module._debug = util.debuglog('module');
 
 
 // We use this alias for the preprocessor that filters it out
-var debug = Module._debug;
+const debug = Module._debug;
 
 
 // given a module name, and a list of paths to test, returns the first
@@ -81,25 +60,18 @@ var debug = Module._debug;
 //   -> a.<ext>
 //   -> a/index.<ext>
 
-function statPath(path) {
-  try {
-    return fs.statSync(path);
-  } catch (ex) {}
-  return false;
-}
-
 // check if the directory is a package.json dir
-var packageMainCache = {};
+const packageMainCache = {};
 
 function readPackage(requestPath) {
   if (hasOwnProperty(packageMainCache, requestPath)) {
     return packageMainCache[requestPath];
   }
 
-  try {
-    var jsonPath = path.resolve(requestPath, 'package.json');
-    var json = fs.readFileSync(jsonPath, 'utf8');
-  } catch (e) {
+  var jsonPath = path.resolve(requestPath, 'package.json');
+  var json = internalModuleReadFile(path._makeLong(jsonPath));
+
+  if (json === undefined) {
     return false;
   }
 
@@ -130,11 +102,12 @@ Module._realpathCache = {};
 
 // check if the file exists and is not a directory
 function tryFile(requestPath) {
-  var stats = statPath(requestPath);
-  if (stats && !stats.isDirectory()) {
-    return fs.realpathSync(requestPath, Module._realpathCache);
-  }
-  return false;
+  const rc = internalModuleStat(path._makeLong(requestPath));
+  return rc === 0 && toRealPath(requestPath);
+}
+
+function toRealPath(requestPath) {
+  return fs.realpathSync(requestPath, Module._realpathCache);
 }
 
 // given a path check a the file exists with any of the set extensions
@@ -149,11 +122,11 @@ function tryExtensions(p, exts) {
   return false;
 }
 
-
+var warned = false;
 Module._findPath = function(request, paths) {
   var exts = Object.keys(Module._extensions);
 
-  if (request.charAt(0) === '/') {
+  if (path.isAbsolute(request)) {
     paths = [''];
   }
 
@@ -166,14 +139,20 @@ Module._findPath = function(request, paths) {
 
   // For each path
   for (var i = 0, PL = paths.length; i < PL; i++) {
+    // Don't search further if path doesn't exist
+    if (paths[i] && internalModuleStat(path._makeLong(paths[i])) < 1) continue;
     var basePath = path.resolve(paths[i], request);
     var filename;
 
     if (!trailingSlash) {
-      // try to join the request to the path
-      filename = tryFile(basePath);
+      const rc = internalModuleStat(path._makeLong(basePath));
+      if (rc === 0) {  // File.
+        filename = toRealPath(basePath);
+      } else if (rc === 1) {  // Directory.
+        filename = tryPackage(basePath, exts);
+      }
 
-      if (!filename && !trailingSlash) {
+      if (!filename) {
         // try it with each of the extensions
         filename = tryExtensions(basePath, exts);
       }
@@ -189,6 +168,14 @@ Module._findPath = function(request, paths) {
     }
 
     if (filename) {
+      // Warn once if '.' resolved outside the module dir
+      if (request === '.' && i > 0) {
+        warned = internalUtil.printDeprecationMessage(
+          'warning: require(\'.\') resolved outside the package ' +
+          'directory. This functionality is deprecated and will be removed ' +
+          'soon.', warned);
+      }
+
       Module._pathCache[cacheKey] = filename;
       return filename;
     }
@@ -220,7 +207,7 @@ Module._nodeModulePaths = function(from) {
 
 
 Module._resolveLookupPaths = function(request, parent) {
-  if (NativeModule.exists(request)) {
+  if (NativeModule.nonInternalExists(request)) {
     return [request, []];
   }
 
@@ -231,6 +218,17 @@ Module._resolveLookupPaths = function(request, parent) {
       if (!parent.paths) parent.paths = [];
       paths = parent.paths.concat(paths);
     }
+
+    // Maintain backwards compat with certain broken uses of require('.')
+    // by putting the module's directory in front of the lookup paths.
+    if (request === '.') {
+      if (parent && parent.filename) {
+        paths.splice(0, 0, path.dirname(parent.filename));
+      } else {
+        paths.splice(0, 0, path.resolve(request));
+      }
+    }
+
     return [request, paths];
   }
 
@@ -275,6 +273,17 @@ Module._load = function(request, parent, isMain) {
     debug('Module._load REQUEST  ' + (request) + ' parent: ' + parent.id);
   }
 
+  // REPL is a special case, because it needs the real require.
+  if (request === 'internal/repl' || request === 'repl') {
+    if (Module._cache[request]) {
+      return Module._cache[request];
+    }
+    var replModule = new Module(request);
+    replModule._compile(NativeModule.getSource(request), `${request}.js`);
+    NativeModule._cache[request] = replModule;
+    return replModule.exports;
+  }
+
   var filename = Module._resolveFilename(request, parent);
 
   var cachedModule = Module._cache[filename];
@@ -282,15 +291,7 @@ Module._load = function(request, parent, isMain) {
     return cachedModule.exports;
   }
 
-  if (NativeModule.exists(filename)) {
-    // REPL is a special case, because it needs the real require.
-    if (filename == 'repl') {
-      var replModule = new Module('repl');
-      replModule._compile(NativeModule.getSource('repl'), 'repl.js');
-      NativeModule._cache.repl = replModule;
-      return replModule.exports;
-    }
-
+  if (NativeModule.nonInternalExists(filename)) {
     debug('load native module ' + request);
     return NativeModule.require(filename);
   }
@@ -319,7 +320,7 @@ Module._load = function(request, parent, isMain) {
 };
 
 Module._resolveFilename = function(request, parent) {
-  if (NativeModule.exists(request)) {
+  if (NativeModule.nonInternalExists(request)) {
     return request;
   }
 
@@ -361,7 +362,7 @@ Module.prototype.load = function(filename) {
 // `exports` property.
 Module.prototype.require = function(path) {
   assert(path, 'missing path');
-  assert(util.isString(path), 'path must be a string');
+  assert(typeof path === 'string', 'path must be a string');
   return Module._load(path, this);
 };
 
@@ -407,36 +408,6 @@ Module.prototype._compile = function(content, filename) {
 
   var dirname = path.dirname(filename);
 
-  if (Module._contextLoad) {
-    if (self.id !== '.') {
-      debug('load submodule');
-      // not root module
-      var sandbox = {};
-      for (var k in global) {
-        sandbox[k] = global[k];
-      }
-      sandbox.require = require;
-      sandbox.exports = self.exports;
-      sandbox.__filename = filename;
-      sandbox.__dirname = dirname;
-      sandbox.module = self;
-      sandbox.global = sandbox;
-      sandbox.root = root;
-
-      return runInNewContext(content, sandbox, { filename: filename });
-    }
-
-    debug('load root module');
-    // root module
-    global.require = require;
-    global.exports = self.exports;
-    global.__filename = filename;
-    global.__dirname = dirname;
-    global.module = self;
-
-    return runInThisContext(content, { filename: filename });
-  }
-
   // create wrapper function
   var wrapper = Module.wrap(content);
 
@@ -453,6 +424,10 @@ Module.prototype._compile = function(content, filename) {
 
     // Set breakpoint on module start
     if (filename === resolvedArgv) {
+      // Installing this dummy debug event listener tells V8 to start
+      // the debugger.  Without it, the setBreakPoint() fails with an
+      // 'illegal access' error.
+      global.v8debug.Debug.setListener(function() {});
       global.v8debug.Debug.setBreakPoint(compiledWrapper, 0, 0);
     }
   }
@@ -461,21 +436,10 @@ Module.prototype._compile = function(content, filename) {
 };
 
 
-function stripBOM(content) {
-  // Remove byte order marker. This catches EF BB BF (the UTF-8 BOM)
-  // because the buffer-to-string conversion in `fs.readFileSync()`
-  // translates it to FEFF, the UTF-16 BOM.
-  if (content.charCodeAt(0) === 0xFEFF) {
-    content = content.slice(1);
-  }
-  return content;
-}
-
-
 // Native extension for .js
 Module._extensions['.js'] = function(module, filename) {
   var content = fs.readFileSync(filename, 'utf8');
-  module._compile(stripBOM(content), filename);
+  module._compile(internalModule.stripBOM(content), filename);
 };
 
 
@@ -483,7 +447,7 @@ Module._extensions['.js'] = function(module, filename) {
 Module._extensions['.json'] = function(module, filename) {
   var content = fs.readFileSync(filename, 'utf8');
   try {
-    module.exports = JSON.parse(stripBOM(content));
+    module.exports = JSON.parse(internalModule.stripBOM(content));
   } catch (err) {
     err.message = filename + ': ' + err.message;
     throw err;
@@ -492,7 +456,9 @@ Module._extensions['.json'] = function(module, filename) {
 
 
 //Native extension for .node
-Module._extensions['.node'] = process.dlopen;
+Module._extensions['.node'] = function(module, filename) {
+  return process.dlopen(module, path._makeLong(filename));
+};
 
 
 // bootstrap main module.
@@ -504,7 +470,7 @@ Module.runMain = function() {
 };
 
 Module._initPaths = function() {
-  var isWindows = process.platform === 'win32';
+  const isWindows = process.platform === 'win32';
 
   if (isWindows) {
     var homeDir = process.env.USERPROFILE;
@@ -521,7 +487,9 @@ Module._initPaths = function() {
 
   var nodePath = process.env['NODE_PATH'];
   if (nodePath) {
-    paths = nodePath.split(path.delimiter).concat(paths);
+    paths = nodePath.split(path.delimiter).filter(function(path) {
+      return !!path;
+    }).concat(paths);
   }
 
   modulePaths = paths;
@@ -532,7 +500,28 @@ Module._initPaths = function() {
 
 // bootstrap repl
 Module.requireRepl = function() {
-  return Module._load('repl', '.');
+  return Module._load('internal/repl', '.');
+};
+
+Module._preloadModules = function(requests) {
+  if (!Array.isArray(requests))
+    return;
+
+  // Preloaded modules have a dummy parent module which is deemed to exist
+  // in the current working directory. This seeds the search path for
+  // preloaded modules.
+  var parent = new Module('internal/preload', null);
+  try {
+    parent.paths = Module._nodeModulePaths(process.cwd());
+  }
+  catch (e) {
+    if (e.code !== 'ENOENT') {
+      throw e;
+    }
+  }
+  requests.forEach(function(request) {
+    parent.require(request);
+  });
 };
 
 Module._initPaths();

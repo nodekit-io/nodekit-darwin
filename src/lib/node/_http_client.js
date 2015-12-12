@@ -1,49 +1,26 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var util = require('util');
-var net = require('net');
-var url = require('url');
-var EventEmitter = require('events').EventEmitter;
-var HTTPParser = process.binding('http_parser').HTTPParser;
-var assert = require('assert').ok;
-var Buffer = require('buffer').Buffer;
-
-var common = require('_http_common');
-
-var httpSocketSetup = common.httpSocketSetup;
-var parsers = common.parsers;
-var freeParser = common.freeParser;
-var debug = common.debug;
-
-var OutgoingMessage = require('_http_outgoing').OutgoingMessage;
-
-var Agent = require('_http_agent');
+const util = require('util');
+const net = require('net');
+const url = require('url');
+const EventEmitter = require('events');
+const HTTPParser = process.binding('http_parser').HTTPParser;
+const assert = require('assert').ok;
+const common = require('_http_common');
+const httpSocketSetup = common.httpSocketSetup;
+const parsers = common.parsers;
+const freeParser = common.freeParser;
+const debug = common.debug;
+const OutgoingMessage = require('_http_outgoing').OutgoingMessage;
+const Agent = require('_http_agent');
+const Buffer = require('buffer').Buffer;
 
 
 function ClientRequest(options, cb) {
   var self = this;
   OutgoingMessage.call(self);
 
-  if (util.isString(options)) {
+  if (typeof options === 'string') {
     options = url.parse(options);
   } else {
     options = util._extend({}, options);
@@ -53,7 +30,8 @@ function ClientRequest(options, cb) {
   var defaultAgent = options._defaultAgent || Agent.globalAgent;
   if (agent === false) {
     agent = new defaultAgent.constructor();
-  } else if (util.isNullOrUndefined(agent) && !options.createConnection) {
+  } else if ((agent === null || agent === undefined) &&
+             !options.createConnection) {
     agent = defaultAgent;
   }
   self.agent = agent;
@@ -76,12 +54,13 @@ function ClientRequest(options, cb) {
                     'Expected "' + expectedProtocol + '".');
   }
 
-  var defaultPort = options.defaultPort || self.agent && self.agent.defaultPort;
+  const defaultPort = options.defaultPort ||
+                      self.agent && self.agent.defaultPort;
 
   var port = options.port = options.port || defaultPort || 80;
   var host = options.host = options.hostname || options.host || 'localhost';
 
-  if (util.isUndefined(options.setHost)) {
+  if (options.setHost === undefined) {
     var setHost = true;
   }
 
@@ -93,7 +72,7 @@ function ClientRequest(options, cb) {
     self.once('response', cb);
   }
 
-  if (!util.isArray(options.headers)) {
+  if (!Array.isArray(options.headers)) {
     if (options.headers) {
       var keys = Object.keys(options.headers);
       for (var i = 0, l = keys.length; i < l; i++) {
@@ -126,7 +105,7 @@ function ClientRequest(options, cb) {
     self.useChunkedEncodingByDefault = true;
   }
 
-  if (util.isArray(options.headers)) {
+  if (Array.isArray(options.headers)) {
     self._storeHeader(self.method + ' ' + self.path + ' HTTP/1.1\r\n',
                       options.headers);
   } else if (self.getHeader('expect')) {
@@ -179,6 +158,7 @@ ClientRequest.prototype.aborted = undefined;
 
 ClientRequest.prototype._finish = function() {
   DTRACE_HTTP_CLIENT_REQUEST(this, this.connection);
+  LTTNG_HTTP_CLIENT_REQUEST(this, this.connection);
   COUNTER_HTTP_CLIENT_REQUEST();
   OutgoingMessage.prototype._finish.call(this);
 };
@@ -189,6 +169,9 @@ ClientRequest.prototype._implicitHeader = function() {
 };
 
 ClientRequest.prototype.abort = function() {
+  if (this.aborted === undefined) {
+    process.nextTick(emitAbortNT, this);
+  }
   // Mark as aborting so we can avoid sending queued request data
   // This is used as a truthy flag elsewhere. The use of Date.now is for
   // debugging purposes only.
@@ -211,6 +194,11 @@ ClientRequest.prototype.abort = function() {
 };
 
 
+function emitAbortNT(self) {
+  self.emit('abort');
+}
+
+
 function createHangUpError() {
   var error = new Error('socket hang up');
   error.code = 'ECONNRESET';
@@ -228,7 +216,7 @@ function socketCloseListener() {
   // is a no-op if no final chunk remains.
   socket.read();
 
-  // NOTE: Its important to get parser here, because it could be freed by
+  // NOTE: It's important to get parser here, because it could be freed by
   // the `socketOnData`.
   var parser = socket.parser;
   req.emit('close');
@@ -334,7 +322,7 @@ function socketOnData(d) {
     var bodyHead = d.slice(bytesParsed, d.length);
 
     var eventName = req.method === 'CONNECT' ? 'connect' : 'upgrade';
-    if (EventEmitter.listenerCount(req, eventName) > 0) {
+    if (req.listenerCount(eventName) > 0) {
       req.upgradeOrConnect = true;
 
       // detach the socket
@@ -417,6 +405,7 @@ function parserOnIncomingClient(res, shouldKeepAlive) {
 
 
   DTRACE_HTTP_CLIENT_RESPONSE(socket, req);
+  LTTNG_HTTP_CLIENT_RESPONSE(socket, req);
   COUNTER_HTTP_CLIENT_RESPONSE();
   req.res = res;
   res.req = req;
@@ -456,10 +445,12 @@ function responseOnEnd() {
     socket.removeListener('error', socketErrorListener);
     // Mark this socket as available, AFTER user-added end
     // handlers have a chance to run.
-    process.nextTick(function() {
-      socket.emit('free');
-    });
+    process.nextTick(emitFreeNT, socket);
   }
+}
+
+function emitFreeNT(socket) {
+  socket.emit('free');
 }
 
 function tickOnSocket(req, socket) {
@@ -478,7 +469,7 @@ function tickOnSocket(req, socket) {
   httpSocketSetup(socket);
 
   // Propagate headers limit from request object to parser
-  if (util.isNumber(req.maxHeadersCount)) {
+  if (typeof req.maxHeadersCount === 'number') {
     parser.maxHeaderPairs = req.maxHeadersCount << 1;
   } else {
     // Set default value because parser may be reused from FreeList
@@ -494,17 +485,17 @@ function tickOnSocket(req, socket) {
 }
 
 ClientRequest.prototype.onSocket = function(socket) {
-  var req = this;
-
-  process.nextTick(function() {
-    if (req.aborted) {
-      // If we were aborted while waiting for a socket, skip the whole thing.
-      socket.emit('free');
-    } else {
-      tickOnSocket(req, socket);
-    }
-  });
+  process.nextTick(onSocketNT, this, socket);
 };
+
+function onSocketNT(req, socket) {
+  if (req.aborted) {
+    // If we were aborted while waiting for a socket, skip the whole thing.
+    socket.emit('free');
+  } else {
+    tickOnSocket(req, socket);
+  }
+}
 
 ClientRequest.prototype._deferToConnect = function(method, arguments_, cb) {
   // This function is for calls that need to happen once the socket is
@@ -513,21 +504,23 @@ ClientRequest.prototype._deferToConnect = function(method, arguments_, cb) {
   // in the future (when a socket gets assigned out of the pool and is
   // eventually writable).
   var self = this;
+
+  function callSocketMethod() {
+    if (method)
+      self.socket[method].apply(self.socket, arguments_);
+
+    if (typeof cb === 'function')
+      cb();
+  }
+
   var onSocket = function() {
     if (self.socket.writable) {
-      if (method) {
-        self.socket[method].apply(self.socket, arguments_);
-      }
-      if (cb) { cb(); }
+      callSocketMethod();
     } else {
-      self.socket.once('connect', function() {
-        if (method) {
-          self.socket[method].apply(self.socket, arguments_);
-        }
-        if (cb) { cb(); }
-      });
+      self.socket.once('connect', callSocketMethod);
     }
-  }
+  };
+
   if (!self.socket) {
     self.once('socket', onSocket);
   } else {
@@ -548,7 +541,7 @@ ClientRequest.prototype.setTimeout = function(msecs, callback) {
       this.socket.setTimeout(0, this.timeoutCb);
     this.timeoutCb = emitTimeout;
     this.socket.setTimeout(msecs, emitTimeout);
-    return;
+    return this;
   }
 
   // Set timeoutCb so that it'll get cleaned up on request end
@@ -558,12 +551,14 @@ ClientRequest.prototype.setTimeout = function(msecs, callback) {
     this.socket.once('connect', function() {
       sock.setTimeout(msecs, emitTimeout);
     });
-    return;
+    return this;
   }
 
   this.once('socket', function(sock) {
     sock.setTimeout(msecs, emitTimeout);
   });
+
+  return this;
 };
 
 ClientRequest.prototype.setNoDelay = function() {

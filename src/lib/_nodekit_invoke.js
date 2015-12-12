@@ -1,5 +1,4 @@
 //MODULE DEPENDENCIES
-
 var events = require('events');
 var util = require('util');
 var stream = require('stream');
@@ -113,8 +112,7 @@ exports.cancelContext = function(httpContext) {
  * @public
  */
 exports.invokeContext = function invokeContext(httpContext, callBack) {
-    
-    try{
+   try{
         httpContext.res.on('finish', function() {
                                   var data = httpContext.res.getBody();
                                   httpContext["_chunk"] = data;
@@ -228,7 +226,7 @@ var Writable = stream.Writable;
 util.inherits(ResponseStreamString, Writable);
 
 ResponseStreamString.prototype._write = function ResponseStreamStringWrite(chunk, enc, next) {
-    this.bodyChunks.push(chunk);
+   this.bodyChunks.push(chunk);
     next();
 };
 
@@ -325,6 +323,7 @@ OutgoingMessage.prototype.addTrailers = function addTrailers(trailers)
 
 OutgoingMessage.prototype.writeHead = function HttpBrowserResponseWriteHead(statusCode, headers)
 {
+    
     this.statusCode = statusCode;
     
     var keys = Object.keys(headers);

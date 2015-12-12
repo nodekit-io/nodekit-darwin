@@ -1,26 +1,7 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var util = require('util');
-var Stream = require('stream');
+const util = require('util');
+const Stream = require('stream');
 
 function readStart(socket) {
   if (socket && !socket._paused && socket.readable)
@@ -57,8 +38,6 @@ function IncomingMessage(socket) {
 
   this.readable = true;
 
-  this._pendings = [];
-  this._pendingIndex = 0;
   this.upgrade = null;
 
   // request (server) only
@@ -68,7 +47,7 @@ function IncomingMessage(socket) {
   // response (client) only
   this.statusCode = null;
   this.statusMessage = null;
-  this.client = this.socket;
+  this.client = socket;
 
   // flag for backwards compatibility grossness.
   this._consuming = false;
@@ -87,6 +66,7 @@ IncomingMessage.prototype.setTimeout = function(msecs, callback) {
   if (callback)
     this.on('timeout', callback);
   this.socket.setTimeout(msecs);
+  return this;
 };
 
 
@@ -149,15 +129,17 @@ IncomingMessage.prototype._addHeaderLine = function(field, value, dest) {
   switch (field) {
     // Array headers:
     case 'set-cookie':
-      if (!util.isUndefined(dest[field])) {
+      if (dest[field] !== undefined) {
         dest[field].push(value);
       } else {
         dest[field] = [value];
       }
       break;
 
+    /* eslint-disable max-len */
     // list is taken from:
     // https://mxr.mozilla.org/mozilla/source/netwerk/protocol/http/src/nsHttpHeaderArray.cpp
+    /* eslint-enable max-len */
     case 'content-type':
     case 'content-length':
     case 'user-agent':
@@ -171,15 +153,15 @@ IncomingMessage.prototype._addHeaderLine = function(field, value, dest) {
     case 'location':
     case 'max-forwards':
       // drop duplicates
-      if (util.isUndefined(dest[field]))
+      if (dest[field] === undefined)
         dest[field] = value;
       break;
 
     default:
       // make comma-separated list
-      if (!util.isUndefined(dest[field]))
+      if (dest[field] !== undefined) {
         dest[field] += ', ' + value;
-      else {
+      } else {
         dest[field] = value;
       }
   }

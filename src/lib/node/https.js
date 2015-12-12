@@ -1,30 +1,11 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var tls = require('tls');
-var url = require('url');
-var http = require('http');
-var util = require('util');
-var inherits = require('util').inherits;
-var debug = util.debuglog('https');
+const tls = require('tls');
+const url = require('url');
+const http = require('http');
+const util = require('util');
+const inherits = util.inherits;
+const debug = util.debuglog('https');
 
 function Server(opts, requestListener) {
   if (!(this instanceof Server)) return new Server(opts, requestListener);
@@ -60,26 +41,42 @@ exports.createServer = function(opts, requestListener) {
 // HTTPS agents.
 
 function createConnection(port, host, options) {
-  if (util.isObject(port)) {
+  if (port !== null && typeof port === 'object') {
     options = port;
-  } else if (util.isObject(host)) {
+  } else if (host !== null && typeof host === 'object') {
     options = host;
-  } else if (util.isObject(options)) {
-    options = options;
-  } else {
+  } else if (options === null || typeof options !== 'object') {
     options = {};
   }
 
-  if (util.isNumber(port)) {
+  if (typeof port === 'number') {
     options.port = port;
   }
 
-  if (util.isString(host)) {
+  if (typeof host === 'string') {
     options.host = host;
   }
 
   debug('createConnection', options);
-  return tls.connect(options);
+
+  if (options._agentKey) {
+    const session = this._getSession(options._agentKey);
+    if (session) {
+      debug('reuse session for %j', options._agentKey);
+      options = util._extend({
+        session: session
+      }, options);
+    }
+  }
+
+  const self = this;
+  const socket = tls.connect(options, function() {
+    if (!options._agentKey)
+      return;
+
+    self._cacheSession(options._agentKey, socket.getSession());
+  });
+  return socket;
 }
 
 
@@ -87,6 +84,14 @@ function Agent(options) {
   http.Agent.call(this, options);
   this.defaultPort = 443;
   this.protocol = 'https:';
+  this.maxCachedSessions = this.options.maxCachedSessions;
+  if (this.maxCachedSessions === undefined)
+    this.maxCachedSessions = 100;
+
+  this._sessionCache = {
+    map: {},
+    list: []
+  };
 }
 inherits(Agent, http.Agent);
 Agent.prototype.createConnection = createConnection;
@@ -115,19 +120,41 @@ Agent.prototype.getName = function(options) {
     name += options.pfx;
 
   name += ':';
-  if (!util.isUndefined(options.rejectUnauthorized))
+  if (options.rejectUnauthorized !== undefined)
     name += options.rejectUnauthorized;
 
   return name;
 };
 
-var globalAgent = new Agent();
+Agent.prototype._getSession = function _getSession(key) {
+  return this._sessionCache.map[key];
+};
+
+Agent.prototype._cacheSession = function _cacheSession(key, session) {
+  // Fast case - update existing entry
+  if (this._sessionCache.map[key]) {
+    this._sessionCache.map[key] = session;
+    return;
+  }
+
+  // Put new entry
+  if (this._sessionCache.list.length >= this.maxCachedSessions) {
+    const oldKey = this._sessionCache.list.shift();
+    debug('evicting %j', oldKey);
+    delete this._sessionCache.map[oldKey];
+  }
+
+  this._sessionCache.list.push(key);
+  this._sessionCache.map[key] = session;
+};
+
+const globalAgent = new Agent();
 
 exports.globalAgent = globalAgent;
 exports.Agent = Agent;
 
 exports.request = function(options, cb) {
-  if (util.isString(options)) {
+  if (typeof options === 'string') {
     options = url.parse(options);
   } else {
     options = util._extend({}, options);

@@ -1,28 +1,11 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var net = require('net');
-var url = require('url');
-var util = require('util');
-var Buffer = require('buffer').Buffer;
+const net = require('net');
+const url = require('url');
+const util = require('util');
+const binding = process.binding('crypto');
+const Buffer = require('buffer').Buffer;
+const constants = require('constants');
 
 // Allow {CLIENT_RENEG_LIMIT} client-initiated session renegotiations
 // every {CLIENT_RENEG_WINDOW} seconds. An error event is emitted if more
@@ -33,16 +16,12 @@ exports.CLIENT_RENEG_WINDOW = 600;
 
 exports.SLAB_BUFFER_SIZE = 10 * 1024 * 1024;
 
-exports.DEFAULT_CIPHERS =
-    // TLS 1.2
-    'ECDHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA256:AES128-GCM-SHA256:' +
-    // TLS 1.0
-    'RC4:HIGH:!MD5:!aNULL';
+exports.DEFAULT_CIPHERS = constants.defaultCipherList;
 
 exports.DEFAULT_ECDH_CURVE = 'prime256v1';
 
 exports.getCiphers = function() {
-  var names = process.binding('crypto').getSSLCiphers();
+  const names = binding.getSSLCiphers();
   // Drop all-caps names in favor of their lowercase aliases,
   var ctx = {};
   names.forEach(function(name) {
@@ -56,7 +35,7 @@ exports.getCiphers = function() {
 // ("\x06spdy/2\x08http/1.1\x08http/1.0")
 exports.convertNPNProtocols = function convertNPNProtocols(NPNProtocols, out) {
   // If NPNProtocols is Array - translate it into buffer
-  if (util.isArray(NPNProtocols)) {
+  if (Array.isArray(NPNProtocols)) {
     var buff = new Buffer(NPNProtocols.reduce(function(p, c) {
       return p + 1 + Buffer.byteLength(c);
     }, 0));
@@ -73,7 +52,7 @@ exports.convertNPNProtocols = function convertNPNProtocols(NPNProtocols, out) {
   }
 
   // If it's already a Buffer - store it
-  if (util.isBuffer(NPNProtocols)) {
+  if (NPNProtocols instanceof Buffer) {
     out.NPNProtocols = NPNProtocols;
   }
 };
@@ -151,7 +130,7 @@ exports.checkServerIdentity = function checkServerIdentity(host, cert) {
                            host,
                            ips.join(', '));
     }
-  } else {
+  } else if (cert.subject) {
     // Transform hostname to canonical form
     if (!/\.$/.test(host)) host += '.';
 
@@ -180,7 +159,7 @@ exports.checkServerIdentity = function checkServerIdentity(host, cert) {
     // RFC6125
     if (matchCN) {
       var commonNames = cert.subject.CN;
-      if (util.isArray(commonNames)) {
+      if (Array.isArray(commonNames)) {
         for (var i = 0, k = commonNames.length; i < k; ++i) {
           dnsNames.push(regexpify(commonNames[i], true));
         }
@@ -204,6 +183,8 @@ exports.checkServerIdentity = function checkServerIdentity(host, cert) {
                              cert.subject.CN);
       }
     }
+  } else {
+    reason = 'Cert is empty';
   }
 
   if (!valid) {
@@ -228,7 +209,7 @@ exports.parseCertString = function parseCertString(s) {
       var key = parts[i].slice(0, sepIndex);
       var value = parts[i].slice(sepIndex + 1);
       if (key in out) {
-        if (!util.isArray(out[key])) {
+        if (!Array.isArray(out[key])) {
           out[key] = [out[key]];
         }
         out[key].push(value);

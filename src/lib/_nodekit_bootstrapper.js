@@ -17,11 +17,11 @@
  */
 
 var Startup = function Startup() {
-    
+    this.global = this;
     BootstrapModule.bootstrap('lib/_nodekit_process.js');
     
     process.binding = function(id) {
-           return BootstrapModule._load('lib/bindings/' + id);
+       return BootstrapModule._load('lib/bindings/' + id);
     };
     
     BootstrapModule.loadNodeSource(process.binding('natives'));
@@ -59,17 +59,20 @@ function BootstrapModule(id) {
 }
 
 BootstrapModule.getSource = function(id) {
-    
     var append = "\r\n //" + "# source" + "URL=" + id + "\r\n";
     
-    if (id.indexOf("/") > -1)
-        return io.nodekit.fs.getSource(id) + append;
+    if (id.indexOf("/") > -1 && !id.startsWith("internal/"))
+        return _removeStrictMode(io.nodekit.fs.getSource(id) + append);
     
     if (BootstrapModule.nodeSourceExists(id)) {
-        return BootstrapModule.getNodeSource(id) + append;
+        return _removeStrictMode(BootstrapModule.getNodeSource(id) + append);
     }
     
-    return io.nodekit.fs.getSource(id) + append;
+    return _removeStrictMode(io.nodekit.fs.getSource(id) + append);
+}
+
+function _removeStrictMode(source) {
+    return source.replace("'use strict';", "//'use strict';");
 }
 
 BootstrapModule._cache = {};
@@ -87,10 +90,16 @@ BootstrapModule._load = function(id)
     
     process.moduleLoadList.push('BootstrapModule ' + id);
     
-    var bootstrapModule = new BootstrapModule(id);
     
+    var bootstrapModule = new BootstrapModule(id);
+    try{
     bootstrapModule.cache();
     bootstrapModule.compile();
+        
+    } catch(e)
+    {io.nodekit.console.log("Error bootstrapping " + id);
+        io.nodekit.console.log(e);
+    }
     
     return bootstrapModule.exports;
 };
@@ -147,6 +156,7 @@ BootstrapModule.error = function(e, source)
 
 BootstrapModule.bootstrap = function(id) {
     // process.moduleLoadList.push('BootstrapModule ' + id);
+    
     var source = BootstrapModule.getSource(id);
     var fn = BootstrapModule.runInThisContext(source, { filename: id , displayErrors: true});
     return fn(process);
@@ -163,7 +173,8 @@ BootstrapModule.runInThisContext = function(code, options) {
     var displayErrors = options.displayErrors || false;
     
     try {
-        return io.nodekit.fs.eval(code, filename);
+       // eval(code);
+       return io.nodekit.fs.eval(code, filename);
     } catch (e) {
         io.nodekit.console.log(e.message + " - " + filename + " - " + e.stack);
         
@@ -171,7 +182,7 @@ BootstrapModule.runInThisContext = function(code, options) {
 }
 
 BootstrapModule.wrap = function(script) {
-    return BootstrapModule.wrapper[0] + script + BootstrapModule.wrapper[1];
+    return BootstrapModule.wrapper[0] + script.replace("'use strict';", "//'use strict';") + BootstrapModule.wrapper[1];
 };
 
 BootstrapModule.wrapper = [

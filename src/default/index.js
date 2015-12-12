@@ -30,17 +30,15 @@ var fs = require('fs');
 var path = require('path');
 
 var server = io.nodekit.createServer(function (request, response) {
-                                     console.log("EXECUTING DEFAULT APPLICATION");
                                      var file = path.resolve(__dirname, 'default.html');
-                                     
                                      fs.readFile(file, function read(err, content) {
-                                                 if (err) {
-                                                 console.log(err);
+                                                if (err) {
+                                                 console.log(err.message + e.stack);
                                                  response.writeHead(500, { 'Content-Type': 'text/html' });
                                                  response.end('<html><body>An internal server error occurred</body>', 'utf-8');
                                                  } else {
-                                                 response.writeHead(200, { 'Content-Type': 'text/html' });
-                                                 response.end(content, 'utf-8');
+                                                     response.writeHead(200, { 'Content-Type': 'text/html' });
+                                                     response.end(content.toString(), 'utf-8');
                                                  }
                                                  });
                                      });

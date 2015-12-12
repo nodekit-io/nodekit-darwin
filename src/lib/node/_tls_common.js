@@ -1,59 +1,13 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var util = require('util');
-var constants = require('constants');
-var tls = require('tls');
+const constants = require('constants');
+const tls = require('tls');
 
 // Lazily loaded
 var crypto = null;
 
-var binding = process.binding('crypto');
-var NativeSecureContext = binding.SecureContext;
-
-var CONTEXT_DEFAULT_OPTIONS = undefined;
-
-function getSecureOptions(secureProtocol, secureOptions) {
-  if (CONTEXT_DEFAULT_OPTIONS === undefined) {
-    CONTEXT_DEFAULT_OPTIONS = 0;
-
-    if (!binding.SSL3_ENABLE)
-      CONTEXT_DEFAULT_OPTIONS |= constants.SSL_OP_NO_SSLv3;
-
-    if (!binding.SSL2_ENABLE)
-      CONTEXT_DEFAULT_OPTIONS |= constants.SSL_OP_NO_SSLv2;
-  }
-
-  if (secureOptions === undefined) {
-    if (secureProtocol === undefined ||
-        secureProtocol === 'SSLv23_method' ||
-        secureProtocol === 'SSLv23_server_method' ||
-        secureProtocol === 'SSLv23_client_method') {
-      secureOptions |= CONTEXT_DEFAULT_OPTIONS;
-    }
-  }
-
-  return secureOptions;
-}
-exports._getSecureOptions = getSecureOptions;
+const binding = process.binding('crypto');
+const NativeSecureContext = binding.SecureContext;
 
 function SecureContext(secureProtocol, flags, context) {
   if (!(this instanceof SecureContext)) {
@@ -72,9 +26,7 @@ function SecureContext(secureProtocol, flags, context) {
     }
   }
 
-  flags = getSecureOptions(secureProtocol, flags);
-
-  this.context.setOptions(flags);
+  if (flags) this.context.setOptions(flags);
 }
 
 exports.SecureContext = SecureContext;
@@ -91,29 +43,10 @@ exports.createSecureContext = function createSecureContext(options, context) {
 
   if (context) return c;
 
-  if (options.key) {
-    if (Array.isArray(options.key)) {
-      for (var i = 0; i < options.key.length; i++) {
-        var key = options.key[i];
-
-        if (key.passphrase)
-          c.context.setKey(key.pem, key.passphrase);
-        else
-          c.context.setKey(key);
-      }
-    } else {
-      if (options.passphrase) {
-        c.context.setKey(options.key, options.passphrase);
-      } else {
-        c.context.setKey(options.key);
-      }
-    }
-  }
-
   // NOTE: It's important to add CA before the cert to be able to load
   // cert's issuer in C++ code.
   if (options.ca) {
-    if (util.isArray(options.ca)) {
+    if (Array.isArray(options.ca)) {
       for (var i = 0, len = options.ca.length; i < len; i++) {
         c.context.addCACert(options.ca[i]);
       }
@@ -133,12 +66,35 @@ exports.createSecureContext = function createSecureContext(options, context) {
     }
   }
 
+  // NOTE: It is important to set the key after the cert.
+  // `ssl_set_pkey` returns `0` when the key does not much the cert, but
+  // `ssl_set_cert` returns `1` and nullifies the key in the SSL structure
+  // which leads to the crash later on.
+  if (options.key) {
+    if (Array.isArray(options.key)) {
+      for (var i = 0; i < options.key.length; i++) {
+        var key = options.key[i];
+
+        if (key.passphrase)
+          c.context.setKey(key.pem, key.passphrase);
+        else
+          c.context.setKey(key);
+      }
+    } else {
+      if (options.passphrase) {
+        c.context.setKey(options.key, options.passphrase);
+      } else {
+        c.context.setKey(options.key);
+      }
+    }
+  }
+
   if (options.ciphers)
     c.context.setCiphers(options.ciphers);
   else
     c.context.setCiphers(tls.DEFAULT_CIPHERS);
 
-  if (util.isUndefined(options.ecdhCurve))
+  if (options.ecdhCurve === undefined)
     c.context.setECDHCurve(tls.DEFAULT_ECDH_CURVE);
   else if (options.ecdhCurve)
     c.context.setECDHCurve(options.ecdhCurve);
@@ -146,7 +102,7 @@ exports.createSecureContext = function createSecureContext(options, context) {
   if (options.dhparam) c.context.setDHParam(options.dhparam);
 
   if (options.crl) {
-    if (util.isArray(options.crl)) {
+    if (Array.isArray(options.crl)) {
       for (var i = 0, len = options.crl.length; i < len; i++) {
         c.context.addCRL(options.crl[i]);
       }
@@ -175,6 +131,12 @@ exports.createSecureContext = function createSecureContext(options, context) {
     } else {
       c.context.loadPKCS12(pfx);
     }
+  }
+
+  // Do not keep read/write buffers in free list
+  if (options.singleUse) {
+    c.singleUse = true;
+    c.context.setFreeListLength(0);
   }
 
   return c;

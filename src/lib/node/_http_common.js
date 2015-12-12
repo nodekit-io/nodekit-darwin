@@ -1,34 +1,14 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var FreeList = require('freelist').FreeList;
-var HTTPParser = process.binding('http_parser').HTTPParser;
+const FreeList = require('internal/freelist').FreeList;
+const HTTPParser = process.binding('http_parser').HTTPParser;
 
-var incoming = require('_http_incoming');
-var IncomingMessage = incoming.IncomingMessage;
-var readStart = incoming.readStart;
-var readStop = incoming.readStop;
+const incoming = require('_http_incoming');
+const IncomingMessage = incoming.IncomingMessage;
+const readStart = incoming.readStart;
+const readStop = incoming.readStop;
 
-var isNumber = require('util').isNumber;
-var debug = require('util').debuglog('http');
+const debug = require('util').debuglog('http');
 exports.debug = debug;
 
 exports.CRLF = '\r\n';
@@ -36,10 +16,10 @@ exports.chunkExpression = /chunk/i;
 exports.continueExpression = /100-continue/i;
 exports.methods = HTTPParser.methods;
 
-var kOnHeaders = HTTPParser.kOnHeaders | 0;
-var kOnHeadersComplete = HTTPParser.kOnHeadersComplete | 0;
-var kOnBody = HTTPParser.kOnBody | 0;
-var kOnMessageComplete = HTTPParser.kOnMessageComplete | 0;
+const kOnHeaders = HTTPParser.kOnHeaders | 0;
+const kOnHeadersComplete = HTTPParser.kOnHeadersComplete | 0;
+const kOnBody = HTTPParser.kOnBody | 0;
+const kOnMessageComplete = HTTPParser.kOnMessageComplete | 0;
 
 // Only called in the slow case where slow means
 // that the request headers were either fragmented
@@ -55,16 +35,14 @@ function parserOnHeaders(headers, url) {
   this._url += url;
 }
 
-// info.headers and info.url are set only if .onHeaders()
-// has not been called for this request.
-//
-// info.url is not set for response parsers but that's not
-// applicable here since all our parsers are request parsers.
-function parserOnHeadersComplete(info) {
-  debug('parserOnHeadersComplete', info);
+// `headers` and `url` are set only if .onHeaders() has not been called for
+// this request.
+// `url` is not set for response parsers but that's not applicable here since
+// all our parsers are request parsers.
+function parserOnHeadersComplete(versionMajor, versionMinor, headers, method,
+                                 url, statusCode, statusMessage, upgrade,
+                                 shouldKeepAlive) {
   var parser = this;
-  var headers = info.headers;
-  var url = info.url;
 
   if (!headers) {
     headers = parser._headers;
@@ -77,38 +55,37 @@ function parserOnHeadersComplete(info) {
   }
 
   parser.incoming = new IncomingMessage(parser.socket);
-  parser.incoming.httpVersionMajor = info.versionMajor;
-  parser.incoming.httpVersionMinor = info.versionMinor;
-  parser.incoming.httpVersion = info.versionMajor + '.' + info.versionMinor;
+  parser.incoming.httpVersionMajor = versionMajor;
+  parser.incoming.httpVersionMinor = versionMinor;
+  parser.incoming.httpVersion = versionMajor + '.' + versionMinor;
   parser.incoming.url = url;
 
   var n = headers.length;
 
-  // If parser.maxHeaderPairs <= 0 - assume that there're no limit
-  if (parser.maxHeaderPairs > 0) {
+  // If parser.maxHeaderPairs <= 0 assume that there's no limit.
+  if (parser.maxHeaderPairs > 0)
     n = Math.min(n, parser.maxHeaderPairs);
-  }
 
   parser.incoming._addHeaderLines(headers, n);
 
-  if (isNumber(info.method)) {
+  if (typeof method === 'number') {
     // server only
-    parser.incoming.method = HTTPParser.methods[info.method];
+    parser.incoming.method = HTTPParser.methods[method];
   } else {
     // client only
-    parser.incoming.statusCode = info.statusCode;
-    parser.incoming.statusMessage = info.statusMessage;
+    parser.incoming.statusCode = statusCode;
+    parser.incoming.statusMessage = statusMessage;
   }
 
-  parser.incoming.upgrade = info.upgrade;
+  parser.incoming.upgrade = upgrade;
 
   var skipBody = false; // response to HEAD or CONNECT
 
-  if (!info.upgrade) {
-    // For upgraded connections and CONNECT method request,
-    // we'll emit this after parser.execute
-    // so that we can capture the first part of the new protocol
-    skipBody = parser.onIncoming(parser.incoming, info.shouldKeepAlive);
+  if (!upgrade) {
+    // For upgraded connections and CONNECT method request, we'll emit this
+    // after parser.execute so that we can capture the first part of the new
+    // protocol.
+    skipBody = parser.onIncoming(parser.incoming, shouldKeepAlive);
   }
 
   return skipBody;
@@ -149,12 +126,6 @@ function parserOnMessageComplete() {
       parser._url = '';
     }
 
-    if (!stream.upgrade)
-      // For upgraded connections, also emit this after parser.execute
-      stream.push(null);
-  }
-
-  if (stream && !parser.incoming._pendings.length) {
     // For emit end event
     stream.push(null);
   }
@@ -169,6 +140,7 @@ var parsers = new FreeList('parsers', 1000, function() {
 
   parser._headers = [];
   parser._url = '';
+  parser._consumed = false;
 
   // Only called in the slow case where slow means
   // that the request headers were either fragmented
@@ -196,6 +168,9 @@ function freeParser(parser, req, socket) {
   if (parser) {
     parser._headers = [];
     parser.onIncoming = null;
+    if (parser._consumed)
+      parser.unconsume();
+    parser._consumed = false;
     if (parser.socket)
       parser.socket.parser = null;
     parser.socket = null;

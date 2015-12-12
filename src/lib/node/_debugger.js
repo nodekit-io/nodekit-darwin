@@ -1,32 +1,15 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var util = require('util'),
-    path = require('path'),
-    net = require('net'),
-    vm = require('vm'),
-    repl = require('repl'),
-    inherits = util.inherits,
-    assert = require('assert'),
-    spawn = require('child_process').spawn;
+const util = require('util');
+const path = require('path');
+const net = require('net');
+const vm = require('vm');
+const Module = require('module');
+const repl = Module.requireRepl();
+const inherits = util.inherits;
+const assert = require('assert');
+const spawn = require('child_process').spawn;
+const Buffer = require('buffer').Buffer;
 
 exports.start = function(argv, stdin, stdout) {
   argv || (argv = process.argv.slice(2));
@@ -119,7 +102,7 @@ Protocol.prototype.execute = function(d) {
       if (len - this.bodyStartByteIndex < this.contentLength) {
         break;
       }
-      // pass thru
+      // falls through
     case 'body':
       var resRawByteLength = Buffer.byteLength(res.raw, 'utf8');
 
@@ -143,7 +126,6 @@ Protocol.prototype.execute = function(d) {
 
     default:
       throw new Error('Unknown state');
-      break;
   }
 };
 
@@ -157,7 +139,7 @@ Protocol.prototype.serialize = function(req) {
 };
 
 
-var NO_FRAME = -1;
+const NO_FRAME = -1;
 
 function Client() {
   net.Stream.call(this);
@@ -184,19 +166,20 @@ exports.Client = Client;
 
 
 Client.prototype._addHandle = function(desc) {
-  if (!util.isObject(desc) || !util.isNumber(desc.handle)) {
+  if (desc === null || typeof desc !== 'object' ||
+      typeof desc.handle !== 'number') {
     return;
   }
 
   this.handles[desc.handle] = desc;
 
-  if (desc.type == 'script') {
+  if (desc.type === 'script') {
     this._addScript(desc);
   }
 };
 
 
-var natives = process.binding('natives');
+const natives = process.binding('natives');
 
 
 Client.prototype._addScript = function(desc) {
@@ -279,7 +262,7 @@ Client.prototype.req = function(req, cb) {
 
 Client.prototype.reqVersion = function(cb) {
   cb = cb || function() {};
-  this.req({ command: 'version' } , function(err, body, res) {
+  this.req({ command: 'version' }, function(err, body, res) {
     if (err) return cb(err);
     cb(null, res.body.body.V8Version, res.body.running);
   });
@@ -302,7 +285,7 @@ Client.prototype.reqLookup = function(refs, cb) {
   this.req(req, function(err, res) {
     if (err) return cb(err);
     for (var ref in res) {
-      if (util.isObject(res[ref])) {
+      if (res[ref] !== null && typeof res[ref] === 'object') {
         self._addHandle(res[ref]);
       }
     }
@@ -415,7 +398,7 @@ Client.prototype.reqFrameEval = function(expression, frame, cb) {
 // reqBacktrace(cb)
 // TODO: from, to, bottom
 Client.prototype.reqBacktrace = function(cb) {
-  this.req({ command: 'backtrace', arguments: { inlineRefs: true } } , cb);
+  this.req({ command: 'backtrace', arguments: { inlineRefs: true } }, cb);
 };
 
 
@@ -449,7 +432,7 @@ Client.prototype.reqScripts = function(cb) {
   var self = this;
   cb = cb || function() {};
 
-  this.req({ command: 'scripts' } , function(err, res) {
+  this.req({ command: 'scripts' }, function(err, res) {
     if (err) return cb(err);
 
     for (var i = 0; i < res.length; i++) {
@@ -564,8 +547,7 @@ Client.prototype.mirrorObject = function(handle, depth, cb) {
           mirrorValue = '[?]';
         }
 
-
-        if (util.isArray(mirror) && !util.isNumber(prop.name)) {
+        if (Array.isArray(mirror) && typeof prop.name !== 'number') {
           // Skip the 'length' property.
           return;
         }
@@ -598,16 +580,14 @@ Client.prototype.mirrorObject = function(handle, depth, cb) {
     val = function() {};
   } else if (handle.type === 'null') {
     val = null;
-  } else if (!util.isUndefined(handle.value)) {
+  } else if (handle.value !== undefined) {
     val = handle.value;
   } else if (handle.type === 'undefined') {
     val = undefined;
   } else {
     val = handle;
   }
-  process.nextTick(function() {
-    cb(null, val);
-  });
+  process.nextTick(cb, null, val);
 };
 
 
@@ -661,11 +641,7 @@ Client.prototype.fullTrace = function(cb) {
 };
 
 
-
-
-
-
-var commands = [
+const commands = [
   [
     'run (r)',
     'cont (c)',
@@ -776,6 +752,7 @@ function Interface(stdin, stdout, args) {
   if (parseInt(process.env['NODE_DISABLE_COLORS'], 10)) {
     opts.useColors = false;
   }
+
   this.repl = repl.start(opts);
 
   // Do not print useless warning
@@ -791,22 +768,22 @@ function Interface(stdin, stdout, args) {
   process.once('SIGTERM', process.exit.bind(process, 0));
   process.once('SIGHUP', process.exit.bind(process, 0));
 
-  var proto = Interface.prototype,
-      ignored = ['pause', 'resume', 'exitRepl', 'handleBreak',
-                 'requireConnection', 'killChild', 'trySpawn',
-                 'controlEval', 'debugEval', 'print', 'childPrint',
-                 'clearline'],
-      shortcut = {
-        'run': 'r',
-        'cont': 'c',
-        'next': 'n',
-        'step': 's',
-        'out': 'o',
-        'backtrace': 'bt',
-        'setBreakpoint': 'sb',
-        'clearBreakpoint': 'cb',
-        'pause_': 'pause'
-      };
+  var proto = Interface.prototype;
+  const ignored = ['pause', 'resume', 'exitRepl', 'handleBreak',
+                   'requireConnection', 'killChild', 'trySpawn',
+                   'controlEval', 'debugEval', 'print', 'childPrint',
+                   'clearline'];
+  const shortcut = {
+    'run': 'r',
+    'cont': 'c',
+    'next': 'n',
+    'step': 's',
+    'out': 'o',
+    'backtrace': 'bt',
+    'setBreakpoint': 'sb',
+    'clearBreakpoint': 'cb',
+    'pause_': 'pause'
+  };
 
   function defineProperty(key, protoKey) {
     // Check arity
@@ -898,7 +875,7 @@ Interface.prototype.print = function(text, oneline) {
   if (this.killed) return;
   this.clearline();
 
-  this.stdout.write(util.isString(text) ? text : util.inspect(text));
+  this.stdout.write(typeof text === 'string' ? text : util.inspect(text));
 
   if (oneline !== true) {
     this.stdout.write('\n');
@@ -1129,7 +1106,7 @@ Interface.prototype.list = function(delta) {
       if (lineno == 1) {
         // The first line needs to have the module wrapper filtered out of
         // it.
-        var wrapper = require('module').wrapper[0];
+        var wrapper = Module.wrapper[0];
         lines[i] = lines[i].slice(wrapper.length);
 
         client.currentSourceColumn -= wrapper.length;
@@ -1213,7 +1190,7 @@ Interface.prototype.scripts = function() {
   this.pause();
   for (var id in client.scripts) {
     var script = client.scripts[id];
-    if (util.isObject(script) && script.name) {
+    if (script !== null && typeof script === 'object' && script.name) {
       if (displayNatives ||
           script.name == client.currentScript ||
           !script.isNative) {
@@ -1288,11 +1265,11 @@ Interface.prototype.unwatch = function(expr) {
 
 // List watchers
 Interface.prototype.watchers = function() {
-  var self = this,
-      verbose = arguments[0] || false,
-      callback = arguments[1] || function() {},
-      waiting = this._watchers.length,
-      values = [];
+  var self = this;
+  var verbose = arguments[0] || false;
+  var callback = arguments[1] || function() {};
+  var waiting = this._watchers.length;
+  var values = [];
 
   this.pause();
 
@@ -1351,13 +1328,13 @@ Interface.prototype.setBreakpoint = function(script, line,
       ambiguous;
 
   // setBreakpoint() should insert breakpoint on current line
-  if (util.isUndefined(script)) {
+  if (script === undefined) {
     script = this.client.currentScript;
     line = this.client.currentSourceLine + 1;
   }
 
   // setBreakpoint(line-number) should insert breakpoint in current script
-  if (util.isUndefined(line) && util.isNumber(script)) {
+  if (line === undefined && typeof script === 'number') {
     line = script;
     script = this.client.currentScript;
   }
@@ -1379,9 +1356,7 @@ Interface.prototype.setBreakpoint = function(script, line,
     // setBreakpoint('scriptname')
     if (script != +script && !this.client.scripts[script]) {
       var scripts = this.client.scripts;
-      var keys = Object.keys(scripts);
-      for (var v = 0; v < keys.length; v++) {
-        var id = keys[v];
+      for (var id in scripts) {
         if (scripts[id] &&
             scripts[id].name &&
             scripts[id].name.indexOf(script) !== -1) {
@@ -1456,15 +1431,17 @@ Interface.prototype.clearBreakpoint = function(script, line) {
 
   var ambiguous,
       breakpoint,
+      scriptId,
       index;
 
   this.client.breakpoints.some(function(bp, i) {
     if (bp.scriptId === script ||
         bp.scriptReq === script ||
         (bp.script && bp.script.indexOf(script) !== -1)) {
-      if (!util.isUndefined(index)) {
+      if (index !== undefined) {
         ambiguous = true;
       }
+      scriptId = script;
       if (bp.line === line) {
         index = i;
         breakpoint = bp.id;
@@ -1473,10 +1450,28 @@ Interface.prototype.clearBreakpoint = function(script, line) {
     }
   });
 
+  if (!scriptId && !this.client.scripts[script]) {
+    var scripts = this.client.scripts;
+    for (var id in scripts) {
+      if (scripts[id] &&
+          scripts[id].name &&
+          scripts[id].name.indexOf(script) !== -1) {
+        if (scriptId) {
+          ambiguous = true;
+        }
+        scriptId = id;
+      }
+    }
+  }
+
   if (ambiguous) return this.error('Script name is ambiguous');
 
-  if (util.isUndefined(breakpoint)) {
-    return this.error('Script : ' + script + ' not found');
+  if (scriptId === undefined) {
+    return this.error('Script ' + script + ' not found');
+  }
+
+  if (breakpoint === undefined) {
+    return this.error('Breakpoint not found on line ' + line);
   }
 
   var self = this,
@@ -1621,7 +1616,7 @@ Interface.prototype.trySpawn = function(cb) {
   var self = this,
       breakpoints = this.breakpoints || [],
       port = exports.port,
-      host = 'localhost',
+      host = '127.0.0.1',
       childArgs = this.args;
 
   this.killChild();
@@ -1641,7 +1636,16 @@ Interface.prototype.trySpawn = function(cb) {
   } else if (this.args.length === 3) {
     // `node debug -p pid`
     if (this.args[1] === '-p' && /^\d+$/.test(this.args[2])) {
-      process._debugProcess(parseInt(this.args[2], 10));
+      const pid = parseInt(this.args[2], 10);
+      try {
+        process._debugProcess(pid);
+      } catch (e) {
+        if (e.code === 'ESRCH') {
+          console.error(`Target process: ${pid} doesn't exist.`);
+          process.exit(1);
+        }
+        throw e;
+      }
       isRemote = true;
     } else {
       var match = this.args[1].match(/^--port=(\d+)$/);
@@ -1706,8 +1710,8 @@ Interface.prototype.trySpawn = function(cb) {
   function connectError() {
     // If it's failed to connect 10 times then print failed message
     if (connectionAttempts >= 10) {
-      self.stdout.write(' failed, please retry\n');
-      return;
+      console.error(' failed, please retry');
+      process.exit(1);
     }
     setTimeout(attemptConnect, 500);
   }

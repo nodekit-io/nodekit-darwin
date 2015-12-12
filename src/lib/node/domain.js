@@ -1,27 +1,13 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var util = require('util');
-var EventEmitter = require('events');
-var inherits = util.inherits;
+// WARNING: THIS MODULE IS PENDING DEPRECATION.
+//
+// No new pull requests targeting this module will be accepted
+// unless they address existing, critical bugs.
+
+const util = require('util');
+const EventEmitter = require('events');
+const inherits = util.inherits;
 
 // communicate with events module, but don't require that
 // module to have to load this one, since this module has
@@ -41,12 +27,8 @@ Object.defineProperty(process, 'domain', {
   }
 });
 
-// objects with external array data are excellent ways to communicate state
-// between js and c++ w/o much overhead
-var _domain_flag = {};
-
 // let the process know we're using domains
-process._setupDomainUse(_domain, _domain_flag);
+const _domain_flag = process._setupDomainUse(_domain);
 
 exports.Domain = Domain;
 
@@ -223,9 +205,23 @@ Domain.prototype.remove = function(ee) {
 Domain.prototype.run = function(fn) {
   if (this._disposed)
     return;
+
+  var ret;
+
   this.enter();
-  var ret = fn.call(this);
+  if (arguments.length >= 2) {
+    var len = arguments.length;
+    var args = new Array(len - 1);
+
+    for (var i = 1; i < len; i++)
+      args[i - 1] = arguments[i];
+
+    ret = fn.apply(this, args);
+  } else {
+    ret = fn.call(this);
+  }
   this.exit();
+
   return ret;
 };
 

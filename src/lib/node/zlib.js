@@ -1,30 +1,13 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var Transform = require('_stream_transform');
-
-var binding = process.binding('zlib');
-var util = require('util');
-var Buffer = require('buffer').Buffer;
-var assert = require('assert').ok;
+const Buffer = require('buffer').Buffer;
+const Transform = require('_stream_transform');
+const binding = process.binding('zlib');
+const util = require('util');
+const assert = require('assert').ok;
+const kMaxLength = require('buffer').kMaxLength;
+const kRangeErrorMessage = 'Cannot create final Buffer. ' +
+    'It would be larger than 0x' + kMaxLength.toString(16) + ' bytes.';
 
 // zlib doesn't provide these, so kludge them in following the same
 // const naming scheme zlib uses.
@@ -48,14 +31,18 @@ binding.Z_MAX_LEVEL = 9;
 binding.Z_DEFAULT_LEVEL = binding.Z_DEFAULT_COMPRESSION;
 
 // expose all the zlib constants
-var bkeys = Object.keys(binding);
+const bkeys = Object.keys(binding);
 for (var bk = 0; bk < bkeys.length; bk++) {
   var bkey = bkeys[bk];
-  if (bkey.match(/^Z/)) exports[bkey] = binding[bkey];
+  if (bkey.match(/^Z/)) {
+    Object.defineProperty(exports, bkey, {
+      enumerable: true, value: binding[bkey], writable: false
+    });
+  }
 }
 
 // translation table for return codes.
-exports.codes = {
+const codes = {
   Z_OK: binding.Z_OK,
   Z_STREAM_END: binding.Z_STREAM_END,
   Z_NEED_DICT: binding.Z_NEED_DICT,
@@ -67,11 +54,15 @@ exports.codes = {
   Z_VERSION_ERROR: binding.Z_VERSION_ERROR
 };
 
-var ckeys = Object.keys(exports.codes);
+const ckeys = Object.keys(codes);
 for (var ck = 0; ck < ckeys.length; ck++) {
   var ckey = ckeys[ck];
-  exports.codes[exports.codes[ckey]] = ckey;
+  codes[codes[ckey]] = ckey;
 }
+
+Object.defineProperty(exports, 'codes', {
+  enumerable: true, value: Object.freeze(codes), writable: false
+});
 
 exports.Deflate = Deflate;
 exports.Inflate = Inflate;
@@ -113,7 +104,7 @@ exports.createUnzip = function(o) {
 // Convenience methods.
 // compress/decompress a string or buffer in one step.
 exports.deflate = function(buffer, opts, callback) {
-  if (util.isFunction(opts)) {
+  if (typeof opts === 'function') {
     callback = opts;
     opts = {};
   }
@@ -125,7 +116,7 @@ exports.deflateSync = function(buffer, opts) {
 };
 
 exports.gzip = function(buffer, opts, callback) {
-  if (util.isFunction(opts)) {
+  if (typeof opts === 'function') {
     callback = opts;
     opts = {};
   }
@@ -137,7 +128,7 @@ exports.gzipSync = function(buffer, opts) {
 };
 
 exports.deflateRaw = function(buffer, opts, callback) {
-  if (util.isFunction(opts)) {
+  if (typeof opts === 'function') {
     callback = opts;
     opts = {};
   }
@@ -149,7 +140,7 @@ exports.deflateRawSync = function(buffer, opts) {
 };
 
 exports.unzip = function(buffer, opts, callback) {
-  if (util.isFunction(opts)) {
+  if (typeof opts === 'function') {
     callback = opts;
     opts = {};
   }
@@ -161,7 +152,7 @@ exports.unzipSync = function(buffer, opts) {
 };
 
 exports.inflate = function(buffer, opts, callback) {
-  if (util.isFunction(opts)) {
+  if (typeof opts === 'function') {
     callback = opts;
     opts = {};
   }
@@ -173,7 +164,7 @@ exports.inflateSync = function(buffer, opts) {
 };
 
 exports.gunzip = function(buffer, opts, callback) {
-  if (util.isFunction(opts)) {
+  if (typeof opts === 'function') {
     callback = opts;
     opts = {};
   }
@@ -185,7 +176,7 @@ exports.gunzipSync = function(buffer, opts) {
 };
 
 exports.inflateRaw = function(buffer, opts, callback) {
-  if (util.isFunction(opts)) {
+  if (typeof opts === 'function') {
     callback = opts;
     opts = {};
   }
@@ -222,17 +213,25 @@ function zlibBuffer(engine, buffer, callback) {
   }
 
   function onEnd() {
-    var buf = Buffer.concat(buffers, nread);
+    var buf;
+    var err = null;
+
+    if (nread >= kMaxLength) {
+      err = new RangeError(kRangeErrorMessage);
+    } else {
+      buf = Buffer.concat(buffers, nread);
+    }
+
     buffers = [];
-    callback(null, buf);
     engine.close();
+    callback(err, buf);
   }
 }
 
 function zlibBufferSync(engine, buffer) {
-  if (util.isString(buffer))
+  if (typeof buffer === 'string')
     buffer = new Buffer(buffer);
-  if (!util.isBuffer(buffer))
+  if (!(buffer instanceof Buffer))
     throw new TypeError('Not a string or buffer');
 
   var flushFlag = binding.Z_FINISH;
@@ -253,7 +252,6 @@ function Inflate(opts) {
 }
 
 
-
 // gzip - bigger header, same deflate compression
 function Gzip(opts) {
   if (!(this instanceof Gzip)) return new Gzip(opts);
@@ -264,7 +262,6 @@ function Gunzip(opts) {
   if (!(this instanceof Gunzip)) return new Gunzip(opts);
   Zlib.call(this, opts, binding.GUNZIP);
 }
-
 
 
 // raw - no header
@@ -348,7 +345,7 @@ function Zlib(opts, mode) {
   }
 
   if (opts.dictionary) {
-    if (!util.isBuffer(opts.dictionary)) {
+    if (!(opts.dictionary instanceof Buffer)) {
       throw new Error('Invalid dictionary: it should be a Buffer instance');
     }
   }
@@ -370,10 +367,10 @@ function Zlib(opts, mode) {
   };
 
   var level = exports.Z_DEFAULT_COMPRESSION;
-  if (util.isNumber(opts.level)) level = opts.level;
+  if (typeof opts.level === 'number') level = opts.level;
 
   var strategy = exports.Z_DEFAULT_STRATEGY;
-  if (util.isNumber(opts.strategy)) strategy = opts.strategy;
+  if (typeof opts.strategy === 'number') strategy = opts.strategy;
 
   this._handle.init(opts.windowBits || exports.Z_DEFAULT_WINDOWBITS,
                     level,
@@ -435,7 +432,7 @@ Zlib.prototype._flush = function(callback) {
 Zlib.prototype.flush = function(kind, callback) {
   var ws = this._writableState;
 
-  if (util.isFunction(kind) || (util.isUndefined(kind) && !callback)) {
+  if (typeof kind === 'function' || (kind === undefined && !callback)) {
     callback = kind;
     kind = binding.Z_FULL_FLUSH;
   }
@@ -468,11 +465,12 @@ Zlib.prototype.close = function(callback) {
 
   this._handle.close();
 
-  var self = this;
-  process.nextTick(function() {
-    self.emit('close');
-  });
+  process.nextTick(emitCloseNT, this);
 };
+
+function emitCloseNT(self) {
+  self.emit('close');
+}
 
 Zlib.prototype._transform = function(chunk, encoding, cb) {
   var flushFlag;
@@ -480,7 +478,7 @@ Zlib.prototype._transform = function(chunk, encoding, cb) {
   var ending = ws.ending || ws.ended;
   var last = ending && (!chunk || ws.length === chunk.length);
 
-  if (!util.isNull(chunk) && !util.isBuffer(chunk))
+  if (chunk !== null && !(chunk instanceof Buffer))
     return cb(new Error('invalid input'));
 
   if (this._closed)
@@ -511,7 +509,7 @@ Zlib.prototype._processChunk = function(chunk, flushFlag, cb) {
 
   var self = this;
 
-  var async = util.isFunction(cb);
+  var async = typeof cb === 'function';
 
   if (!async) {
     var buffers = [];
@@ -535,6 +533,11 @@ Zlib.prototype._processChunk = function(chunk, flushFlag, cb) {
 
     if (this._hadError) {
       throw error;
+    }
+
+    if (nread >= kMaxLength) {
+      this.close();
+      throw new RangeError(kRangeErrorMessage);
     }
 
     var buf = Buffer.concat(buffers, nread);

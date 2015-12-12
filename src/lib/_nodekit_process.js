@@ -17,6 +17,7 @@
 (function(process) {
     
   process._nextTick = (function () {
+                       
                      var canSetTimeOut = typeof window !== 'undefined'
                      && window.setTimeout;
                     
@@ -27,10 +28,12 @@
                      && window.postMessage && window.addEventListener;
                      
                      if (canSetImmediate) {
+                       
                      return function (f) { return window.setImmediate(f) };
                      }
                      
                      if (canPost) {
+                       
                          var queue = [];
                          window.addEventListener('message', function (ev) {
                                                  var source = ev.source;
@@ -50,10 +53,17 @@
                     }
                      
                      if (canSetImmediate) {
+                       
                         return function nextTick(fn) {setTimeout(fn, 0);};
                      }
-                     
-                      return function(f) {return io.nodekit.console.nextTick(f); };
+                       
+                       return function(f) {
+                       
+                          var args = Array.prototype.slice.call(arguments, 1);
+                       return io.nodekit.console.nextTick(function(){
+                                                          f.apply(null, args);
+                                                          });
+                       };
                      
                      })();
 
@@ -66,21 +76,24 @@
         process._unloadAsyncQueue = unloadAsyncQueue;
     };
     
- process._setupNextTick = function(tickInfo, _tickCallback, _runMicrotasks) {
-    _runMicrotasks.runMicrotasks = function(){};
-    process._tickCallback = _tickCallback;
-    process.nextTick = process._nextTick;
- //    _tickCallback();
- };
+    process._setupNextTick = function(_tickCallback, _runMicrotasks) {
+        _runMicrotasks.runMicrotasks = function(){};
+        process._tickCallback = _tickCallback;
+        process.nextTick = process._nextTick;
+        return {};
+    //    _tickCallback();
+    };
  
+ process._setupPromises = function(fn){};
+    
     process._setupDomainUse = function() {};
     process.cwd = function cwd() { return  process.workingDirectory; };
     process.isatty = false;
  
-    process.versions = { http_parser: '1.0', node: '0.12.9', v8: '3.14.5.8', ares: '1.9.0-DEV', uv: '0.10.3', zlib: '1.2.3', modules: '11', openssl: '1.0.1e' };
+  process.versions = {"http_parser":"2.5.0","node":"4.2.3","v8":"4.5.103.35","uv":"1.7.5","zlib":"1.2.8","ares":"1.10.1-DEV","icu":"56.1","modules":"46","openssl":"1.0.2e"}
  
-    process.version = 'v0.12.9';
-    process.execArgv = ['--nodekit'];
+    process.version = 'v4.2.3';
+   process.execArgv = ['--nodekit'];
  
  if (Error.captureStackTrace === undefined) {
  Error.captureStackTrace = function (obj) {

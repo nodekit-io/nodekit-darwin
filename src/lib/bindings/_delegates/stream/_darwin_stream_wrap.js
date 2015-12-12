@@ -88,8 +88,8 @@ Stream.prototype.writeUcs2String = function(req, data) {
 
 Stream.prototype.writeBuffer = function(req, data) {
     this._stream.write(data.toString('base64'), 'base64');
-    
-    //function afterWrite(status, handle, req, err)
+   
+     //function afterWrite(status, handle, req, err)
     req.oncomplete(0, this, req , null);
 };
 

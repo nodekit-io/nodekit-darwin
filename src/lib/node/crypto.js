@@ -1,52 +1,35 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 // Note: In 0.8 and before, crypto functions all defaulted to using
 // binary-encoded strings rather than buffers.
+
+'use strict';
 
 exports.DEFAULT_ENCODING = 'buffer';
 
 try {
   var binding = process.binding('crypto');
   var randomBytes = binding.randomBytes;
-  var pseudoRandomBytes = binding.pseudoRandomBytes;
   var getCiphers = binding.getCiphers;
   var getHashes = binding.getHashes;
+  var getCurves = binding.getCurves;
 } catch (e) {
   throw new Error('node.js not compiled with openssl crypto support.');
 }
 
-var constants = require('constants');
+const Buffer = require('buffer').Buffer;
+const constants = require('constants');
+const stream = require('stream');
+const util = require('util');
+const internalUtil = require('internal/util');
+const LazyTransform = require('internal/streams/lazy_transform');
 
-var stream = require('stream');
-var util = require('util');
-
-var DH_GENERATOR = 2;
+const DH_GENERATOR = 2;
 
 // This is here because many functions accepted binary strings without
 // any explicit encoding in older versions of node, and we don't want
 // to break them unnecessarily.
 function toBuf(str, encoding) {
   encoding = encoding || 'binary';
-  if (util.isString(str)) {
+  if (typeof str === 'string') {
     if (encoding === 'buffer')
       encoding = 'binary';
     str = new Buffer(str, encoding);
@@ -56,39 +39,8 @@ function toBuf(str, encoding) {
 exports._toBuf = toBuf;
 
 
-var assert = require('assert');
-var StringDecoder = require('string_decoder').StringDecoder;
-
-
-function LazyTransform(options) {
-  this._options = options;
-}
-util.inherits(LazyTransform, stream.Transform);
-
-[
-  '_readableState',
-  '_writableState',
-  '_transformState'
-].forEach(function(prop, i, props) {
-  Object.defineProperty(LazyTransform.prototype, prop, {
-    get: function() {
-      stream.Transform.call(this, this._options);
-      this._writableState.decodeStrings = false;
-      this._writableState.defaultEncoding = 'binary';
-      return this[prop];
-    },
-    set: function(val) {
-      Object.defineProperty(this, prop, {
-        value: val,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    },
-    configurable: true,
-    enumerable: true
-  });
-});
+const assert = require('assert');
+const StringDecoder = require('string_decoder').StringDecoder;
 
 
 exports.createHash = exports.Hash = Hash;
@@ -107,14 +59,13 @@ Hash.prototype._transform = function(chunk, encoding, callback) {
 };
 
 Hash.prototype._flush = function(callback) {
-  var encoding = this._readableState.encoding || 'buffer';
-  this.push(this._handle.digest(encoding), encoding);
+  this.push(this._handle.digest());
   callback();
 };
 
 Hash.prototype.update = function(data, encoding) {
   encoding = encoding || exports.DEFAULT_ENCODING;
-  if (encoding === 'buffer' && util.isString(data))
+  if (encoding === 'buffer' && typeof data === 'string')
     encoding = 'binary';
   this._handle.update(data, encoding);
   return this;
@@ -215,7 +166,18 @@ Cipher.prototype.setAutoPadding = function(ap) {
   return this;
 };
 
+Cipher.prototype.getAuthTag = function() {
+  return this._handle.getAuthTag();
+};
 
+
+Cipher.prototype.setAuthTag = function(tagbuf) {
+  this._handle.setAuthTag(tagbuf);
+};
+
+Cipher.prototype.setAAD = function(aadbuf) {
+  this._handle.setAAD(aadbuf);
+};
 
 exports.createCipheriv = exports.Cipheriv = Cipheriv;
 function Cipheriv(cipher, key, iv, options) {
@@ -235,20 +197,9 @@ Cipheriv.prototype._flush = Cipher.prototype._flush;
 Cipheriv.prototype.update = Cipher.prototype.update;
 Cipheriv.prototype.final = Cipher.prototype.final;
 Cipheriv.prototype.setAutoPadding = Cipher.prototype.setAutoPadding;
-
-Cipheriv.prototype.getAuthTag = function() {
-  return this._handle.getAuthTag();
-};
-
-
-Cipheriv.prototype.setAuthTag = function(tagbuf) {
-  this._handle.setAuthTag(tagbuf);
-};
-
-Cipheriv.prototype.setAAD = function(aadbuf) {
-  this._handle.setAAD(aadbuf);
-};
-
+Cipheriv.prototype.getAuthTag = Cipher.prototype.getAuthTag;
+Cipheriv.prototype.setAuthTag = Cipher.prototype.setAuthTag;
+Cipheriv.prototype.setAAD = Cipher.prototype.setAAD;
 
 exports.createDecipher = exports.Decipher = Decipher;
 function Decipher(cipher, password, options) {
@@ -270,7 +221,9 @@ Decipher.prototype.update = Cipher.prototype.update;
 Decipher.prototype.final = Cipher.prototype.final;
 Decipher.prototype.finaltol = Cipher.prototype.final;
 Decipher.prototype.setAutoPadding = Cipher.prototype.setAutoPadding;
-
+Decipher.prototype.getAuthTag = Cipher.prototype.getAuthTag;
+Decipher.prototype.setAuthTag = Cipher.prototype.setAuthTag;
+Decipher.prototype.setAAD = Cipher.prototype.setAAD;
 
 
 exports.createDecipheriv = exports.Decipheriv = Decipheriv;
@@ -293,10 +246,9 @@ Decipheriv.prototype.update = Cipher.prototype.update;
 Decipheriv.prototype.final = Cipher.prototype.final;
 Decipheriv.prototype.finaltol = Cipher.prototype.final;
 Decipheriv.prototype.setAutoPadding = Cipher.prototype.setAutoPadding;
-Decipheriv.prototype.getAuthTag = Cipheriv.prototype.getAuthTag;
-Decipheriv.prototype.setAuthTag = Cipheriv.prototype.setAuthTag;
-Decipheriv.prototype.setAAD = Cipheriv.prototype.setAAD;
-
+Decipheriv.prototype.getAuthTag = Cipher.prototype.getAuthTag;
+Decipheriv.prototype.setAuthTag = Cipher.prototype.setAuthTag;
+Decipheriv.prototype.setAAD = Cipher.prototype.setAAD;
 
 
 exports.createSign = exports.Sign = Sign;
@@ -334,13 +286,12 @@ Sign.prototype.sign = function(options, encoding) {
 };
 
 
-
 exports.createVerify = exports.Verify = Verify;
 function Verify(algorithm, options) {
   if (!(this instanceof Verify))
     return new Verify(algorithm, options);
 
-  this._handle = new binding.Verify;
+  this._handle = new binding.Verify();
   this._handle.init(algorithm);
 
   stream.Writable.call(this, options);
@@ -356,19 +307,32 @@ Verify.prototype.verify = function(object, signature, sigEncoding) {
   return this._handle.verify(toBuf(object), toBuf(signature, sigEncoding));
 };
 
-exports.publicEncrypt = function(options, buffer) {
-  var key = options.key || options;
-  var padding = options.padding || constants.RSA_PKCS1_OAEP_PADDING;
-  return binding.publicEncrypt(toBuf(key), buffer, padding);
-};
+function rsaPublic(method, defaultPadding) {
+  return function(options, buffer) {
+    var key = options.key || options;
+    var padding = options.padding || defaultPadding;
+    var passphrase = options.passphrase || null;
+    return method(toBuf(key), buffer, padding, passphrase);
+  };
+}
 
-exports.privateDecrypt = function(options, buffer) {
-  var key = options.key || options;
-  var passphrase = options.passphrase || null;
-  var padding = options.padding || constants.RSA_PKCS1_OAEP_PADDING;
-  return binding.privateDecrypt(toBuf(key), buffer, padding, passphrase);
-};
+function rsaPrivate(method, defaultPadding) {
+  return function(options, buffer) {
+    var key = options.key || options;
+    var passphrase = options.passphrase || null;
+    var padding = options.padding || defaultPadding;
+    return method(toBuf(key), buffer, padding, passphrase);
+  };
+}
 
+exports.publicEncrypt = rsaPublic(binding.publicEncrypt,
+                                  constants.RSA_PKCS1_OAEP_PADDING);
+exports.publicDecrypt = rsaPublic(binding.publicDecrypt,
+                                  constants.RSA_PKCS1_PADDING);
+exports.privateEncrypt = rsaPrivate(binding.privateEncrypt,
+                                    constants.RSA_PKCS1_PADDING);
+exports.privateDecrypt = rsaPrivate(binding.privateDecrypt,
+                                    constants.RSA_PKCS1_OAEP_PADDING);
 
 
 exports.createDiffieHellman = exports.DiffieHellman = DiffieHellman;
@@ -377,7 +341,7 @@ function DiffieHellman(sizeOrKey, keyEncoding, generator, genEncoding) {
   if (!(this instanceof DiffieHellman))
     return new DiffieHellman(sizeOrKey, keyEncoding, generator, genEncoding);
 
-  if (!util.isBuffer(sizeOrKey) &&
+  if (!(sizeOrKey instanceof Buffer) &&
       typeof sizeOrKey !== 'number' &&
       typeof sizeOrKey !== 'string')
     throw new TypeError('First argument should be number, string or Buffer');
@@ -521,7 +485,7 @@ DiffieHellman.prototype.setPrivateKey = function(key, encoding) {
 
 
 function ECDH(curve) {
-  if (!util.isString(curve))
+  if (typeof curve !== 'string')
     throw new TypeError('curve should be a string');
 
   this._handle = new binding.ECDH(curve);
@@ -555,7 +519,7 @@ ECDH.prototype.getPublicKey = function getPublicKey(encoding, format) {
     else if (format === 'uncompressed')
       f = constants.POINT_CONVERSION_UNCOMPRESSED;
     else
-      throw TypeError('Bad format: ' + format);
+      throw new TypeError('Bad format: ' + format);
   } else {
     f = constants.POINT_CONVERSION_UNCOMPRESSED;
   }
@@ -567,19 +531,18 @@ ECDH.prototype.getPublicKey = function getPublicKey(encoding, format) {
 };
 
 
-
 exports.pbkdf2 = function(password,
                           salt,
                           iterations,
                           keylen,
                           digest,
                           callback) {
-  if (util.isFunction(digest)) {
+  if (typeof digest === 'function') {
     callback = digest;
     digest = undefined;
   }
 
-  if (!util.isFunction(callback))
+  if (typeof callback !== 'function')
     throw new Error('No callback provided to pbkdf2');
 
   return pbkdf2(password, salt, iterations, keylen, digest, callback);
@@ -592,22 +555,20 @@ exports.pbkdf2Sync = function(password, salt, iterations, keylen, digest) {
 
 
 function pbkdf2(password, salt, iterations, keylen, digest, callback) {
-  var encoding = exports.DEFAULT_ENCODING;
-
-  function next(er, ret) {
-    if (ret)
-      ret = ret.toString(encoding);
-    callback(er, ret);
-  }
-
   password = toBuf(password);
   salt = toBuf(salt);
 
-  if (encoding === 'buffer')
+  if (exports.DEFAULT_ENCODING === 'buffer')
     return binding.PBKDF2(password, salt, iterations, keylen, digest, callback);
 
   // at this point, we need to handle encodings.
+  var encoding = exports.DEFAULT_ENCODING;
   if (callback) {
+    var next = function(er, ret) {
+      if (ret)
+        ret = ret.toString(encoding);
+      callback(er, ret);
+    };
     binding.PBKDF2(password, salt, iterations, keylen, digest, next);
   } else {
     var ret = binding.PBKDF2(password, salt, iterations, keylen, digest);
@@ -642,10 +603,10 @@ Certificate.prototype.exportChallenge = function(object, encoding) {
 
 
 exports.setEngine = function setEngine(id, flags) {
-  if (!util.isString(id))
+  if (typeof id !== 'string')
     throw new TypeError('id should be a string');
 
-  if (flags && !util.isNumber(flags))
+  if (flags && typeof flags !== 'number')
     throw new TypeError('flags should be a number, if present');
   flags = flags >>> 0;
 
@@ -656,21 +617,22 @@ exports.setEngine = function setEngine(id, flags) {
   return binding.setEngine(id, flags);
 };
 
-exports.randomBytes = randomBytes;
-exports.pseudoRandomBytes = pseudoRandomBytes;
+exports.randomBytes = exports.pseudoRandomBytes = randomBytes;
 
-exports.rng = randomBytes;
-exports.prng = pseudoRandomBytes;
-
+exports.rng = exports.prng = randomBytes;
 
 exports.getCiphers = function() {
-  return filterDuplicates(getCiphers.call(null, arguments));
+  return filterDuplicates(getCiphers());
 };
 
 
 exports.getHashes = function() {
-  return filterDuplicates(getHashes.call(null, arguments));
+  return filterDuplicates(getHashes());
+};
 
+
+exports.getCurves = function() {
+  return filterDuplicates(getCurves());
 };
 
 
@@ -691,10 +653,13 @@ function filterDuplicates(names) {
 }
 
 // Legacy API
-exports.__defineGetter__('createCredentials', util.deprecate(function() {
-  return require('tls').createSecureContext;
-}, 'createCredentials() is deprecated, use tls.createSecureContext instead'));
+exports.__defineGetter__('createCredentials',
+  internalUtil.deprecate(function() {
+    return require('tls').createSecureContext;
+  }, 'crypto.createCredentials is deprecated. ' +
+     'Use tls.createSecureContext instead.'));
 
-exports.__defineGetter__('Credentials', util.deprecate(function() {
+exports.__defineGetter__('Credentials', internalUtil.deprecate(function() {
   return require('tls').SecureContext;
-}, 'Credentials is deprecated, use tls.createSecureContext instead'));
+}, 'crypto.Credentials is deprecated. ' +
+   'Use tls.createSecureContext instead.'));

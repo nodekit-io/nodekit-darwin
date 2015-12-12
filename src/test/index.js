@@ -1,4 +1,4 @@
-
+io.nodekit.console.log("STARTING JASMINE");
 var jasmine = require('test/server.js');
 
 jasmine.run(

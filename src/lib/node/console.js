@@ -1,31 +1,12 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var util = require('util');
+const util = require('util');
 
 function Console(stdout, stderr) {
   if (!(this instanceof Console)) {
     return new Console(stdout, stderr);
   }
-  if (!stdout || !util.isFunction(stdout.write)) {
+  if (!stdout || typeof stdout.write !== 'function') {
     throw new TypeError('Console expects a writable stream instance');
   }
   if (!stderr) {
@@ -40,7 +21,7 @@ function Console(stdout, stderr) {
   Object.defineProperty(this, '_stdout', prop);
   prop.value = stderr;
   Object.defineProperty(this, '_stderr', prop);
-  prop.value = Object.create(null);
+  prop.value = new Map();
   Object.defineProperty(this, '_times', prop);
 
   // bind the prototype functions to this Console instance
@@ -75,12 +56,12 @@ Console.prototype.dir = function(object, options) {
 
 
 Console.prototype.time = function(label) {
-  this._times[label] = Date.now();
+  this._times.set(label, Date.now());
 };
 
 
 Console.prototype.timeEnd = function(label) {
-  var time = this._times[label];
+  var time = this._times.get(label);
   if (!time) {
     throw new Error('No such label: ' + label);
   }
@@ -92,7 +73,7 @@ Console.prototype.timeEnd = function(label) {
 Console.prototype.trace = function trace() {
   // TODO probably can to do this better with V8's debug object once that is
   // exposed.
-  var err = new Error;
+  var err = new Error();
   err.name = 'Trace';
   err.message = util.format.apply(this, arguments);
   Error.captureStackTrace(err, trace);

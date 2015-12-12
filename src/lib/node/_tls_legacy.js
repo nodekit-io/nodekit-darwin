@@ -1,40 +1,20 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var assert = require('assert');
-var events = require('events');
-var stream = require('stream');
-var tls = require('tls');
-var util = require('util');
-var common = require('_tls_common');
-
-var Timer = process.binding('timer_wrap').Timer;
+const assert = require('assert');
+const EventEmitter = require('events');
+const stream = require('stream');
+const tls = require('tls');
+const util = require('util');
+const common = require('_tls_common');
+const debug = util.debuglog('tls-legacy');
+const Buffer = require('buffer').Buffer;
+const Timer = process.binding('timer_wrap').Timer;
 var Connection = null;
 try {
   Connection = process.binding('crypto').Connection;
 } catch (e) {
   throw new Error('node.js not compiled with openssl crypto support.');
 }
-
-var debug = util.debuglog('tls-legacy');
 
 function SlabBuffer() {
   this.create();
@@ -57,7 +37,7 @@ SlabBuffer.prototype.use = function use(context, fn, size) {
 
   var actualSize = this.remaining;
 
-  if (!util.isNull(size)) actualSize = Math.min(size, actualSize);
+  if (size !== null) actualSize = Math.min(size, actualSize);
 
   var bytes = fn.call(context, this.pool, this.offset, actualSize);
   if (bytes > 0) {
@@ -93,7 +73,7 @@ function CryptoStream(pair, options) {
   this._finished = false;
   this._opposite = null;
 
-  if (util.isNull(slabBuffer)) slabBuffer = new SlabBuffer();
+  if (slabBuffer === null) slabBuffer = new SlabBuffer();
   this._buffer = slabBuffer;
 
   this.once('finish', onCryptoStreamFinish);
@@ -113,11 +93,11 @@ function onCryptoStreamFinish() {
       // Generate close notify
       // NOTE: first call checks if client has sent us shutdown,
       // second call enqueues shutdown into the BIO.
-      if (this.pair.ssl.shutdown() !== 1) {
+      if (this.pair.ssl.shutdownSSL() !== 1) {
         if (this.pair.ssl && this.pair.ssl.error)
           return this.pair.error();
 
-        this.pair.ssl.shutdown();
+        this.pair.ssl.shutdownSSL();
       }
 
       if (this.pair.ssl && this.pair.ssl.error)
@@ -163,7 +143,7 @@ CryptoStream.prototype.init = function init() {
 
 
 CryptoStream.prototype._write = function write(data, encoding, cb) {
-  assert(util.isNull(this._pending));
+  assert(this._pending === null);
 
   // Black-hole data
   if (!this.pair.ssl) return cb(null);
@@ -210,7 +190,7 @@ CryptoStream.prototype._write = function write(data, encoding, cb) {
 
       // Invoke callback only when all data read from opposite stream
       if (this._opposite._halfRead) {
-        assert(util.isNull(this._sslOutCb));
+        assert(this._sslOutCb === null);
         this._sslOutCb = cb;
       } else {
         cb(null);
@@ -309,8 +289,8 @@ CryptoStream.prototype._read = function read(size) {
   }
 
   // Try writing pending data
-  if (!util.isNull(this._pending)) this._writePending();
-  if (!util.isNull(this._opposite._pending)) this._opposite._writePending();
+  if (this._pending !== null) this._writePending();
+  if (this._opposite._pending !== null) this._opposite._writePending();
 
   if (bytesRead === 0) {
     // EOF when cleartext has finished and we have nothing to read
@@ -419,31 +399,13 @@ CryptoStream.prototype.end = function(chunk, encoding) {
   }
 
   // Write pending data first
-  if (!util.isNull(this._pending)) this._writePending();
+  if (this._pending !== null) this._writePending();
 
   this.writable = false;
 
   stream.Duplex.prototype.end.call(this, chunk, encoding);
 };
 
-/*
- * Wait for both `finish` and `end` events to ensure that all data that
- * was written on this side was read from the other side.
- */
-function _destroyWhenReadAndWriteEndsDone(cryptoStream) {
-  var waiting = 1;
-
-  function finish() {
-    if (--waiting === 0) cryptoStream.destroy();
-  }
-
-  cryptoStream._opposite.once('end', finish);
-
-  if (!cryptoStream._finished) {
-    cryptoStream.once('finish', finish);
-    ++waiting;
-  }
-}
 
 CryptoStream.prototype.destroySoon = function(err) {
   if (this === this.pair.cleartext) {
@@ -458,7 +420,18 @@ CryptoStream.prototype.destroySoon = function(err) {
   if (this._writableState.finished && this._opposite._ended) {
     this.destroy();
   } else {
-    _destroyWhenReadAndWriteEndsDone(this);
+    // Wait for both `finish` and `end` events to ensure that all data that
+    // was written on this side was read from the other side.
+    var self = this;
+    var waiting = 1;
+    var finish = function() {
+      if (--waiting === 0) self.destroy();
+    };
+    this._opposite.once('end', finish);
+    if (!this._finished) {
+      this.once('finish', finish);
+      ++waiting;
+    }
   }
 };
 
@@ -476,15 +449,17 @@ CryptoStream.prototype.destroy = function(err) {
   }
   this._opposite.destroy();
 
-  var self = this;
-  process.nextTick(function() {
-    // Force EOF
-    self.push(null);
-
-    // Emit 'close' event
-    self.emit('close', err ? true : false);
-  });
+  process.nextTick(destroyNT, this, err ? true : false);
 };
+
+
+function destroyNT(self, hadErr) {
+  // Force EOF
+  self.push(null);
+
+  // Emit 'close' event
+  self.emit('close', hadErr);
+}
 
 
 CryptoStream.prototype._done = function() {
@@ -672,7 +647,7 @@ function onnewsession(key, session) {
 
     if (self.ssl)
       self.ssl.newSessionDone();
-  };
+  }
 }
 
 
@@ -695,11 +670,9 @@ function SecurePair(context, isServer, requestCert, rejectUnauthorized,
                           options);
   }
 
-  var self = this;
-
   options || (options = {});
 
-  events.EventEmitter.call(this);
+  EventEmitter.call(this);
 
   this.server = options.server;
   this._secureEstablished = false;
@@ -765,22 +738,24 @@ function SecurePair(context, isServer, requestCert, rejectUnauthorized,
   this.cleartext.init();
   this.encrypted.init();
 
-  process.nextTick(function() {
-    /* The Connection may be destroyed by an abort call */
-    if (self.ssl) {
-      self.ssl.start();
-
-      if (options.requestOCSP)
-        self.ssl.requestOCSP();
-
-      /* In case of cipher suite failures - SSL_accept/SSL_connect may fail */
-      if (self.ssl && self.ssl.error)
-        self.error();
-    }
-  });
+  process.nextTick(securePairNT, this, options);
 }
 
-util.inherits(SecurePair, events.EventEmitter);
+util.inherits(SecurePair, EventEmitter);
+
+function securePairNT(self, options) {
+  /* The Connection may be destroyed by an abort call */
+  if (self.ssl) {
+    self.ssl.start();
+
+    if (options.requestOCSP)
+      self.ssl.requestOCSP();
+
+    /* In case of cipher suite failures - SSL_accept/SSL_connect may fail */
+    if (self.ssl && self.ssl.error)
+      self.error();
+  }
+}
 
 
 exports.createSecurePair = function(context,
@@ -863,12 +838,7 @@ exports.pipe = function pipe(pair, socket) {
   socket.pipe(pair.encrypted);
 
   pair.encrypted.on('close', function() {
-    process.nextTick(function() {
-      // Encrypted should be unpiped from socket to prevent possible
-      // write after destroy.
-      pair.encrypted.unpipe(socket);
-      socket.destroySoon();
-    });
+    process.nextTick(pipeCloseNT, pair, socket);
   });
 
   pair.fd = socket.fd;
@@ -914,3 +884,11 @@ exports.pipe = function pipe(pair, socket) {
 
   return cleartext;
 };
+
+
+function pipeCloseNT(pair, socket) {
+  // Encrypted should be unpiped from socket to prevent possible
+  // write after destroy.
+  pair.encrypted.unpipe(socket);
+  socket.destroySoon();
+}

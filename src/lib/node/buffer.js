@@ -1,212 +1,235 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+/* eslint-disable require-buffer */
+'use strict';
 
-var buffer = process.binding('buffer');
-var smalloc = process.binding('smalloc');
-var util = require('util');
-var alloc = smalloc.alloc;
-var truncate = smalloc.truncate;
-var sliceOnto = smalloc.sliceOnto;
-var kMaxLength = smalloc.kMaxLength;
-var internal = {};
+const binding = process.binding('buffer');
+const internalUtil = require('internal/util');
+const bindingObj = {};
 
 exports.Buffer = Buffer;
 exports.SlowBuffer = SlowBuffer;
 exports.INSPECT_MAX_BYTES = 50;
+exports.kMaxLength = binding.kMaxLength;
 
 
 Buffer.poolSize = 8 * 1024;
 var poolSize, poolOffset, allocPool;
 
 
+binding.setupBufferJS(Buffer.prototype, bindingObj);
+const flags = bindingObj.flags;
+const kNoZeroFill = 0;
+
+
 function createPool() {
   poolSize = Buffer.poolSize;
-  allocPool = alloc({}, poolSize);
+  if (poolSize > 0)
+    flags[kNoZeroFill] = 1;
+  allocPool = new Uint8Array(poolSize);
+  Object.setPrototypeOf(allocPool, Buffer.prototype);
   poolOffset = 0;
 }
 createPool();
 
 
-function Buffer(subject, encoding) {
-  if (!util.isBuffer(this))
-    return new Buffer(subject, encoding);
-
-  if (util.isNumber(subject)) {
-    this.length = +subject;
-
-  } else if (util.isString(subject)) {
-    if (!util.isString(encoding) || encoding.length === 0)
-      encoding = 'utf8';
-    this.length = Buffer.byteLength(subject, encoding);
-
-  // Handle Arrays, Buffers, Uint8Arrays or JSON.
-  } else if (util.isObject(subject)) {
-    if (subject.type === 'Buffer' && util.isArray(subject.data))
-      subject = subject.data;
-    this.length = +subject.length;
-
-  } else {
-    throw new TypeError('must start with number, buffer, array or string');
-  }
-
-  if (this.length > kMaxLength) {
-    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
-                         'size: 0x' + kMaxLength.toString(16) + ' bytes');
-  }
-
-  if (this.length < 0)
-    this.length = 0;
-  else
-    this.length >>>= 0;  // Coerce to uint32.
-
-  this.parent = undefined;
-  if (this.length <= (Buffer.poolSize >>> 1) && this.length > 0) {
-    if (this.length > poolSize - poolOffset)
-      createPool();
-    this.parent = sliceOnto(allocPool,
-                            this,
-                            poolOffset,
-                            poolOffset + this.length);
-    poolOffset += this.length;
-
-    // Ensure aligned slices
-    if (poolOffset & 0x7) {
-      poolOffset |= 0x7;
-      poolOffset++;
-    }
-  } else {
-    alloc(this, this.length);
-  }
-
-  if (util.isNumber(subject)) {
-    return;
-  }
-
-  if (util.isString(subject)) {
-    // In the case of base64 it's possible that the size of the buffer
-    // allocated was slightly too large. In this case we need to rewrite
-    // the length to the actual length written.
-    var len = this.write(subject, encoding);
-    // Buffer was truncated after decode, realloc internal ExternalArray
-    if (len !== this.length) {
-      var prevLen = this.length;
-      this.length = len;
-      truncate(this, this.length);
-      // Only need to readjust the poolOffset if the allocation is a slice.
-      if (this.parent != undefined)
-        poolOffset -= (prevLen - len);
-    }
-
-  } else if (util.isBuffer(subject)) {
-    subject.copy(this, 0, 0, this.length);
-
-  } else if (util.isNumber(subject.length) || util.isArray(subject)) {
-    // Really crappy way to handle Uint8Arrays, but V8 doesn't give a simple
-    // way to access the data from the C++ API.
-    for (var i = 0; i < this.length; i++)
-      this[i] = subject[i];
+function alignPool() {
+  // Ensure aligned slices
+  if (poolOffset & 0x7) {
+    poolOffset |= 0x7;
+    poolOffset++;
   }
 }
 
 
-function SlowBuffer(length) {
-  length = length >>> 0;
-  if (length > kMaxLength) {
-    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
-                         'size: 0x' + kMaxLength.toString(16) + ' bytes');
+function Buffer(arg) {
+  // Common case.
+  if (typeof arg === 'number') {
+    // If less than zero, or NaN.
+    if (arg < 0 || arg !== arg)
+      arg = 0;
+    return allocate(arg);
   }
-  var b = new NativeBuffer(length);
-  alloc(b, length);
+
+  // Slightly less common case.
+  if (typeof arg === 'string') {
+    return fromString(arg, arguments[1]);
+  }
+
+  // Unusual.
+  return fromObject(arg);
+}
+
+Object.setPrototypeOf(Buffer.prototype, Uint8Array.prototype);
+Object.setPrototypeOf(Buffer, Uint8Array);
+
+
+function SlowBuffer(length) {
+  if (+length != length)
+    length = 0;
+  if (length > 0)
+    flags[kNoZeroFill] = 1;
+  const ui8 = new Uint8Array(+length);
+  Object.setPrototypeOf(ui8, Buffer.prototype);
+  return ui8;
+}
+
+Object.setPrototypeOf(SlowBuffer.prototype, Uint8Array.prototype);
+Object.setPrototypeOf(SlowBuffer, Uint8Array);
+
+
+function allocate(size) {
+  if (size === 0) {
+    const ui8 = new Uint8Array(size);
+    Object.setPrototypeOf(ui8, Buffer.prototype);
+    return ui8;
+  }
+  if (size < (Buffer.poolSize >>> 1)) {
+    if (size > (poolSize - poolOffset))
+      createPool();
+    var b = allocPool.slice(poolOffset, poolOffset + size);
+    poolOffset += size;
+    alignPool();
+    return b;
+  } else {
+    // Even though this is checked above, the conditional is a safety net and
+    // sanity check to prevent any subsequent typed array allocation from not
+    // being zero filled.
+    if (size > 0)
+      flags[kNoZeroFill] = 1;
+    const ui8 = new Uint8Array(size);
+    Object.setPrototypeOf(ui8, Buffer.prototype);
+    return ui8;
+  }
+}
+
+
+function fromString(string, encoding) {
+  if (typeof encoding !== 'string' || encoding === '')
+    encoding = 'utf8';
+
+  var length = byteLength(string, encoding);
+  if (length >= (Buffer.poolSize >>> 1))
+    return binding.createFromString(string, encoding);
+
+  if (length > (poolSize - poolOffset))
+    createPool();
+  var actual = allocPool.write(string, poolOffset, encoding);
+  var b = allocPool.slice(poolOffset, poolOffset + actual);
+  poolOffset += actual;
+  alignPool();
   return b;
 }
 
 
-// Bypass all checks for instantiating unallocated Buffer required for
-// Objects created in C++. Significantly faster than calling the Buffer
-// function.
-function NativeBuffer(length) {
-  this.length = length >>> 0;
-  // Set this to keep the object map the same.
-  this.parent = undefined;
+function fromObject(obj) {
+  if (obj instanceof Buffer) {
+    var b = allocate(obj.length);
+    obj.copy(b, 0, 0, obj.length);
+    return b;
+  }
+
+  if (Array.isArray(obj)) {
+    var length = obj.length;
+    var b = allocate(length);
+    for (var i = 0; i < length; i++)
+      b[i] = obj[i] & 255;
+    return b;
+  }
+
+  if (obj == null) {
+    throw new TypeError('must start with number, buffer, array or string');
+  }
+
+  if (obj instanceof ArrayBuffer) {
+    return binding.createFromArrayBuffer(obj);
+  }
+
+  if (obj.buffer instanceof ArrayBuffer || obj.length) {
+    var length;
+    if (typeof obj.length !== 'number' || obj.length !== obj.length)
+      length = 0;
+    else
+      length = obj.length;
+    var b = allocate(length);
+    for (var i = 0; i < length; i++) {
+      b[i] = obj[i] & 255;
+    }
+    return b;
+  }
+
+  if (obj.type === 'Buffer' && Array.isArray(obj.data)) {
+    var array = obj.data;
+    var b = allocate(array.length);
+    for (var i = 0; i < array.length; i++)
+      b[i] = array[i] & 255;
+    return b;
+  }
+
+  throw new TypeError('must start with number, buffer, array or string');
 }
-NativeBuffer.prototype = Buffer.prototype;
-
-
-// add methods to Buffer prototype
-buffer.setupBufferJS(NativeBuffer, internal);
 
 
 // Static methods
 
 Buffer.isBuffer = function isBuffer(b) {
-  return util.isBuffer(b);
+  return b instanceof Buffer;
 };
 
 
 Buffer.compare = function compare(a, b) {
   if (!(a instanceof Buffer) ||
-      !(b instanceof Buffer))
+      !(b instanceof Buffer)) {
     throw new TypeError('Arguments must be Buffers');
+  }
 
-  return internal.compare(a, b);
+  if (a === b) {
+    return 0;
+  }
+
+  return binding.compare(a, b);
 };
 
 
 Buffer.isEncoding = function(encoding) {
-  switch ((encoding + '').toLowerCase()) {
-    case 'hex':
-    case 'utf8':
-    case 'utf-8':
-    case 'ascii':
-    case 'binary':
-    case 'base64':
-    case 'ucs2':
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
-    case 'raw':
-      return true;
+  var loweredCase = false;
+  for (;;) {
+    switch (encoding) {
+      case 'hex':
+      case 'utf8':
+      case 'utf-8':
+      case 'ascii':
+      case 'binary':
+      case 'base64':
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+      case 'raw':
+        return true;
 
-    default:
-      return false;
+      default:
+        if (loweredCase)
+          return false;
+        encoding = ('' + encoding).toLowerCase();
+        loweredCase = true;
+    }
   }
 };
 
 
 Buffer.concat = function(list, length) {
-  if (!util.isArray(list))
+  if (!Array.isArray(list))
     throw new TypeError('list argument must be an Array of Buffers.');
 
-  if (util.isUndefined(length)) {
+  if (list.length === 0)
+    return new Buffer(0);
+
+  if (length === undefined) {
     length = 0;
     for (var i = 0; i < list.length; i++)
       length += list[i].length;
   } else {
     length = length >>> 0;
   }
-
-  if (list.length === 0)
-    return new Buffer(0);
-  else if (list.length === 1)
-    return list[0];
 
   var buffer = new Buffer(length);
   var pos = 0;
@@ -220,37 +243,95 @@ Buffer.concat = function(list, length) {
 };
 
 
-Buffer.byteLength = function(str, enc) {
-  var ret;
-  str = str + '';
-  switch (enc) {
-    case 'ascii':
-    case 'binary':
-    case 'raw':
-      ret = str.length;
-      break;
-    case 'ucs2':
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
-      ret = str.length * 2;
-      break;
-    case 'hex':
-      ret = str.length >>> 1;
-      break;
-    default:
-      ret = internal.byteLength(str, enc);
+function base64ByteLength(str, bytes) {
+  // Handle padding
+  if (str.charCodeAt(bytes - 1) === 0x3D)
+    bytes--;
+  if (bytes > 1 && str.charCodeAt(bytes - 1) === 0x3D)
+    bytes--;
+
+  // Base64 ratio: 3/4
+  return (bytes * 3) >>> 2;
+}
+
+
+function byteLength(string, encoding) {
+  if (typeof string !== 'string')
+    string = '' + string;
+
+  var len = string.length;
+  if (len === 0)
+    return 0;
+
+  // Use a for loop to avoid recursion
+  var loweredCase = false;
+  for (;;) {
+    switch (encoding) {
+      case 'ascii':
+      case 'binary':
+      // Deprecated
+      case 'raw':
+      case 'raws':
+        return len;
+
+      case 'utf8':
+      case 'utf-8':
+        return binding.byteLengthUtf8(string);
+
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return len * 2;
+
+      case 'hex':
+        return len >>> 1;
+
+      case 'base64':
+        return base64ByteLength(string, len);
+
+      default:
+        // The C++ binding defaulted to UTF8, we should too.
+        if (loweredCase)
+          return binding.byteLengthUtf8(string);
+
+        encoding = ('' + encoding).toLowerCase();
+        loweredCase = true;
+    }
   }
-  return ret;
-};
+}
+
+Buffer.byteLength = byteLength;
 
 
-// toString(encoding, start=0, end=buffer.length)
-Buffer.prototype.toString = function(encoding, start, end) {
+// For backwards compatibility.
+Object.defineProperty(Buffer.prototype, 'parent', {
+  enumerable: true,
+  get: function() {
+    if (!(this instanceof Buffer))
+      return undefined;
+    if (this.byteLength === 0 ||
+        this.byteLength === this.buffer.byteLength) {
+      return undefined;
+    }
+    return this.buffer;
+  }
+});
+Object.defineProperty(Buffer.prototype, 'offset', {
+  enumerable: true,
+  get: function() {
+    if (!(this instanceof Buffer))
+      return undefined;
+    return this.byteOffset;
+  }
+});
+
+
+function slowToString(encoding, start, end) {
   var loweredCase = false;
 
   start = start >>> 0;
-  end = util.isUndefined(end) || end === Infinity ? this.length : end >>> 0;
+  end = end === undefined || end === Infinity ? this.length : end >>> 0;
 
   if (!encoding) encoding = 'utf8';
   if (start < 0) start = 0;
@@ -288,6 +369,18 @@ Buffer.prototype.toString = function(encoding, start, end) {
         loweredCase = true;
     }
   }
+}
+
+
+Buffer.prototype.toString = function() {
+  if (arguments.length === 0) {
+    var result = this.utf8Slice(0, this.length);
+  } else {
+    var result = slowToString.apply(this, arguments);
+  }
+  if (result === undefined)
+    throw new Error('toString failed');
+  return result;
 };
 
 
@@ -295,7 +388,10 @@ Buffer.prototype.equals = function equals(b) {
   if (!(b instanceof Buffer))
     throw new TypeError('Argument must be a Buffer');
 
-  return internal.compare(this, b) === 0;
+  if (this === b)
+    return true;
+
+  return binding.compare(this, b) === 0;
 };
 
 
@@ -316,7 +412,61 @@ Buffer.prototype.compare = function compare(b) {
   if (!(b instanceof Buffer))
     throw new TypeError('Argument must be a Buffer');
 
-  return internal.compare(this, b);
+  if (this === b)
+    return 0;
+
+  return binding.compare(this, b);
+};
+
+function slowIndexOf(buffer, val, byteOffset, encoding) {
+  var loweredCase = false;
+  for (;;) {
+    switch (encoding) {
+      case 'utf8':
+      case 'utf-8':
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+      case 'binary':
+        return binding.indexOfString(buffer, val, byteOffset, encoding);
+
+      case 'base64':
+      case 'ascii':
+      case 'hex':
+        return binding.indexOfBuffer(
+            buffer, Buffer(val, encoding), byteOffset, encoding);
+
+      default:
+        if (loweredCase) {
+          throw new TypeError('Unknown encoding: ' + encoding);
+        }
+
+        encoding = ('' + encoding).toLowerCase();
+        loweredCase = true;
+    }
+  }
+}
+
+Buffer.prototype.indexOf = function indexOf(val, byteOffset, encoding) {
+  if (byteOffset > 0x7fffffff)
+    byteOffset = 0x7fffffff;
+  else if (byteOffset < -0x80000000)
+    byteOffset = -0x80000000;
+  byteOffset >>= 0;
+
+  if (typeof val === 'string') {
+    if (encoding === undefined) {
+      return binding.indexOfString(this, val, byteOffset, encoding);
+    }
+    return slowIndexOf(this, val, byteOffset, encoding);
+  } else if (val instanceof Buffer) {
+    return binding.indexOfBuffer(this, val, byteOffset, encoding);
+  } else if (typeof val === 'number') {
+    return binding.indexOfNumber(this, val, byteOffset);
+  }
+
+  throw new TypeError('val must be string, number or Buffer');
 };
 
 
@@ -337,44 +487,45 @@ Buffer.prototype.fill = function fill(val, start, end) {
       val = code;
   }
 
-  internal.fill(this, val, start, end);
+  binding.fill(this, val, start, end);
 
   return this;
 };
 
 
 // XXX remove in v0.13
-Buffer.prototype.get = util.deprecate(function get(offset) {
+Buffer.prototype.get = internalUtil.deprecate(function get(offset) {
   offset = ~~offset;
   if (offset < 0 || offset >= this.length)
     throw new RangeError('index out of range');
   return this[offset];
-}, '.get() is deprecated. Access using array indexes instead.');
+}, 'Buffer.get is deprecated. Use array indexes instead.');
 
 
 // XXX remove in v0.13
-Buffer.prototype.set = util.deprecate(function set(offset, v) {
+Buffer.prototype.set = internalUtil.deprecate(function set(offset, v) {
   offset = ~~offset;
   if (offset < 0 || offset >= this.length)
     throw new RangeError('index out of range');
   return this[offset] = v;
-}, '.set() is deprecated. Set using array indexes instead.');
+}, 'Buffer.set is deprecated. Use array indexes instead.');
 
 
 // TODO(trevnorris): fix these checks to follow new standard
 // write(string, offset = 0, length = buffer.length, encoding = 'utf8')
 var writeWarned = false;
-var writeMsg = '.write(string, encoding, offset, length) is deprecated.' +
-               ' Use write(string[, offset[, length]][, encoding]) instead.';
+const writeMsg = 'Buffer.write(string, encoding, offset, length) is ' +
+                 'deprecated. Use write(string[, offset[, length]]' +
+                 '[, encoding]) instead.';
 Buffer.prototype.write = function(string, offset, length, encoding) {
   // Buffer#write(string);
-  if (util.isUndefined(offset)) {
+  if (offset === undefined) {
     encoding = 'utf8';
     length = this.length;
     offset = 0;
 
   // Buffer#write(string, encoding)
-  } else if (util.isUndefined(length) && util.isString(offset)) {
+  } else if (length === undefined && typeof offset === 'string') {
     encoding = offset;
     length = this.length;
     offset = 0;
@@ -384,7 +535,7 @@ Buffer.prototype.write = function(string, offset, length, encoding) {
     offset = offset >>> 0;
     if (isFinite(length)) {
       length = length >>> 0;
-      if (util.isUndefined(encoding))
+      if (encoding === undefined)
         encoding = 'utf8';
     } else {
       encoding = length;
@@ -393,16 +544,7 @@ Buffer.prototype.write = function(string, offset, length, encoding) {
 
   // XXX legacy write(string, encoding, offset, length) - remove in v0.13
   } else {
-    if (!writeWarned) {
-      if (process.throwDeprecation)
-        throw new Error(writeMsg);
-      else if (process.traceDeprecation)
-        console.trace(writeMsg);
-      else
-        console.error(writeMsg);
-      writeWarned = true;
-    }
-
+    writeWarned = internalUtil.printDeprecationMessage(writeMsg, writeWarned);
     var swap = encoding;
     encoding = offset;
     offset = length >>> 0;
@@ -410,50 +552,48 @@ Buffer.prototype.write = function(string, offset, length, encoding) {
   }
 
   var remaining = this.length - offset;
-  if (util.isUndefined(length) || length > remaining)
+  if (length === undefined || length > remaining)
     length = remaining;
-
-  encoding = !!encoding ? (encoding + '').toLowerCase() : 'utf8';
 
   if (string.length > 0 && (length < 0 || offset < 0))
     throw new RangeError('attempt to write outside buffer bounds');
 
-  var ret;
-  switch (encoding) {
-    case 'hex':
-      ret = this.hexWrite(string, offset, length);
-      break;
+  if (!encoding)
+    encoding = 'utf8';
 
-    case 'utf8':
-    case 'utf-8':
-      ret = this.utf8Write(string, offset, length);
-      break;
+  var loweredCase = false;
+  for (;;) {
+    switch (encoding) {
+      case 'hex':
+        return this.hexWrite(string, offset, length);
 
-    case 'ascii':
-      ret = this.asciiWrite(string, offset, length);
-      break;
+      case 'utf8':
+      case 'utf-8':
+        return this.utf8Write(string, offset, length);
 
-    case 'binary':
-      ret = this.binaryWrite(string, offset, length);
-      break;
+      case 'ascii':
+        return this.asciiWrite(string, offset, length);
 
-    case 'base64':
-      // Warning: maxLength not taken into account in base64Write
-      ret = this.base64Write(string, offset, length);
-      break;
+      case 'binary':
+        return this.binaryWrite(string, offset, length);
 
-    case 'ucs2':
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
-      ret = this.ucs2Write(string, offset, length);
-      break;
+      case 'base64':
+        // Warning: maxLength not taken into account in base64Write
+        return this.base64Write(string, offset, length);
 
-    default:
-      throw new TypeError('Unknown encoding: ' + encoding);
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return this.ucs2Write(string, offset, length);
+
+      default:
+        if (loweredCase)
+          throw new TypeError('Unknown encoding: ' + encoding);
+        encoding = ('' + encoding).toLowerCase();
+        loweredCase = true;
+    }
   }
-
-  return ret;
 };
 
 
@@ -467,37 +607,10 @@ Buffer.prototype.toJSON = function() {
 
 // TODO(trevnorris): currently works like Array.prototype.slice(), which
 // doesn't follow the new standard for throwing on out of range indexes.
-Buffer.prototype.slice = function(start, end) {
-  var len = this.length;
-  start = ~~start;
-  end = util.isUndefined(end) ? len : ~~end;
-
-  if (start < 0) {
-    start += len;
-    if (start < 0)
-      start = 0;
-  } else if (start > len) {
-    start = len;
-  }
-
-  if (end < 0) {
-    end += len;
-    if (end < 0)
-      end = 0;
-  } else if (end > len) {
-    end = len;
-  }
-
-  if (end < start)
-    end = start;
-
-  var buf = new NativeBuffer();
-  sliceOnto(this, buf, start, end);
-  buf.length = end - start;
-  if (buf.length > 0)
-    buf.parent = util.isUndefined(this.parent) ? this : this.parent;
-
-  return buf;
+Buffer.prototype.slice = function slice(start, end) {
+  const buffer = this.subarray(start, end);
+  Object.setPrototypeOf(buffer, Buffer.prototype);
+  return buffer;
 };
 
 
@@ -681,7 +794,7 @@ Buffer.prototype.readFloatLE = function readFloatLE(offset, noAssert) {
   offset = offset >>> 0;
   if (!noAssert)
     checkOffset(offset, 4, this.length);
-  return internal.readFloatLE(this, offset);
+  return binding.readFloatLE(this, offset);
 };
 
 
@@ -689,7 +802,7 @@ Buffer.prototype.readFloatBE = function readFloatBE(offset, noAssert) {
   offset = offset >>> 0;
   if (!noAssert)
     checkOffset(offset, 4, this.length);
-  return internal.readFloatBE(this, offset);
+  return binding.readFloatBE(this, offset);
 };
 
 
@@ -697,7 +810,7 @@ Buffer.prototype.readDoubleLE = function readDoubleLE(offset, noAssert) {
   offset = offset >>> 0;
   if (!noAssert)
     checkOffset(offset, 8, this.length);
-  return internal.readDoubleLE(this, offset);
+  return binding.readDoubleLE(this, offset);
 };
 
 
@@ -705,7 +818,7 @@ Buffer.prototype.readDoubleBE = function readDoubleBE(offset, noAssert) {
   offset = offset >>> 0;
   if (!noAssert)
     checkOffset(offset, 8, this.length);
-  return internal.readDoubleBE(this, offset);
+  return binding.readDoubleBE(this, offset);
 };
 
 
@@ -723,8 +836,10 @@ Buffer.prototype.writeUIntLE = function(value, offset, byteLength, noAssert) {
   value = +value;
   offset = offset >>> 0;
   byteLength = byteLength >>> 0;
-  if (!noAssert)
-    checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0);
+  if (!noAssert) {
+    const maxBytes = Math.pow(2, 8 * byteLength) - 1;
+    checkInt(this, value, offset, byteLength, maxBytes, 0);
+  }
 
   var mul = 1;
   var i = 0;
@@ -740,8 +855,10 @@ Buffer.prototype.writeUIntBE = function(value, offset, byteLength, noAssert) {
   value = +value;
   offset = offset >>> 0;
   byteLength = byteLength >>> 0;
-  if (!noAssert)
-    checkInt(this, value, offset, byteLength, Math.pow(2, 8 * byteLength), 0);
+  if (!noAssert) {
+    const maxBytes = Math.pow(2, 8 * byteLength) - 1;
+    checkInt(this, value, offset, byteLength, maxBytes, 0);
+  }
 
   var i = byteLength - 1;
   var mul = 1;
@@ -928,7 +1045,7 @@ Buffer.prototype.writeFloatLE = function writeFloatLE(val, offset, noAssert) {
   offset = offset >>> 0;
   if (!noAssert)
     checkFloat(this, val, offset, 4);
-  internal.writeFloatLE(this, val, offset);
+  binding.writeFloatLE(this, val, offset);
   return offset + 4;
 };
 
@@ -938,7 +1055,7 @@ Buffer.prototype.writeFloatBE = function writeFloatBE(val, offset, noAssert) {
   offset = offset >>> 0;
   if (!noAssert)
     checkFloat(this, val, offset, 4);
-  internal.writeFloatBE(this, val, offset);
+  binding.writeFloatBE(this, val, offset);
   return offset + 4;
 };
 
@@ -948,7 +1065,7 @@ Buffer.prototype.writeDoubleLE = function writeDoubleLE(val, offset, noAssert) {
   offset = offset >>> 0;
   if (!noAssert)
     checkFloat(this, val, offset, 8);
-  internal.writeDoubleLE(this, val, offset);
+  binding.writeDoubleLE(this, val, offset);
   return offset + 8;
 };
 
@@ -958,6 +1075,6 @@ Buffer.prototype.writeDoubleBE = function writeDoubleBE(val, offset, noAssert) {
   offset = offset >>> 0;
   if (!noAssert)
     checkFloat(this, val, offset, 8);
-  internal.writeDoubleBE(this, val, offset);
+  binding.writeDoubleBE(this, val, offset);
   return offset + 8;
 };

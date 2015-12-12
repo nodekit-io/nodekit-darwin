@@ -1,28 +1,14 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
+const util = require('util');
+const isWindows = process.platform === 'win32';
 
-var isWindows = process.platform === 'win32';
-var util = require('util');
-
+function assertPath(path) {
+  if (typeof path !== 'string') {
+    throw new TypeError('Path must be a string. Received ' +
+                        util.inspect(path));
+  }
+}
 
 // resolves . and .. elements in a path array with directory names there
 // must be no slashes or device names (c:\) in the array
@@ -51,7 +37,7 @@ function normalizeArray(parts, allowAboveRoot) {
   return res;
 }
 
-// returns an array with empty elements removed from either end of the input
+// Returns an array with empty elements removed from either end of the input
 // array or the original array if no elements need to be removed
 function trimArray(arr) {
   var lastIndex = arr.length - 1;
@@ -76,11 +62,11 @@ function trimArray(arr) {
 
 // Regex to split a windows path into three parts: [*, device, slash,
 // tail] windows-only
-var splitDeviceRe =
+const splitDeviceRe =
     /^([a-zA-Z]:|[\\\/]{2}[^\\\/]+[\\\/]+[^\\\/]+)?([\\\/])?([\s\S]*?)$/;
 
 // Regex to split the tail part of the above into [*, dir, basename, ext]
-var splitTailRe =
+const splitTailRe =
     /^([\s\S]*?)((?:\.{1,2}|[^\\\/]+?|)(\.[^.\/\\]*|))(?:[\\\/]*)$/;
 
 var win32 = {};
@@ -90,7 +76,7 @@ function win32SplitPath(filename) {
   // Separate device+slash from tail
   var result = splitDeviceRe.exec(filename),
       device = (result[1] || '') + (result[2] || ''),
-      tail = result[3] || '';
+      tail = result[3];
   // Split the tail into dir, basename and extension
   var result2 = splitTailRe.exec(tail),
       dir = result2[1],
@@ -104,8 +90,8 @@ function win32StatPath(path) {
       device = result[1] || '',
       isUnc = !!device && device[1] !== ':';
   return {
-    device: device,
-    isUnc: isUnc,
+    device,
+    isUnc,
     isAbsolute: isUnc || !!result[2], // UNC paths are always absolute
     tail: result[3]
   };
@@ -141,10 +127,10 @@ win32.resolve = function() {
       }
     }
 
-    // Skip empty and invalid entries
-    if (!util.isString(path)) {
-      throw new TypeError('Arguments to path.resolve must be strings');
-    } else if (!path) {
+    assertPath(path);
+
+    // Skip empty entries
+    if (path === '') {
       continue;
     }
 
@@ -194,6 +180,8 @@ win32.resolve = function() {
 
 
 win32.normalize = function(path) {
+  assertPath(path);
+
   var result = win32StatPath(path),
       device = result.device,
       isUnc = result.isUnc,
@@ -222,6 +210,7 @@ win32.normalize = function(path) {
 
 
 win32.isAbsolute = function(path) {
+  assertPath(path);
   return win32StatPath(path).isAbsolute;
 };
 
@@ -229,9 +218,7 @@ win32.join = function() {
   var paths = [];
   for (var i = 0; i < arguments.length; i++) {
     var arg = arguments[i];
-    if (!util.isString(arg)) {
-      throw new TypeError('Arguments to path.join must be strings');
-    }
+    assertPath(arg);
     if (arg) {
       paths.push(arg);
     }
@@ -266,6 +253,9 @@ win32.join = function() {
 // to = 'C:\\orandea\\impl\\bbb'
 // The output of the function should be: '..\\..\\impl\\bbb'
 win32.relative = function(from, to) {
+  assertPath(from);
+  assertPath(to);
+
   from = win32.resolve(from);
   to = win32.resolve(to);
 
@@ -287,7 +277,7 @@ win32.relative = function(from, to) {
     }
   }
 
-  if (samePartsLength == 0) {
+  if (samePartsLength === 0) {
     return to;
   }
 
@@ -304,7 +294,7 @@ win32.relative = function(from, to) {
 
 win32._makeLong = function(path) {
   // Note: this will *probably* throw somewhere.
-  if (!util.isString(path))
+  if (typeof path !== 'string')
     return path;
 
   if (!path) {
@@ -347,6 +337,9 @@ win32.dirname = function(path) {
 
 
 win32.basename = function(path, ext) {
+  if (ext !== undefined && typeof ext !== 'string')
+    throw new TypeError('ext must be a string');
+
   var f = win32SplitPath(path)[2];
   // TODO: make this comparison case-insensitive on windows?
   if (ext && f.substr(-1 * ext.length) === ext) {
@@ -362,7 +355,7 @@ win32.extname = function(path) {
 
 
 win32.format = function(pathObject) {
-  if (!util.isObject(pathObject)) {
+  if (pathObject === null || typeof pathObject !== 'object') {
     throw new TypeError(
         "Parameter 'pathObject' must be an object, not " + typeof pathObject
     );
@@ -370,7 +363,7 @@ win32.format = function(pathObject) {
 
   var root = pathObject.root || '';
 
-  if (!util.isString(root)) {
+  if (typeof root !== 'string') {
     throw new TypeError(
         "'pathObject.root' must be a string or undefined, not " +
         typeof pathObject.root
@@ -390,15 +383,9 @@ win32.format = function(pathObject) {
 
 
 win32.parse = function(pathString) {
-  if (!util.isString(pathString)) {
-    throw new TypeError(
-        "Parameter 'pathString' must be a string, not " + typeof pathString
-    );
-  }
+  assertPath(pathString);
+
   var allParts = win32SplitPath(pathString);
-  if (!allParts || allParts.length !== 4) {
-    throw new TypeError("Invalid path '" + pathString + "'");
-  }
   return {
     root: allParts[0],
     dir: allParts[0] + allParts[1].slice(0, -1),
@@ -415,13 +402,15 @@ win32.delimiter = ';';
 
 // Split a filename into [root, dir, basename, ext], unix version
 // 'root' is just a slash, or nothing.
-var splitPathRe =
+const splitPathRe =
     /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
 var posix = {};
 
 
 function posixSplitPath(filename) {
-  return splitPathRe.exec(filename).slice(1);
+  const out = splitPathRe.exec(filename);
+  out.shift();
+  return out;
 }
 
 
@@ -434,10 +423,10 @@ posix.resolve = function() {
   for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
     var path = (i >= 0) ? arguments[i] : process.cwd();
 
-    // Skip empty and invalid entries
-    if (!util.isString(path)) {
-      throw new TypeError('Arguments to path.resolve must be strings');
-    } else if (!path) {
+    assertPath(path);
+
+    // Skip empty entries
+    if (path === '') {
       continue;
     }
 
@@ -458,6 +447,8 @@ posix.resolve = function() {
 // path.normalize(path)
 // posix version
 posix.normalize = function(path) {
+  assertPath(path);
+
   var isAbsolute = posix.isAbsolute(path),
       trailingSlash = path && path[path.length - 1] === '/';
 
@@ -476,7 +467,8 @@ posix.normalize = function(path) {
 
 // posix version
 posix.isAbsolute = function(path) {
-  return path.charAt(0) === '/';
+  assertPath(path);
+  return !!path && path[0] === '/';
 };
 
 // posix version
@@ -484,9 +476,7 @@ posix.join = function() {
   var path = '';
   for (var i = 0; i < arguments.length; i++) {
     var segment = arguments[i];
-    if (!util.isString(segment)) {
-      throw new TypeError('Arguments to path.join must be strings');
-    }
+    assertPath(segment);
     if (segment) {
       if (!path) {
         path += segment;
@@ -502,6 +492,9 @@ posix.join = function() {
 // path.relative(from, to)
 // posix version
 posix.relative = function(from, to) {
+  assertPath(from);
+  assertPath(to);
+
   from = posix.resolve(from).substr(1);
   to = posix.resolve(to).substr(1);
 
@@ -553,8 +546,11 @@ posix.dirname = function(path) {
 
 
 posix.basename = function(path, ext) {
+  if (ext !== undefined && typeof ext !== 'string')
+    throw new TypeError('ext must be a string');
+
   var f = posixSplitPath(path)[2];
-  // TODO: make this comparison case-insensitive on windows?
+
   if (ext && f.substr(-1 * ext.length) === ext) {
     f = f.substr(0, f.length - ext.length);
   }
@@ -568,7 +564,7 @@ posix.extname = function(path) {
 
 
 posix.format = function(pathObject) {
-  if (!util.isObject(pathObject)) {
+  if (pathObject === null || typeof pathObject !== 'object') {
     throw new TypeError(
         "Parameter 'pathObject' must be an object, not " + typeof pathObject
     );
@@ -576,7 +572,7 @@ posix.format = function(pathObject) {
 
   var root = pathObject.root || '';
 
-  if (!util.isString(root)) {
+  if (typeof root !== 'string') {
     throw new TypeError(
         "'pathObject.root' must be a string or undefined, not " +
         typeof pathObject.root
@@ -590,19 +586,9 @@ posix.format = function(pathObject) {
 
 
 posix.parse = function(pathString) {
-  if (!util.isString(pathString)) {
-    throw new TypeError(
-        "Parameter 'pathString' must be a string, not " + typeof pathString
-    );
-  }
-  var allParts = posixSplitPath(pathString);
-  if (!allParts || allParts.length !== 4) {
-    throw new TypeError("Invalid path '" + pathString + "'");
-  }
-  allParts[1] = allParts[1] || '';
-  allParts[2] = allParts[2] || '';
-  allParts[3] = allParts[3] || '';
+  assertPath(pathString);
 
+  var allParts = posixSplitPath(pathString);
   return {
     root: allParts[0],
     dir: allParts[0] + allParts[1].slice(0, -1),

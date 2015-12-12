@@ -21,7 +21,8 @@ var getSource = require('native_module').getSource;
 var source = {};
 
 /* BUILT-IN UNMODIFIED NODE.JS SOURCES */
-[   '_debugger',
+[   '_debug_agent',
+    '_debugger',
 	'_http_agent',
 	'_http_client',
 	'_http_common',
@@ -33,7 +34,8 @@ var source = {};
 	'_stream_passthrough',
 	'_stream_readable',
 	'_stream_transform',
-    '_stream_writable',
+    '_stream_wrap',
+	'_stream_writable',
     '_tls_common',
 	'_tls_legacy',
 	'_tls_wrap',
@@ -53,31 +55,40 @@ var source = {};
 	'http',
 	'https',
 	'module',
-	'net',
+	'net', /** NOT YET WORKING */
 	'os',
 	'path',
-  	'punycode',
+    /* 'process', ** NOT USED ** */
+	'punycode',
 	'querystring',
 	'readline',
 	'repl',
-     'smalloc',
+    /* 'smalloc', ** REMOVED in NODE v4.x ** */
 	'stream',
 	'string_decoder',
 	'sys',
 	'timers',
 	'tls',
-   'tty',
+     /* 'tracing', ** REMOVED in NODE v4.x ** */
+	'tty',
 	'url',
-   'util',
-    'vm',
+	/* 'util', ** SEE REPLACEMENT SECTION BELOW ** */
+    /* 'v8', ** NOT YET IMPLEMENTED ** */
+	'vm',
 	'zlib',
-     ].forEach( function(name) {
+    'internal/child_process',
+    'internal/freelist',
+    'internal/module',
+    'internal/repl',
+    'internal/socket_list',
+    'internal/util'
+   ].forEach( function(name) {
   source[name] = getSource('lib/node/' + name);
    });
 
 /* CUSTOM NODE.JS API REPLACEMENTS*/
 [
-	'buffer', 'dns', 'crypto'
+	'buffer', 'dns', 'crypto', 'util' 
  ].forEach(function (name) {
            source[name] = getSource('lib/builtin-replacements/' + name );
            });

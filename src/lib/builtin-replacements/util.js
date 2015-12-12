@@ -1,23 +1,33 @@
-'use strict';
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-const uv = process.binding('uv');
-const Buffer = require('buffer').Buffer;
-const internalUtil = require('internal/util');
-const binding = process.binding('util');
-
-var Debug;
-
-const formatRegExp = /%[sdj%]/g;
+var formatRegExp = /%[sdj%]/g;
 exports.format = function(f) {
-  if (typeof f !== 'string') {
+  if (!isString(f)) {
     var objects = [];
     for (var i = 0; i < arguments.length; i++) {
       objects.push(inspect(arguments[i]));
     }
     return objects.join(' ');
   }
-
-  if (arguments.length === 1) return f;
 
   var i = 1;
   var args = arguments;
@@ -34,13 +44,12 @@ exports.format = function(f) {
         } catch (_) {
           return '[Circular]';
         }
-        // falls through
       default:
         return x;
     }
   });
   for (var x = args[i]; i < len; x = args[++i]) {
-    if (x === null || (typeof x !== 'object' && typeof x !== 'symbol')) {
+    if (isNull(x) || !isObject(x)) {
       str += ' ' + x;
     } else {
       str += ' ' + inspect(x);
@@ -50,13 +59,44 @@ exports.format = function(f) {
 };
 
 
-exports.deprecate = internalUtil._deprecate;
+// Mark that a method should not be used.
+// Returns a modified function which warns once by default.
+// If --no-deprecation is set, then it is a no-op.
+exports.deprecate = function(fn, msg) {
+  // Allow for deprecating things in the process of starting up.
+  if (isUndefined(global.process)) {
+    return function() {
+      return exports.deprecate(fn, msg).apply(this, arguments);
+    };
+  }
+
+  if (process.noDeprecation === true) {
+    return fn;
+  }
+
+  var warned = false;
+  function deprecated() {
+    if (!warned) {
+      if (process.throwDeprecation) {
+        throw new Error(msg);
+      } else if (process.traceDeprecation) {
+        console.trace(msg);
+      } else {
+        console.error(msg);
+      }
+      warned = true;
+    }
+    return fn.apply(this, arguments);
+  }
+
+  return deprecated;
+};
 
 
 var debugs = {};
 var debugEnviron;
 exports.debuglog = function(set) {
-  if (debugEnviron === undefined)
+  if (isUndefined(debugEnviron))
     debugEnviron = process.env.NODE_DEBUG || '';
   set = set.toUpperCase();
   if (!debugs[set]) {
@@ -91,7 +131,7 @@ function inspect(obj, opts) {
   // legacy...
   if (arguments.length >= 3) ctx.depth = arguments[2];
   if (arguments.length >= 4) ctx.colors = arguments[3];
-  if (typeof opts === 'boolean') {
+  if (isBoolean(opts)) {
     // legacy...
     ctx.showHidden = opts;
   } else if (opts) {
@@ -99,10 +139,10 @@ function inspect(obj, opts) {
     exports._extend(ctx, opts);
   }
   // set default options
-  if (ctx.showHidden === undefined) ctx.showHidden = false;
-  if (ctx.depth === undefined) ctx.depth = 2;
-  if (ctx.colors === undefined) ctx.colors = false;
-  if (ctx.customInspect === undefined) ctx.customInspect = true;
+  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
+  if (isUndefined(ctx.depth)) ctx.depth = 2;
+  if (isUndefined(ctx.colors)) ctx.colors = false;
+  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
   if (ctx.colors) ctx.stylize = stylizeWithColor;
   return formatValue(ctx, obj, ctx.depth);
 }
@@ -134,7 +174,6 @@ inspect.styles = {
   'undefined': 'grey',
   'null': 'bold',
   'string': 'green',
-  'symbol': 'green',
   'date': 'magenta',
   // "name": intentionally not styling
   'regexp': 'red'
@@ -169,51 +208,18 @@ function arrayToHash(array) {
 }
 
 
-function getConstructorOf(obj) {
-  while (obj) {
-    var descriptor = Object.getOwnPropertyDescriptor(obj, 'constructor');
-    if (descriptor !== undefined &&
-        typeof descriptor.value === 'function' &&
-        descriptor.value.name !== '') {
-      return descriptor.value;
-    }
-
-    obj = Object.getPrototypeOf(obj);
-  }
-
-  return null;
-}
-
-
-function ensureDebugIsInitialized() {
-  if (Debug === undefined) {
-    const runInDebugContext = require('vm').runInDebugContext;
-    Debug = runInDebugContext('Debug');
-  }
-}
-
-
-function inspectPromise(p) {
-  ensureDebugIsInitialized();
-  if (!binding.isPromise(p))
-    return null;
-  const mirror = Debug.MakeMirror(p, true);
-  return {status: mirror.status(), value: mirror.promiseValue().value_};
-}
-
-
 function formatValue(ctx, value, recurseTimes) {
   // Provide a hook for user-specified inspect functions.
   // Check that value is an object with an inspect function on it
   if (ctx.customInspect &&
       value &&
-      typeof value.inspect === 'function' &&
+      isFunction(value.inspect) &&
       // Filter out the util module, it's inspect function is special
       value.inspect !== exports.inspect &&
       // Also filter out any prototype objects using the circular check.
       !(value.constructor && value.constructor.prototype === value)) {
     var ret = value.inspect(recurseTimes, ctx);
-    if (typeof ret !== 'string') {
+    if (!isString(ret)) {
       ret = formatValue(ctx, ret, recurseTimes);
     }
     return ret;
@@ -231,7 +237,6 @@ function formatValue(ctx, value, recurseTimes) {
 
   if (ctx.showHidden) {
     keys = Object.getOwnPropertyNames(value);
-    keys = keys.concat(Object.getOwnPropertySymbols(value));
   }
 
   // This could be a boxed primitive (new String(), etc.), check valueOf()
@@ -248,7 +253,7 @@ function formatValue(ctx, value, recurseTimes) {
     // ignore...
   }
 
-  if (typeof raw === 'string') {
+  if (isString(raw)) {
     // for boxed Strings, we have to remove the 0-n indexed entries,
     // since they just noisey up the output and are redundant
     keys = keys.filter(function(key) {
@@ -258,7 +263,7 @@ function formatValue(ctx, value, recurseTimes) {
 
   // Some type of object without properties can be shortcutted.
   if (keys.length === 0) {
-    if (typeof value === 'function') {
+    if (isFunction(value)) {
       var name = value.name ? ': ' + value.name : '';
       return ctx.stylize('[Function' + name + ']', 'special');
     }
@@ -272,79 +277,30 @@ function formatValue(ctx, value, recurseTimes) {
       return formatError(value);
     }
     // now check the `raw` value to handle boxed primitives
-    if (typeof raw === 'string') {
+    if (isString(raw)) {
       formatted = formatPrimitiveNoColor(ctx, raw);
       return ctx.stylize('[String: ' + formatted + ']', 'string');
     }
-    if (typeof raw === 'number') {
+    if (isNumber(raw)) {
       formatted = formatPrimitiveNoColor(ctx, raw);
       return ctx.stylize('[Number: ' + formatted + ']', 'number');
     }
-    if (typeof raw === 'boolean') {
+    if (isBoolean(raw)) {
       formatted = formatPrimitiveNoColor(ctx, raw);
       return ctx.stylize('[Boolean: ' + formatted + ']', 'boolean');
     }
   }
 
-  var constructor = getConstructorOf(value);
-  var base = '', empty = false, braces, formatter;
+  var base = '', array = false, braces = ['{', '}'];
 
-  if (Array.isArray(value)) {
-    // We can't use `constructor === Array` because this could
-    // have come from a Debug context.
-    // Otherwise, an Array will print "Array [...]".
-    if (constructor && constructor.name === 'Array')
-      constructor = null;
+  // Make Array say that they are Array
+  if (isArray(value)) {
+    array = true;
     braces = ['[', ']'];
-    empty = value.length === 0;
-    formatter = formatArray;
-  } else if (value instanceof Set) {
-    braces = ['{', '}'];
-    // With `showHidden`, `length` will display as a hidden property for
-    // arrays. For consistency's sake, do the same for `size`, even though this
-    // property isn't selected by Object.getOwnPropertyNames().
-    if (ctx.showHidden)
-      keys.unshift('size');
-    empty = value.size === 0;
-    formatter = formatSet;
-  } else if (value instanceof Map) {
-    braces = ['{', '}'];
-    // Ditto.
-    if (ctx.showHidden)
-      keys.unshift('size');
-    empty = value.size === 0;
-    formatter = formatMap;
-  } else {
-    // Only create a mirror if the object superficially looks like a Promise.
-    var promiseInternals = value instanceof Promise && inspectPromise(value);
-    if (promiseInternals) {
-      braces = ['{', '}'];
-      formatter = formatPromise;
-    } else {
-      if (binding.isMapIterator(value)) {
-        constructor = { name: 'MapIterator' };
-        braces = ['{', '}'];
-        empty = false;
-        formatter = formatCollectionIterator;
-      } else if (binding.isSetIterator(value)) {
-        constructor = { name: 'SetIterator' };
-        braces = ['{', '}'];
-        empty = false;
-        formatter = formatCollectionIterator;
-      } else {
-        if (constructor === Object)
-          constructor = null;
-        braces = ['{', '}'];
-        empty = true;  // No other data than keys.
-        formatter = formatObject;
-      }
-    }
   }
 
-  empty = empty === true && keys.length === 0;
-
   // Make functions say that they are functions
-  if (typeof value === 'function') {
+  if (isFunction(value)) {
     var n = value.name ? ': ' + value.name : '';
     base = ' [Function' + n + ']';
   }
@@ -365,28 +321,24 @@ function formatValue(ctx, value, recurseTimes) {
   }
 
   // Make boxed primitive Strings look like such
-  if (typeof raw === 'string') {
+  if (isString(raw)) {
     formatted = formatPrimitiveNoColor(ctx, raw);
     base = ' ' + '[String: ' + formatted + ']';
   }
 
   // Make boxed primitive Numbers look like such
-  if (typeof raw === 'number') {
+  if (isNumber(raw)) {
     formatted = formatPrimitiveNoColor(ctx, raw);
     base = ' ' + '[Number: ' + formatted + ']';
   }
 
   // Make boxed primitive Booleans look like such
-  if (typeof raw === 'boolean') {
+  if (isBoolean(raw)) {
     formatted = formatPrimitiveNoColor(ctx, raw);
     base = ' ' + '[Boolean: ' + formatted + ']';
   }
 
-  // Add constructor name if available
-  if (base === '' && constructor)
-    braces[0] = constructor.name + ' ' + braces[0];
-
-  if (empty === true) {
+  if (keys.length === 0 && (!array || value.length === 0)) {
     return braces[0] + base + braces[1];
   }
 
@@ -400,7 +352,14 @@ function formatValue(ctx, value, recurseTimes) {
 
   ctx.seen.push(value);
 
-  var output = formatter(ctx, value, recurseTimes, visibleKeys, keys);
+  var output;
+  if (array) {
+    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+  } else {
+    output = keys.map(function(key) {
+      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+    });
+  }
 
   ctx.seen.pop();
 
@@ -409,33 +368,26 @@ function formatValue(ctx, value, recurseTimes) {
 
 
 function formatPrimitive(ctx, value) {
-  if (value === undefined)
+  if (isUndefined(value))
     return ctx.stylize('undefined', 'undefined');
-
-  // For some reason typeof null is "object", so special case here.
-  if (value === null)
-    return ctx.stylize('null', 'null');
-
-  var type = typeof value;
-
-  if (type === 'string') {
+  if (isString(value)) {
     var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
-        .replace(/'/g, "\\'")
-        .replace(/\\"/g, '"') + '\'';
+                                             .replace(/'/g, "\\'")
+                                             .replace(/\\"/g, '"') + '\'';
     return ctx.stylize(simple, 'string');
   }
-  if (type === 'number') {
+  if (isNumber(value)) {
     // Format -0 as '-0'. Strict equality won't distinguish 0 from -0,
     // so instead we use the fact that 1 / -0 < 0 whereas 1 / 0 > 0 .
     if (value === 0 && 1 / value < 0)
       return ctx.stylize('-0', 'number');
     return ctx.stylize('' + value, 'number');
   }
-  if (type === 'boolean')
+  if (isBoolean(value))
     return ctx.stylize('' + value, 'boolean');
-  // es6 symbol primitive
-  if (type === 'symbol')
-    return ctx.stylize(value.toString(), 'symbol');
+  // For some reason typeof null is "object", so special case here.
+  if (isNull(value))
+    return ctx.stylize('null', 'null');
 }
 
 
@@ -453,13 +405,6 @@ function formatError(value) {
 }
 
 
-function formatObject(ctx, value, recurseTimes, visibleKeys, keys) {
-  return keys.map(function(key) {
-    return formatProperty(ctx, value, recurseTimes, visibleKeys, key, false);
-  });
-}
-
-
 function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
   var output = [];
   for (var i = 0, l = value.length; i < l; ++i) {
@@ -471,75 +416,10 @@ function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
     }
   }
   keys.forEach(function(key) {
-    if (typeof key === 'symbol' || !key.match(/^\d+$/)) {
+    if (!key.match(/^\d+$/)) {
       output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
           key, true));
     }
-  });
-  return output;
-}
-
-
-function formatSet(ctx, value, recurseTimes, visibleKeys, keys) {
-  var output = [];
-  value.forEach(function(v) {
-    var nextRecurseTimes = recurseTimes === null ? null : recurseTimes - 1;
-    var str = formatValue(ctx, v, nextRecurseTimes);
-    output.push(str);
-  });
-  keys.forEach(function(key) {
-    output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-                               key, false));
-  });
-  return output;
-}
-
-
-function formatMap(ctx, value, recurseTimes, visibleKeys, keys) {
-  var output = [];
-  value.forEach(function(v, k) {
-    var nextRecurseTimes = recurseTimes === null ? null : recurseTimes - 1;
-    var str = formatValue(ctx, k, nextRecurseTimes);
-    str += ' => ';
-    str += formatValue(ctx, v, nextRecurseTimes);
-    output.push(str);
-  });
-  keys.forEach(function(key) {
-    output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-                               key, false));
-  });
-  return output;
-}
-
-function formatCollectionIterator(ctx, value, recurseTimes, visibleKeys, keys) {
-  ensureDebugIsInitialized();
-  const mirror = Debug.MakeMirror(value, true);
-  var nextRecurseTimes = recurseTimes === null ? null : recurseTimes - 1;
-  var vals = mirror.preview();
-  var output = [];
-  for (let o of vals) {
-    output.push(formatValue(ctx, o, nextRecurseTimes));
-  }
-  return output;
-}
-
-function formatPromise(ctx, value, recurseTimes, visibleKeys, keys) {
-  var output = [];
-  var internals = inspectPromise(value);
-  if (internals.status === 'pending') {
-    output.push('<pending>');
-  } else {
-    var nextRecurseTimes = recurseTimes === null ? null : recurseTimes - 1;
-    var str = formatValue(ctx, internals.value, nextRecurseTimes);
-    if (internals.status === 'rejected') {
-      output.push('<rejected> ' + str);
-    } else {
-      output.push(str);
-    }
-  }
-  keys.forEach(function(key) {
-    output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-                               key, false));
   });
   return output;
 }
@@ -560,15 +440,11 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     }
   }
   if (!hasOwnProperty(visibleKeys, key)) {
-    if (typeof key === 'symbol') {
-      name = '[' + ctx.stylize(key.toString(), 'symbol') + ']';
-    } else {
-      name = '[' + key + ']';
-    }
+    name = '[' + key + ']';
   }
   if (!str) {
     if (ctx.seen.indexOf(desc.value) < 0) {
-      if (recurseTimes === null) {
+      if (isNull(recurseTimes)) {
         str = formatValue(ctx, desc.value, null);
       } else {
         str = formatValue(ctx, desc.value, recurseTimes - 1);
@@ -588,7 +464,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
       str = ctx.stylize('[Circular]', 'special');
     }
   }
-  if (name === undefined) {
+  if (isUndefined(name)) {
     if (array && key.match(/^\d+$/)) {
       return str;
     }
@@ -616,10 +492,7 @@ function reduceToSingleString(output, base, braces) {
 
   if (length > 60) {
     return braces[0] +
-           // If the opening "brace" is too large, like in the case of "Set {",
-           // we need to force the first item to be on the next line or the
-           // items will not line up correctly.
-           (base === '' && braces[0].length === 1 ? '' : base + '\n ') +
+           (base === '' ? '' : base + '\n ') +
            ' ' +
            output.join(',\n  ') +
            ' ' +
@@ -632,7 +505,7 @@ function reduceToSingleString(output, base, braces) {
 
 // NOTE: These type checking functions intentionally don't use `instanceof`
 // because it is fragile and can be easily faked with `Object.create()`.
-exports.isArray = Array.isArray;
+var isArray = exports.isArray = Array.isArray;
 
 function isBoolean(arg) {
   return typeof arg === 'boolean';
@@ -645,7 +518,7 @@ function isNull(arg) {
 exports.isNull = isNull;
 
 function isNullOrUndefined(arg) {
-  return arg === null || arg === undefined;
+  return arg == null;
 }
 exports.isNullOrUndefined = isNullOrUndefined;
 
@@ -665,27 +538,28 @@ function isSymbol(arg) {
 exports.isSymbol = isSymbol;
 
 function isUndefined(arg) {
-  return arg === undefined;
+  return arg === void 0;
 }
 exports.isUndefined = isUndefined;
 
 function isRegExp(re) {
-  return objectToString(re) === '[object RegExp]';
+  return isObject(re) && objectToString(re) === '[object RegExp]';
 }
 exports.isRegExp = isRegExp;
 
 function isObject(arg) {
-  return arg !== null && typeof arg === 'object';
+  return typeof arg === 'object' && arg !== null;
 }
 exports.isObject = isObject;
 
 function isDate(d) {
-  return objectToString(d) === '[object Date]';
+  return isObject(d) && objectToString(d) === '[object Date]';
 }
 exports.isDate = isDate;
 
 function isError(e) {
-  return objectToString(e) === '[object Error]' || e instanceof Error;
+  return isObject(e) &&
+      (objectToString(e) === '[object Error]' || e instanceof Error);
 }
 exports.isError = isError;
 
@@ -696,11 +570,18 @@ exports.isFunction = isFunction;
 
 function isPrimitive(arg) {
   return arg === null ||
-         typeof arg !== 'object' && typeof arg !== 'function';
+         typeof arg === 'boolean' ||
+         typeof arg === 'number' ||
+         typeof arg === 'string' ||
+         typeof arg === 'symbol' ||  // ES6 symbol
+         typeof arg === 'undefined';
 }
 exports.isPrimitive = isPrimitive;
 
-exports.isBuffer = Buffer.isBuffer;
+function isBuffer(arg) {
+  return arg instanceof Buffer;
+}
+exports.isBuffer = isBuffer;
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
@@ -712,8 +593,8 @@ function pad(n) {
 }
 
 
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-                'Oct', 'Nov', 'Dec'];
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+              'Oct', 'Nov', 'Dec'];
 
 // 26 Feb 16:19:34
 function timestamp() {
@@ -743,23 +624,8 @@ exports.log = function() {
  * @param {function} ctor Constructor function which needs to inherit the
  *     prototype.
  * @param {function} superCtor Constructor function to inherit prototype from.
- * @throws {TypeError} Will error if either constructor is null, or if
- *     the super constructor lacks a prototype.
  */
 exports.inherits = function(ctor, superCtor) {
-
-  if (ctor === undefined || ctor === null)
-    throw new TypeError('The constructor to `inherits` must not be ' +
-                        'null or undefined.');
-
-  if (superCtor === undefined || superCtor === null)
-    throw new TypeError('The super constructor to `inherits` must not ' +
-                        'be null or undefined.');
-
-  if (superCtor.prototype === undefined)
-    throw new TypeError('The super constructor to `inherits` must ' +
-                        'have a prototype.');
-
   ctor.super_ = superCtor;
   ctor.prototype = Object.create(superCtor.prototype, {
     constructor: {
@@ -773,7 +639,7 @@ exports.inherits = function(ctor, superCtor) {
 
 exports._extend = function(origin, add) {
   // Don't do anything if add isn't an object
-  if (add === null || typeof add !== 'object') return origin;
+  if (!add || !isObject(add)) return origin;
 
   var keys = Object.keys(add);
   var i = keys.length;
@@ -790,50 +656,50 @@ function hasOwnProperty(obj, prop) {
 
 // Deprecated old stuff.
 
-exports.p = internalUtil.deprecate(function() {
+exports.p = exports.deprecate(function() {
   for (var i = 0, len = arguments.length; i < len; ++i) {
     console.error(exports.inspect(arguments[i]));
   }
-}, 'util.p is deprecated. Use console.error instead.');
+}, 'util.p: Use console.error() instead');
 
 
-exports.exec = internalUtil.deprecate(function() {
+exports.exec = exports.deprecate(function() {
   return require('child_process').exec.apply(this, arguments);
-}, 'util.exec is deprecated. Use child_process.exec instead.');
+}, 'util.exec is now called `child_process.exec`.');
 
 
-exports.print = internalUtil.deprecate(function() {
+exports.print = exports.deprecate(function() {
   for (var i = 0, len = arguments.length; i < len; ++i) {
     process.stdout.write(String(arguments[i]));
   }
-}, 'util.print is deprecated. Use console.log instead.');
+}, 'util.print: Use console.log instead');
 
 
-exports.puts = internalUtil.deprecate(function() {
+exports.puts = exports.deprecate(function() {
   for (var i = 0, len = arguments.length; i < len; ++i) {
     process.stdout.write(arguments[i] + '\n');
   }
-}, 'util.puts is deprecated. Use console.log instead.');
+}, 'util.puts: Use console.log instead');
 
 
-exports.debug = internalUtil.deprecate(function(x) {
+exports.debug = exports.deprecate(function(x) {
   process.stderr.write('DEBUG: ' + x + '\n');
-}, 'util.debug is deprecated. Use console.error instead.');
+}, 'util.debug: Use console.error instead');
 
 
-exports.error = internalUtil.deprecate(function(x) {
+exports.error = exports.deprecate(function(x) {
   for (var i = 0, len = arguments.length; i < len; ++i) {
     process.stderr.write(arguments[i] + '\n');
   }
-}, 'util.error is deprecated. Use console.error instead.');
+}, 'util.error: Use console.error instead');
 
 
-exports.pump = internalUtil.deprecate(function(readStream, writeStream, cb) {
+exports.pump = exports.deprecate(function(readStream, writeStream, callback) {
   var callbackCalled = false;
 
   function call(a, b, c) {
-    if (cb && !callbackCalled) {
-      cb(a, b, c);
+    if (callback && !callbackCalled) {
+      callback(a, b, c);
       callbackCalled = true;
     }
   }
@@ -863,10 +729,12 @@ exports.pump = internalUtil.deprecate(function(readStream, writeStream, cb) {
     readStream.destroy();
     call(err);
   });
-}, 'util.pump is deprecated. Use readableStream.pipe instead.');
+}, 'util.pump(): Use readableStream.pipe() instead');
 
 
+var uv;
 exports._errnoException = function(err, syscall, original) {
+  if (isUndefined(uv)) uv = process.binding('uv');
   var errname = uv.errname(err);
   var message = syscall + ' ' + errname;
   if (original)
@@ -876,28 +744,4 @@ exports._errnoException = function(err, syscall, original) {
   e.errno = errname;
   e.syscall = syscall;
   return e;
-};
-
-
-exports._exceptionWithHostPort = function(err,
-                                          syscall,
-                                          address,
-                                          port,
-                                          additional) {
-  var details;
-  if (port && port > 0) {
-    details = address + ':' + port;
-  } else {
-    details = address;
-  }
-
-  if (additional) {
-    details += ' - Local (' + additional + ')';
-  }
-  var ex = exports._errnoException(err, syscall, details);
-  ex.address = address;
-  if (port) {
-    ex.port = port;
-  }
-  return ex;
 };

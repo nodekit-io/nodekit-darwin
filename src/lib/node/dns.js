@@ -1,34 +1,16 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// 'Software'), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var net = require('net');
-var util = require('util');
+const net = require('net');
+const util = require('util');
 
-var cares = process.binding('cares_wrap');
-var uv = process.binding('uv');
+const cares = process.binding('cares_wrap');
+const uv = process.binding('uv');
 
-var GetAddrInfoReqWrap = cares.GetAddrInfoReqWrap;
-var GetNameInfoReqWrap = cares.GetNameInfoReqWrap;
+const GetAddrInfoReqWrap = cares.GetAddrInfoReqWrap;
+const GetNameInfoReqWrap = cares.GetNameInfoReqWrap;
+const QueryReqWrap = cares.QueryReqWrap;
 
-var isIp = net.isIP;
+const isIp = net.isIP;
 
 
 function errnoException(err, syscall, hostname) {
@@ -72,7 +54,7 @@ function errnoException(err, syscall, hostname) {
 //   callback.immediately = true;
 // }
 function makeAsync(callback) {
-  if (!util.isFunction(callback)) {
+  if (typeof callback !== 'function') {
     return callback;
   }
   return function asyncCallback() {
@@ -80,10 +62,11 @@ function makeAsync(callback) {
       // The API already returned, we can invoke the callback immediately.
       callback.apply(null, arguments);
     } else {
-      var args = arguments;
-      process.nextTick(function() {
-        callback.apply(null, args);
-      });
+      var args = new Array(arguments.length + 1);
+      args[0] = callback;
+      for (var i = 1, a = 0; a < arguments.length; ++i, ++a)
+        args[i] = arguments[a];
+      process.nextTick.apply(null, args);
     }
   };
 }
@@ -101,23 +84,43 @@ function onlookup(err, addresses) {
 }
 
 
+function onlookupall(err, addresses) {
+  var results = [];
+  if (err) {
+    return this.callback(errnoException(err, 'getaddrinfo', this.hostname));
+  }
+
+  for (var i = 0; i < addresses.length; i++) {
+    results.push({
+      address: addresses[i],
+      family: this.family || (addresses[i].indexOf(':') >= 0 ? 6 : 4)
+    });
+  }
+
+  this.callback(null, results);
+}
+
+
 // Easy DNS A/AAAA look up
 // lookup(hostname, [options,] callback)
 exports.lookup = function lookup(hostname, options, callback) {
   var hints = 0;
   var family = -1;
+  var all = false;
 
   // Parse arguments
   if (hostname && typeof hostname !== 'string') {
-    throw TypeError('invalid arguments: hostname must be a string or falsey');
+    throw new TypeError('invalid arguments: ' +
+                        'hostname must be a string or falsey');
   } else if (typeof options === 'function') {
     callback = options;
     family = 0;
   } else if (typeof callback !== 'function') {
-    throw TypeError('invalid arguments: callback must be passed');
-  } else if (util.isObject(options)) {
+    throw new TypeError('invalid arguments: callback must be passed');
+  } else if (options !== null && typeof options === 'object') {
     hints = options.hints >>> 0;
     family = options.family >>> 0;
+    all = options.all === true;
 
     if (hints !== 0 &&
         hints !== exports.ADDRCONFIG &&
@@ -135,13 +138,21 @@ exports.lookup = function lookup(hostname, options, callback) {
   callback = makeAsync(callback);
 
   if (!hostname) {
-    callback(null, null, family === 6 ? 6 : 4);
+    if (all) {
+      callback(null, []);
+    } else {
+      callback(null, null, family === 6 ? 6 : 4);
+    }
     return {};
   }
 
   var matchedFamily = net.isIP(hostname);
   if (matchedFamily) {
-    callback(null, hostname, matchedFamily);
+    if (all) {
+      callback(null, [{address: hostname, family: matchedFamily}]);
+    } else {
+      callback(null, hostname, matchedFamily);
+    }
     return {};
   }
 
@@ -149,7 +160,7 @@ exports.lookup = function lookup(hostname, options, callback) {
   req.callback = callback;
   req.family = family;
   req.hostname = hostname;
-  req.oncomplete = onlookup;
+  req.oncomplete = all ? onlookupall : onlookup;
 
   var err = cares.getaddrinfo(req, hostname, family, hints);
   if (err) {
@@ -206,24 +217,23 @@ function resolver(bindingName) {
   var binding = cares[bindingName];
 
   return function query(name, callback) {
-    if (!util.isString(name)) {
+    if (typeof name !== 'string') {
       throw new Error('Name must be a string');
-    } else if (!util.isFunction(callback)) {
+    } else if (typeof callback !== 'function') {
       throw new Error('Callback must be a function');
     }
 
     callback = makeAsync(callback);
-    var req = {
-      bindingName: bindingName,
-      callback: callback,
-      hostname: name,
-      oncomplete: onresolve
-    };
+    var req = new QueryReqWrap();
+    req.bindingName = bindingName;
+    req.callback = callback;
+    req.hostname = name;
+    req.oncomplete = onresolve;
     var err = binding(req, name);
     if (err) throw errnoException(err, bindingName);
     callback.immediately = true;
     return req;
-  }
+  };
 }
 
 
@@ -242,17 +252,17 @@ exports.reverse = resolveMap.PTR = resolver('getHostByAddr');
 
 exports.resolve = function(hostname, type_, callback_) {
   var resolver, callback;
-  if (util.isString(type_)) {
+  if (typeof type_ === 'string') {
     resolver = resolveMap[type_];
     callback = callback_;
-  } else if (util.isFunction(type_)) {
+  } else if (typeof type_ === 'function') {
     resolver = exports.resolve4;
     callback = type_;
   } else {
     throw new Error('Type must be a string');
   }
 
-  if (util.isFunction(resolver)) {
+  if (typeof resolver === 'function') {
     return resolver(hostname, callback);
   } else {
     throw new Error('Unknown type "' + type_ + '"');
@@ -321,6 +331,7 @@ exports.NOTIMP = 'ENOTIMP';
 exports.REFUSED = 'EREFUSED';
 exports.BADQUERY = 'EBADQUERY';
 exports.ADNAME = 'EADNAME';
+exports.BADNAME = 'EBADNAME';
 exports.BADFAMILY = 'EBADFAMILY';
 exports.BADRESP = 'EBADRESP';
 exports.CONNREFUSED = 'ECONNREFUSED';

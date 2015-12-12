@@ -29,6 +29,7 @@ var path = require('path');
 var http = require('http');
 
 var server = http.createServer(function (request, response) {
+                               io.nodekit.console.log("INCOMING REQUEST");
                                      var file = path.resolve(__dirname, 'default.html');
                                      
                                      fs.readFile(file, function read(err, content) {

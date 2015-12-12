@@ -1,36 +1,14 @@
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+'use strict';
 
-var Timer = process.binding('timer_wrap').Timer;
-var L = require('_linklist');
-var assert = require('assert').ok;
-
-var kOnTimeout = Timer.kOnTimeout | 0;
+const Timer = process.binding('timer_wrap').Timer;
+const L = require('_linklist');
+const assert = require('assert').ok;
+const util = require('util');
+const debug = util.debuglog('timer');
+const kOnTimeout = Timer.kOnTimeout | 0;
 
 // Timeout values > TIMEOUT_MAX are set to 1.
-var TIMEOUT_MAX = 2147483647; // 2^31-1
-
-var util = require('util');
-var debug = util.debuglog('timer');
-
+const TIMEOUT_MAX = 2147483647; // 2^31-1
 
 // IDLE TIMEOUTS
 //
@@ -45,13 +23,16 @@ var debug = util.debuglog('timer');
 // value = list
 var lists = {};
 
+
+// call this whenever the item is active (not idle)
+// it will reset its timeout.
 // the main function - creates lists on demand and the watchers associated
 // with them.
-function insert(item, msecs) {
-  item._idleStart = Timer.now();
-  item._idleTimeout = msecs;
+exports.active = function(item) {
+  const msecs = item._idleTimeout;
+  if (msecs < 0 || msecs === undefined) return;
 
-  if (msecs < 0) return;
+  item._idleStart = Timer.now();
 
   var list;
 
@@ -70,7 +51,7 @@ function insert(item, msecs) {
 
   L.append(list, item);
   assert(!L.isEmpty(list)); // list is not empty
-}
+};
 
 function listOnTimeout() {
   var msecs = this.msecs;
@@ -79,19 +60,10 @@ function listOnTimeout() {
   debug('timeout callback %d', msecs);
 
   var now = Timer.now();
-  debug('now: %d', now);
+  debug('now: %s', now);
 
   var diff, first, threw;
   while (first = L.peek(list)) {
-    // If the previous iteration caused a timer to be added,
-    // update the value of "now" so that timing computations are
-    // done correctly. See test/simple/test-timers-blocking-callback.js
-    // for more information.
-    if (now < first._idleStart) {
-      now = Timer.now();
-      debug('now: %d', now);
-    }
-
     diff = now - first._idleStart;
     if (diff < msecs) {
       list.start(msecs - diff, 0);
@@ -116,6 +88,7 @@ function listOnTimeout() {
         if (domain)
           domain.enter();
         threw = true;
+        first._called = true;
         first._onTimeout();
         if (domain)
           domain.exit();
@@ -127,9 +100,7 @@ function listOnTimeout() {
           // when the timeout threw its exception.
           var oldDomain = process.domain;
           process.domain = null;
-          process.nextTick(function() {
-            list[kOnTimeout]();
-          });
+          process.nextTick(listOnTimeoutNT, list);
           process.domain = oldDomain;
         }
       }
@@ -143,16 +114,32 @@ function listOnTimeout() {
 }
 
 
-var unenroll = exports.unenroll = function(item) {
+function listOnTimeoutNT(list) {
+  list[kOnTimeout]();
+}
+
+
+function reuse(item) {
   L.remove(item);
 
   var list = lists[item._idleTimeout];
-  // if empty then stop the watcher
-  debug('unenroll');
+  // if empty - reuse the watcher
   if (list && L.isEmpty(list)) {
+    debug('reuse hit');
+    list.stop();
+    delete lists[item._idleTimeout];
+    return list;
+  }
+
+  return null;
+}
+
+
+const unenroll = exports.unenroll = function(item) {
+  var list = reuse(item);
+  if (list) {
     debug('unenroll: list empty');
     list.close();
-    delete lists[item._idleTimeout];
   }
   // if active is called later, then we want to make sure not to insert again
   item._idleTimeout = -1;
@@ -161,7 +148,7 @@ var unenroll = exports.unenroll = function(item) {
 
 // Does not start the time, just sets up the members needed.
 exports.enroll = function(item, msecs) {
-  if (!util.isNumber(msecs)) {
+  if (typeof msecs !== 'number') {
     throw new TypeError('msecs must be a number');
   }
 
@@ -183,55 +170,46 @@ exports.enroll = function(item, msecs) {
 };
 
 
-// call this whenever the item is active (not idle)
-// it will reset its timeout.
-exports.active = function(item) {
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    var list = lists[msecs];
-    if (!list || L.isEmpty(list)) {
-      insert(item, msecs);
-    } else {
-      item._idleStart = Timer.now();
-      L.append(list, item);
-    }
-  }
-};
-
-
 /*
  * DOM-style timers
  */
 
 
 exports.setTimeout = function(callback, after) {
-  var timer;
-
   after *= 1; // coalesce to number or NaN
 
   if (!(after >= 1 && after <= TIMEOUT_MAX)) {
     after = 1; // schedule on next tick, follows browser behaviour
   }
 
-  timer = new Timeout(after);
-
-  if (arguments.length <= 2) {
-    timer._onTimeout = callback;
-  } else {
-    /*
-     * Sometimes setTimeout is called with arguments, EG
-     *
-     *   setTimeout(callback, 2000, "hello", "world")
-     *
-     * If that's the case we need to call the callback with
-     * those args. The overhead of an extra closure is not
-     * desired in the normal case.
-     */
-    var args = Array.prototype.slice.call(arguments, 2);
-    timer._onTimeout = function() {
-      callback.apply(timer, args);
-    }
+  var timer = new Timeout(after);
+  var length = arguments.length;
+  var ontimeout = callback;
+  switch (length) {
+    // fast cases
+    case 0:
+    case 1:
+    case 2:
+      break;
+    case 3:
+      ontimeout = callback.bind(timer, arguments[2]);
+      break;
+    case 4:
+      ontimeout = callback.bind(timer, arguments[2], arguments[3]);
+      break;
+    case 5:
+      ontimeout =
+          callback.bind(timer, arguments[2], arguments[3], arguments[4]);
+      break;
+    // slow case
+    default:
+      var args = new Array(length - 2);
+      for (var i = 2; i < length; i++)
+        args[i - 2] = arguments[i];
+      ontimeout = callback.apply.bind(callback, timer, args);
+      break;
   }
+  timer._onTimeout = ontimeout;
 
   if (process.domain) timer.domain = process.domain;
 
@@ -261,9 +239,32 @@ exports.setInterval = function(callback, repeat) {
   }
 
   var timer = new Timeout(repeat);
-  var args = Array.prototype.slice.call(arguments, 2);
+  var length = arguments.length;
+  var ontimeout = callback;
+  switch (length) {
+    case 0:
+    case 1:
+    case 2:
+      break;
+    case 3:
+      ontimeout = callback.bind(timer, arguments[2]);
+      break;
+    case 4:
+      ontimeout = callback.bind(timer, arguments[2], arguments[3]);
+      break;
+    case 5:
+      ontimeout =
+          callback.bind(timer, arguments[2], arguments[3], arguments[4]);
+      break;
+    default:
+      var args = new Array(length - 2);
+      for (var i = 2; i < length; i += 1)
+        args[i - 2] = arguments[i];
+      ontimeout = callback.apply.bind(callback, timer, args);
+      break;
+  }
   timer._onTimeout = wrapper;
-  timer._repeat = true;
+  timer._repeat = ontimeout;
 
   if (process.domain) timer.domain = process.domain;
   exports.active(timer);
@@ -271,9 +272,12 @@ exports.setInterval = function(callback, repeat) {
   return timer;
 
   function wrapper() {
-    callback.apply(this, args);
-    // If callback called clearInterval().
-    if (timer._repeat === false) return;
+    timer._repeat.call(this);
+
+    // Timer might be closed - no point in restarting it
+    if (!timer._repeat)
+      return;
+
     // If timer is unref'd (or was - it's permanently removed from the list.)
     if (this._handle) {
       this._handle.start(repeat, 0);
@@ -287,19 +291,20 @@ exports.setInterval = function(callback, repeat) {
 
 exports.clearInterval = function(timer) {
   if (timer && timer._repeat) {
-    timer._repeat = false;
+    timer._repeat = null;
     clearTimeout(timer);
   }
 };
 
 
-var Timeout = function(after) {
+const Timeout = function(after) {
+  this._called = false;
   this._idleTimeout = after;
   this._idlePrev = this;
   this._idleNext = this;
   this._idleStart = null;
   this._onTimeout = null;
-  this._repeat = false;
+  this._repeat = null;
 };
 
 
@@ -311,26 +316,36 @@ function unrefdHandle() {
 
 
 Timeout.prototype.unref = function() {
-  if (!this._handle) {
+  if (this._handle) {
+    this._handle.unref();
+  } else if (typeof(this._onTimeout) === 'function') {
     var now = Timer.now();
     if (!this._idleStart) this._idleStart = now;
     var delay = this._idleStart + this._idleTimeout - now;
     if (delay < 0) delay = 0;
-    exports.unenroll(this);
-    this._handle = new Timer();
+
+    // Prevent running cb again when unref() is called during the same cb
+    if (this._called && !this._repeat) {
+      exports.unenroll(this);
+      return;
+    }
+
+    var handle = reuse(this);
+
+    this._handle = handle || new Timer();
     this._handle.owner = this;
     this._handle[kOnTimeout] = unrefdHandle;
     this._handle.start(delay, 0);
     this._handle.domain = this.domain;
     this._handle.unref();
-  } else {
-    this._handle.unref();
   }
+  return this;
 };
 
 Timeout.prototype.ref = function() {
   if (this._handle)
     this._handle.ref();
+  return this;
 };
 
 Timeout.prototype.close = function() {
@@ -341,6 +356,7 @@ Timeout.prototype.close = function() {
   } else {
     exports.unenroll(this);
   }
+  return this;
 };
 
 
@@ -401,22 +417,44 @@ Immediate.prototype._idleNext = undefined;
 Immediate.prototype._idlePrev = undefined;
 
 
-exports.setImmediate = function(callback) {
+exports.setImmediate = function(callback, arg1, arg2, arg3) {
+  var i, args;
+  var len = arguments.length;
   var immediate = new Immediate();
-  var args, index;
 
   L.init(immediate);
 
-  immediate._onImmediate = callback;
+  switch (len) {
+    // fast cases
+    case 0:
+    case 1:
+      immediate._onImmediate = callback;
+      break;
+    case 2:
+      immediate._onImmediate = function() {
+        callback.call(immediate, arg1);
+      };
+      break;
+    case 3:
+      immediate._onImmediate = function() {
+        callback.call(immediate, arg1, arg2);
+      };
+      break;
+    case 4:
+      immediate._onImmediate = function() {
+        callback.call(immediate, arg1, arg2, arg3);
+      };
+      break;
+    // slow case
+    default:
+      args = new Array(len - 1);
+      for (i = 1; i < len; i++)
+        args[i - 1] = arguments[i];
 
-  if (arguments.length > 1) {
-    args = [];
-    for (index = 1; index < arguments.length; index++)
-      args.push(arguments[index]);
-
-    immediate._onImmediate = function() {
-      callback.apply(immediate, args);
-    };
+      immediate._onImmediate = function() {
+        callback.apply(immediate, args);
+      };
+      break;
   }
 
   if (!process._needImmediateCallback) {
@@ -455,30 +493,36 @@ function _makeTimerTimeout(timer) {
   var domain = timer.domain;
   var msecs = timer._idleTimeout;
 
+  L.remove(timer);
+
   // Timer has been unenrolled by another timer that fired at the same time,
   // so don't make it timeout.
-  if (!msecs || msecs < 0)
+  if (msecs <= 0)
     return;
 
   if (!timer._onTimeout)
     return;
 
-  if (domain && domain._disposed)
-    return;
+  if (domain) {
+    if (domain._disposed)
+      return;
 
+    domain.enter();
+  }
+
+  debug('unreftimer firing timeout');
+  timer._called = true;
+  _runOnTimeout(timer);
+
+  if (domain)
+    domain.exit();
+}
+
+function _runOnTimeout(timer) {
+  var threw = true;
   try {
-    var threw = true;
-
-    if (domain) domain.enter();
-
-    debug('unreftimer firing timeout');
-    L.remove(timer);
     timer._onTimeout();
-
     threw = false;
-
-    if (domain)
-      domain.exit();
   } finally {
     if (threw) process.nextTick(unrefTimeout);
   }
@@ -492,7 +536,7 @@ function unrefTimeout() {
   var timeSinceLastActive;
   var nextTimeoutTime;
   var nextTimeoutDuration;
-  var minNextTimeoutTime;
+  var minNextTimeoutTime = TIMEOUT_MAX;
   var timersToTimeout = [];
 
   // The actual timer fired and has not yet been rearmed,
@@ -507,7 +551,7 @@ function unrefTimeout() {
   // and rearm the actual timer if the next timeout to expire
   // will expire before the current actual timer.
   var cur = unrefList._idlePrev;
-  while (cur != unrefList) {
+  while (cur !== unrefList) {
     timeSinceLastActive = now - cur._idleStart;
 
     if (timeSinceLastActive < cur._idleTimeout) {
@@ -516,7 +560,7 @@ function unrefTimeout() {
 
       nextTimeoutDuration = cur._idleTimeout - timeSinceLastActive;
       nextTimeoutTime = now + nextTimeoutDuration;
-      if (minNextTimeoutTime == null ||
+      if (minNextTimeoutTime === TIMEOUT_MAX ||
           (nextTimeoutTime < minNextTimeoutTime)) {
         // We found a timeout that will expire earlier,
         // store its next timeout time now so that we
@@ -542,7 +586,7 @@ function unrefTimeout() {
 
   // Rearm the actual timer with the timeout delay
   // of the earliest timeout found.
-  if (minNextTimeoutTime != null) {
+  if (minNextTimeoutTime !== TIMEOUT_MAX) {
     unrefTimer.start(minNextTimeoutTime - now, 0);
     unrefTimer.when = minNextTimeoutTime;
     debug('unrefTimer rescheduled');

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-console.log("ERROR: spawn not yet implemented");
 
 function spawn(options) {
+    console.log("ERROR: spawn not yet implemented");
+
   var result = {
     pid: null,
     output: [
