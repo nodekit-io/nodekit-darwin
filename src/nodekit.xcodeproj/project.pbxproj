@@ -434,7 +434,6 @@
 			isa = PBXGroup;
 			children = (
 				E48C5E241C3DBF25006CEF53 /* WebKit.framework */,
-				E49681441C31D21F0048CA59 /* nodekit-sample.entitlements */,
 				E488A03F1C1F6F2A0041DFCF /* src */,
 				E41181481C1F24B4004F97D6 /* Products */,
 			);
@@ -461,14 +460,14 @@
 			name = "platform-ios";
 			sourceTree = "<group>";
 		};
-		E41181601C1F27C2004F97D6 /* platform-darwin */ = {
+		E41181601C1F27C2004F97D6 /* platform-osx */ = {
 			isa = PBXGroup;
 			children = (
 				E488A0771C1F70970041DFCF /* Info.plist */,
 				E4AD89EE1C1F84C80043F630 /* NKNSAppDelegate.swift */,
 				E4C253D11C20A5FF001B3388 /* NKMainDesktop.swift */,
 			);
-			name = "platform-darwin";
+			name = "platform-osx";
 			sourceTree = "<group>";
 		};
 		E41181611C1F27EC004F97D6 /* common */ = {
@@ -495,7 +494,7 @@
 			isa = PBXGroup;
 			children = (
 				E41181611C1F27EC004F97D6 /* common */,
-				E41181601C1F27C2004F97D6 /* platform-darwin */,
+				E41181601C1F27C2004F97D6 /* platform-osx */,
 				E411815F1C1F27B8004F97D6 /* platform-ios */,
 			);
 			name = nodekit;
@@ -504,10 +503,11 @@
 		E488A0D31C1F75F00041DFCF /* nodekit-sample */ = {
 			isa = PBXGroup;
 			children = (
+				E49681441C31D21F0048CA59 /* nodekit-sample.entitlements */,
 				E4C253DD1C20AF68001B3388 /* main.swift */,
 				E488A0D71C1F761F0041DFCF /* app */,
 				E488A0F81C1F76A40041DFCF /* test */,
-				E488A0D61C1F760C0041DFCF /* platform-darwin */,
+				E488A0D61C1F760C0041DFCF /* platform-osx */,
 				E488A0D51C1F76030041DFCF /* platform-ios */,
 			);
 			name = "nodekit-sample";
@@ -524,14 +524,14 @@
 			name = "platform-ios";
 			sourceTree = "<group>";
 		};
-		E488A0D61C1F760C0041DFCF /* platform-darwin */ = {
+		E488A0D61C1F760C0041DFCF /* platform-osx */ = {
 			isa = PBXGroup;
 			children = (
 				E43DC59B1C624CC40060B37E /* SamplePlugin.swift */,
 				E4AD89D11C1F82AA0043F630 /* Info.plist */,
 				E488A0E31C1F76510041DFCF /* Assets.xcassets */,
 			);
-			name = "platform-darwin";
+			name = "platform-osx";
 			sourceTree = "<group>";
 		};
 		E48C5E5A1C3F203C006CEF53 /* NKScripting */ = {

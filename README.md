@@ -5,7 +5,11 @@ For application developers, the backend can be written in pure Node javascript c
 
 *{NK} NodeKit* enables applications developed for Node to developed once and then run without alteration for any of the above platforms as well as in the browser.
 
-This is a refined preview of the technology and is not intended for production use, but is supporting some production app store applications.  Use at your own caution.  Contributions welcome (details to follow)
+This repository [nodekit-io/nodekit-darwin](https://github.com/nodekit-io/nodekit-darwin) contains those components that are specific to Apple platforms (including iOS, OSX, and tvOS). 
+
+See [nodekit-io/nodekit-windows](https://github.com/nodekit-io/nodekit-windows) for the corresponding repository for Windows platforms (including Windows 7+ Desktop, Windows 10 Desktop, Windows 10+ Mobile, Xbox, SurfaceHub and IoT device familes) 
+
+See [nodekit-io/nodekit-android](https://github.com/nodekit-io/nodekit-android) for the corresponding repository for Android platforms.
 
 # {NK} NodeKit
 
@@ -107,12 +111,14 @@ Just use Safari Web Inspector to set breakpoints, inspect variables, etc. in bot
 iOS 8+, 9+
 OS X 10.9, 10.10, 10.11
 Swift and Objective-C source (we wrote it nearly all in Swift 2.x)
+Windows 10 Universal Platform (October 2015 update or more recent)
 Node.js ~0.12.x
+
 
 ## Still In Development
 
 Android
-Windows 10
+Windows 7, Vista, 8, 8.1 for desktop applications
 Node.js 4.x/5.x updates (we run a very stable 0.12.x for broadest package compatibility, and are currently testing the 4.x LTS version in a development branch).
 
 ## License
@@ -131,7 +137,15 @@ Apache 2.0
 * Hotfixes are very similar to releases, except you don't branch from an arbitrary commit on master, but from the release tag that you want to make the fix in. Again, work on master continues as always, and the necessary fixes are pushed to the hotfix branch. Once the fix is ready, the procedure is exactly the same as for a release - tag the top of the branch creating a new release, merge it into master, then delete the hotfix branch
 * Submit pull request.
 
+## Related Repositories on GitHub
+* [nodekit-io/nodekit](https://github.com/nodekit-io/nodekit) contains the core documents and command line interface
+* [nodekit-io/nodekit-darwin](https://github.com/nodekit-io/nodekit-darwin), [nodekit-io/nodekit-windows](https://github.com/nodekit-io/nodekit-windows), and [nodekit-io/nodekit-android](https://github.com/nodekit-io/nodekit-android) contain the platform specific versions of NKCore, NKElectro and NKScripting (all three included in each).
+
+We went for platform specific code to allow searching by language on GitHub to show up appropriately (e.g., trending repositories in Swift, C#), to allow separate version numbers for minor platform-specific changes, and because the repositories are in essence not dependent on each other, but rather complementary language ports with the same functionality and API.
+
 ## News
+* (February 2016) Split platform versions into their own repositories on GitHub
+* (February 2016) Initial release of NKScripting using the Chakra engine on Windows 10 platforms;  other engines coming
 * (February 2016) Added [roadmap](http://roadmap.nodekit.io) for tracking contributions and future plans
 * (February 2016) Removed the last of the Objective-C and C code;  the entire framework on Darwin platforms is now pure Swift 2.x including the rewritten POSIX sockets layer that makes full use of GCD, is non blocking, and contains no external dependencies;  we may end up releasing as `{NK} Sockets` as while there are lots of good Objective-C libraries, there are fewer Swift versions (and almost none without a tiny C dependency which we've eliminated) and we had to cobble this together from a few complementary sources. 
 * (January 2016) Updated to use all core darwin JavaScript Engines, harmonized the API to industry standard (e.g, Electron subset for front end, JavaScriptCore like for back end) and refactored out {NK} Scripting and {NK} Electro and associated docs in the process
