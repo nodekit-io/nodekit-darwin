@@ -1,1 +1,2 @@
 src/nodekit/common/NKCore/node/* linguist-vendored
+src/nodekit-sample/test/node_modules/* linguist-vendored
