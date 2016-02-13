@@ -139,7 +139,7 @@ Apache 2.0
 
 ## Related Repositories on GitHub
 * [nodekit-io/nodekit](https://github.com/nodekit-io/nodekit) contains the core documents and issues tracker
-* [nodekit-io/nodekit-cli](https://github.com/nodekit-io/nodekit) contains the command line tool
+* [nodekit-io/nodekit-cli](https://github.com/nodekit-io/nodekit-cli) contains the command line tool
 * [nodekit-io/nodekit-darwin](https://github.com/nodekit-io/nodekit-darwin), [nodekit-io/nodekit-windows](https://github.com/nodekit-io/nodekit-windows), and [nodekit-io/nodekit-android](https://github.com/nodekit-io/nodekit-android) contain the platform specific versions of {NK} NodeKit source
 
 We went for platform specific code to allow searching by language on GitHub to show up appropriately (e.g., trending repositories in Swift, C#), to allow separate version numbers for minor platform-specific changes, and because the repositories are in essence not dependent on each other, but rather complementary language ports with the same functionality and API.
