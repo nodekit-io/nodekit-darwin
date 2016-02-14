@@ -1,7 +1,7 @@
 src/nodekit/common/NKCore/lib/node/* linguist-vendored
 src/nodekit/common/NKCore/lib/node/**/* linguist-vendored
-src/nodekit-sample/test/* linguist-vendored
-src/nodekit-sample/test/**/* linguist-vendored
+src/nodekit-sample/* linguist-vendored
+src/nodekit-sample/**/* linguist-vendored
 src/nodekit/common/NKCore/lib/builtin-additions/**/* linguist-vendored
 src/nodekit/common/NKCore/lib/builtin-additions/* linguist-vendored
 src/nodekit/common/NKCore/lib/builtin-replacements/* linguist-vendored
