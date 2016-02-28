@@ -722,7 +722,7 @@ class NKC_SwiftSocket: NSObject {
             throw NKC_SwiftSocketError.DispatchFailed(errno)
         }
         
-        readSource.onEvent { [unowned self]
+        try readSource.onEvent { [unowned self]
             _, readCount in
             
            if self.nkDelegate != nil
