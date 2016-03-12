@@ -21,7 +21,6 @@
 		E46CEEB51C5FEBA600611736 /* NKC_SwiftSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46CEEB21C5FEBA600611736 /* NKC_SwiftSocket.swift */; };
 		E46CEEB61C5FEBA600611736 /* NKC_SwiftSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E46CEEB21C5FEBA600611736 /* NKC_SwiftSocket.swift */; };
 		E488A0D81C1F761F0041DFCF /* app in Resources */ = {isa = PBXBuildFile; fileRef = E488A0D71C1F761F0041DFCF /* app */; };
-		E488A0F91C1F76A40041DFCF /* test in Resources */ = {isa = PBXBuildFile; fileRef = E488A0F81C1F76A40041DFCF /* test */; };
 		E488A12E1C1F78890041DFCF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E488A12B1C1F78890041DFCF /* Assets.xcassets */; };
 		E488A1321C1F78FB0041DFCF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E488A1311C1F78FB0041DFCF /* Launch Screen.storyboard */; };
 		E48C5E941C3F203C006CEF53 /* NKJSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48C5E5D1C3F203C006CEF53 /* NKJSContext.swift */; };
@@ -228,7 +227,6 @@
 		E4A83D4D1C4994FD00514698 /* NKC_Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A83CA01C49939700514698 /* NKC_Timer.swift */; };
 		E4A83D4E1C4994FD00514698 /* NKC_Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A83CA01C49939700514698 /* NKC_Timer.swift */; };
 		E4AD89E51C1F833C0043F630 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E488A0D71C1F761F0041DFCF /* app */; };
-		E4AD89E81C1F833C0043F630 /* test in Resources */ = {isa = PBXBuildFile; fileRef = E488A0F81C1F76A40041DFCF /* test */; };
 		E4AD89ED1C1F834B0043F630 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E488A0E31C1F76510041DFCF /* Assets.xcassets */; };
 		E4AD89F31C1F85220043F630 /* NKNSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD89EE1C1F84C80043F630 /* NKNSAppDelegate.swift */; };
 		E4AD89F51C1F85230043F630 /* NKNSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AD89EE1C1F84C80043F630 /* NKNSAppDelegate.swift */; };
@@ -307,7 +305,6 @@
 		E488A0AC1C1F74250041DFCF /* nodekit-sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nodekit-sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E488A0D71C1F761F0041DFCF /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = "nodekit-sample/app"; sourceTree = "<group>"; };
 		E488A0E31C1F76510041DFCF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "nodekit-sample/platform-darwin/Assets.xcassets"; sourceTree = "<group>"; };
-		E488A0F81C1F76A40041DFCF /* test */ = {isa = PBXFileReference; lastKnownFileType = folder; name = test; path = "nodekit-sample/test"; sourceTree = "<group>"; };
 		E488A12B1C1F78890041DFCF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "nodekit-sample/platform-ios/Assets.xcassets"; sourceTree = "<group>"; };
 		E488A12D1C1F78890041DFCF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "nodekit-sample/platform-ios/Info.plist"; sourceTree = "<group>"; };
 		E488A1311C1F78FB0041DFCF /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "nodekit-sample/platform-ios/Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -386,6 +383,7 @@
 		E4C253E61C20B4EE001B3388 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = nodekit/common/www/app; sourceTree = "<group>"; };
 		E4C253E71C20B4EE001B3388 /* default */ = {isa = PBXFileReference; lastKnownFileType = folder; name = default; path = nodekit/common/www/default; sourceTree = "<group>"; };
 		E4C253E81C20B4EE001B3388 /* splash */ = {isa = PBXFileReference; lastKnownFileType = folder; name = splash; path = nodekit/common/www/splash; sourceTree = "<group>"; };
+		E4C845E91C9498EA00605910 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = ../test/app; sourceTree = "<group>"; };
 		E4D8C2CE1C416B3500D07A0F /* NKUIWebViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKUIWebViewDelegate.swift; sourceTree = "<group>"; };
 		E4D8C2D21C416DE000D07A0F /* NKWKWebViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWKWebViewDelegate.swift; sourceTree = "<group>"; };
 		E4D8C2D61C418D4C00D07A0F /* NKWVContextFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWVContextFactory.swift; sourceTree = "<group>"; };
@@ -486,6 +484,7 @@
 			children = (
 				E488A0401C1F6F310041DFCF /* nodekit */,
 				E488A0D31C1F75F00041DFCF /* nodekit-sample */,
+				E4C845E81C94981D00605910 /* test */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -506,7 +505,6 @@
 				E49681441C31D21F0048CA59 /* nodekit-sample.entitlements */,
 				E4C253DD1C20AF68001B3388 /* main.swift */,
 				E488A0D71C1F761F0041DFCF /* app */,
-				E488A0F81C1F76A40041DFCF /* test */,
 				E488A0D61C1F760C0041DFCF /* platform-osx */,
 				E488A0D51C1F76030041DFCF /* platform-ios */,
 			);
@@ -784,6 +782,14 @@
 			name = www;
 			sourceTree = "<group>";
 		};
+		E4C845E81C94981D00605910 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				E4C845E91C9498EA00605910 /* app */,
+			);
+			name = test;
+			sourceTree = "<group>";
+		};
 		E4D8C2D51C418D4C00D07A0F /* NKWVWebView */ = {
 			isa = PBXGroup;
 			children = (
@@ -926,6 +932,9 @@
 							com.apple.ApplicationGroups.Mac = {
 								enabled = 1;
 							};
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
 						};
 					};
 				};
@@ -985,7 +994,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4C253EF1C20B4EE001B3388 /* default in Resources */,
-				E488A0F91C1F76A40041DFCF /* test in Resources */,
 				E4D8C2FA1C44600B00D07A0F /* promise.js in Resources */,
 				E488A0D81C1F761F0041DFCF /* app in Resources */,
 				E4C253F31C20B4EE001B3388 /* splash in Resources */,
@@ -1002,7 +1010,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4A83D281C4993AB00514698 /* lib in Resources */,
-				E4AD89E81C1F833C0043F630 /* test in Resources */,
 				E4C253F41C20B4EE001B3388 /* splash in Resources */,
 				E4C253F01C20B4EE001B3388 /* default in Resources */,
 				E4AD89ED1C1F834B0043F630 /* Assets.xcassets in Resources */,

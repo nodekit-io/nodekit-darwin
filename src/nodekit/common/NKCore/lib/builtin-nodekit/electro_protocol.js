@@ -36,8 +36,8 @@ var protocol = io.nodekit.electro.protocol
 function BrowserServer(scheme) {
     EventEmitter.call(this)
     this.scheme = scheme.toLowerCase();
-    protocol.registerCustomProtocol(scheme, this.invoke);
-
+    protocol.registerCustomProtocol(scheme, this.invoke.bind(this));
+    console.log("+registered custom protocol" + scheme);
 };
 
 util.inherits(BrowserServer, EventEmitter);
@@ -74,7 +74,7 @@ BrowserServer.prototype.invoke = function (request) {
         var res = context.res;
         var data = res.getBody();
         res.headers["access-control-allow-origin"] = "*";
-        this.callbackEnd(id, { 'data': data, 'headers': res.headers, 'statusCode': res.statusCode })
+        protocol.callbackEnd(id, { 'data': data, 'headers': res.headers, 'statusCode': res.statusCode })
 
         for (var _key in context) {
             if (context.hasOwnProperty(_key))

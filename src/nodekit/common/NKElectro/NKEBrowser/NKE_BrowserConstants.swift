@@ -25,15 +25,15 @@ public enum NKEBrowserType: String {
 }
 
 struct NKEBrowserDefaults {
-    static let nkBrowserType: String = "WKWebView"
-    static let kTitle: String = "NodeKit App"
-    static let kWidth: Int = 800
-    static let kHeight: Int = 600
+    static let kTitle: String = "NodeKit"
+    static let kWidth: Int = 1024
+    static let kHeight: Int = 800
     static let kPreloadURL: String = "https://google.com"
 }
 
 struct NKEBrowserOptions {
     static let nkBrowserType: String = "nk.browserType"
+    static let nkAllowCustomProtocol: String = "nk.allowCustomProtocol"
     static let kTitle: String = "title"
     static let kIcon: String = "icon"
     static let kFrame: String = "frame"

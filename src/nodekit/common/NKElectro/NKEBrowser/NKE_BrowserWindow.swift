@@ -46,8 +46,11 @@ class NKE_BrowserWindow: NSObject {
 
         // PARSE & STORE OPTIONS
         self._options["nk.InstallElectro"] = options["nk.InstallElectro"] as? Bool ?? true
-
-        self._browserType = NKEBrowserType(rawValue: (options[NKEBrowserOptions.nkBrowserType] as? String) ?? NKEBrowserDefaults.nkBrowserType)!
+        let allowCustomProtocol: Bool = options[NKEBrowserOptions.nkAllowCustomProtocol] as? Bool ?? false
+        
+        let defaultBrowser: String = allowCustomProtocol ? NKEBrowserType.UIWebView.rawValue : NKEBrowserType.WKWebView.rawValue
+        
+        self._browserType = NKEBrowserType(rawValue: (options[NKEBrowserOptions.nkBrowserType] as? String) ?? defaultBrowser)!
 
         switch self._browserType {
         case .WKWebView:

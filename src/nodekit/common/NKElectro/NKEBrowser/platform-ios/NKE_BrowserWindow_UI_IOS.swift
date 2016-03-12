@@ -45,6 +45,11 @@ extension NKE_BrowserWindow {
             self._webView = webView
 
             window.rootViewController?.view = webView
+            
+            
+            NSURLProtocol.registerClass(NKE_ProtocolLocalFile)
+            NSURLProtocol.registerClass(NKE_ProtocolCustom)
+
 
             webView.NKgetScriptContext(id, options: [String: AnyObject](), delegate: self)
 

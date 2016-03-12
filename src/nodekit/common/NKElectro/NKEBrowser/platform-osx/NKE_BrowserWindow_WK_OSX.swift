@@ -37,8 +37,8 @@ extension NKE_BrowserWindow {
 
             let urlAddress: String = (options[NKEBrowserOptions.kPreloadURL] as? String) ?? "about:blank"
 
-            let width: CGFloat = CGFloat((options[NKEBrowserOptions.kWidth] as? Int) ?? 800)
-            let height: CGFloat = CGFloat((options[NKEBrowserOptions.kHeight] as? Int) ?? 600)
+            let width: CGFloat = CGFloat((options[NKEBrowserOptions.kWidth] as? Int) ?? 1024)
+            let height: CGFloat = CGFloat((options[NKEBrowserOptions.kHeight] as? Int) ?? 800)
             let viewRect: NSRect = NSMakeRect(0,0, width, height)
 
             let config = WKWebViewConfiguration()

@@ -36,10 +36,9 @@ git clone https://github.com/nodekit-io/nodekit.git
 
 Open `src/nodekit.xcodeproj` in Xcode.  You will see 4 build targets, 2 for the frameworks (on iOS and OSX respectively) and 2 for the sample app. 
 
-Build the nodekit-Mac-sample for My Mac or the nodekit-iOS-sample for the iOS Simulator (e.g., iPhone 6) and run.    All the Node.js tests should run and you should see the results as a graphical chart.  
+Build the nodekit-Mac-sample for My Mac or the nodekit-iOS-sample for the iOS Simulator (e.g., iPhone 6) and run.   
 
-To switch to the sample app, change the `package.json` main entry to point to `app/sample/index.js` instead of `test/index.js`
-  
+You should see a beautiful chat application that automatically resizes to device size, and runs without change across all platforms
 
 ## Simple Configuration
 
@@ -145,6 +144,7 @@ Apache 2.0
 We went for platform specific code to allow searching by language on GitHub to show up appropriately (e.g., trending repositories in Swift, C#), to allow separate version numbers for minor platform-specific changes, and because the repositories are in essence not dependent on each other, but rather complementary language ports with the same functionality and API.
 
 ## News
+* (March 2016) Added sample application, a beautiful lightweight chat application to highlight how to use {NK} NodeKit 
 * (February 2016) Split platform versions into their own repositories on GitHub
 * (February 2016) Initial release of NKScripting using the Chakra engine on Windows 10 platforms;  other engines coming
 * (February 2016) Added [roadmap](http://roadmap.nodekit.io) for tracking contributions and future plans

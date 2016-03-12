@@ -219,7 +219,7 @@ class NKE_ProtocolCustom: NSURLProtocol {
         if (self.isCancelled) {return}
         if let _ = res["path"] as? String { return callbackFile(res);}
 
-        guard let chunk = res["_chunk"] as? String else {return;}
+        guard let chunk = res["data"] as? String else {return;}
 
         let data: NSData =  NSData(base64EncodedString: chunk, options: NSDataBase64DecodingOptions.IgnoreUnknownCharacters)!
 

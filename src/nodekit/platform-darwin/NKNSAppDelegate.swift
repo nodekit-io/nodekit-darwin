@@ -57,7 +57,7 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
-        return false
+        return true
     }
     
     // NodeKit Delegate Methods
