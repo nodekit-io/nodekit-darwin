@@ -1,0 +1,4 @@
+git_url "git@bitbucket.org:domabo/apple-certificates.git"
+type "development" # The default type, can be: appstore, adhoc or development
+app_identifier "io.nodekit.nodekit-sample" 
+username ENV['APPLE_ID'] # Your Apple Developer Portal username

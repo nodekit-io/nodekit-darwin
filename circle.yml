@@ -1,0 +1,19 @@
+machine:
+  xcode:
+    version: "7.2"
+
+dependencies:
+  pre:
+    - openssl aes-256-cbc -pass "pass:$SSH_SECRET" -in ./fastlane/travis_key.enc -out ~/.ssh/id_rsa -d -a
+    - chmod 600 ~/.ssh/id_rsa
+    - cat ./fastlane/travis_key.pub > ~/.ssh/id_rsa.pub
+    - chmod 600 ~/.ssh/id_rsa.pub
+    - fastlane --version
+
+test:
+  override:
+    - fastlane build
+
+teardown:
+  pre:
+    - mv -v *.framework.zip $CIRCLE_ARTIFACTS || true

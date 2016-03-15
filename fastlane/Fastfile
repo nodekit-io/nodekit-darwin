@@ -1,0 +1,9 @@
+lane :build do
+   match(type: "development", readonly:"true")
+   
+   sh "cd .. && carthage build --no-skip-current"
+   
+   sh "cd .. && carthage archive #{ENV['FRAMEWORK_NAME']}"
+
+end
+
