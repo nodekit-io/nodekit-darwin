@@ -4,6 +4,7 @@ machine:
 
 dependencies:
   pre:
+    - ssh-keyscan -t 'rsa,dsa' -H bitbucket.org 2>&1 | tee -a ~/.ssh/known_hosts
     - openssl aes-256-cbc -pass "pass:$SSH_SECRET" -in ./fastlane/travis_key.enc -out ~/.ssh/id_rsa -d -a
     - chmod 600 ~/.ssh/id_rsa
     - cat ./fastlane/travis_key.pub > ~/.ssh/id_rsa.pub
