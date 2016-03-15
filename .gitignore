@@ -55,4 +55,4 @@ Carthage/
 # Build Artifacts
 NodeKitBuild
 Build
-
+*.framework.zip

@@ -11,10 +11,8 @@ dependencies:
     - fastlane --version
 
 test:
-  pre:
-    - fastlane build
   override:
-    - echo "tests"
+    - fastlane build
 
 teardown:
   pre:
