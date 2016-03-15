@@ -3,17 +3,17 @@
   <testsuite name="fastlane.lanes">
     
       
-      <testcase classname="fastlane.lanes" name="0: match" time="3.007299">
+      <testcase classname="fastlane.lanes" name="0: match" time="3.33539">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: cd .. &amp;&amp; carthage build --no-skip-current" time="18.798502">
+      <testcase classname="fastlane.lanes" name="1: cd .. &amp;&amp; carthage build --no-skip-current" time="20.704943">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: cd .. &amp;&amp; carthage archive NodeKit" time="3.447732">
+      <testcase classname="fastlane.lanes" name="2: cd .. &amp;&amp; carthage archive NodeKit" time="3.440531">
         
       </testcase>
     

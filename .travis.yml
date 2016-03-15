@@ -1,8 +1,7 @@
 addons:
   ssh_known_hosts: bitbucket.org
 before_install:
-- openssl aes-256-cbc -pass "pass:$SSH_SECRET" -in ./fastlane/travis_key.enc -out
-  ~/.ssh/id_rsa -d -a
+- openssl aes-256-cbc -pass "pass:$SSH_SECRET" -in ./fastlane/travis_key.enc -out ~/.ssh/id_rsa -d -a
 - chmod 600 ~/.ssh/id_rsa
 - cat ./fastlane/travis_key.pub > ~/.ssh/id_rsa.pub
 - chmod 600 ~/.ssh/id_rsa.pub
@@ -10,19 +9,8 @@ before_install:
 language: objective-c
 osx_image: xcode7.2
 script:
-- fastlane build --env $FASTLANE_ENV
-deploy:
-  provider: releases
-  skip_cleanup: true
-  api_key:
-    secure: KVD8ysV50mo/A082RfJzzwsArlIPN7xooomkNJWry1QIJtIbTUnn8WWOrI4bxIJED6uPklxB1GajABodIhv957YoLxbRUDn+cOKx+GLVYU8vz80fChtWCHpKdVku2Q8LhtYiP5tTbmRkhR/2OB+2gnLJMPUT4ljFSa7CDzrdkbf5ltCcMsb690sjrGUay/MlHjseV7EskRyAe6otNXTSWBVvOaB1WSnkpSKYTeNzKlxbNNKdaws0qAIPa6V16v5Ydm137Ku1e/sYxvLrUYb5hGLSCdvNTpO9s1eblUCSfhsiqwwxzZgn/hUaY8LTF1T121qZdhc7Kw+AFR5XifVzbvzv3J0j/zJrqUEzLnVu0ATqPVhq83l0iJjlSkJ2z+oBb865RrDd3ngcyPmL2o71C2S057IvLGU1JoeUNQBUrCOBjo/8tqH6StY/V05Ng5iZNv/ShP+Xi8tqp5YNZuTIa9c1Y67AODa93u4zeB87WTpHqhmhcyRM+Zxrsl+f62P/Y+8f5rIMixgyuUavRRnbieoQU0M43gQhMSRVoLfH0PwXyat8lbzDsP55Q7dVkIO4K7/h1/qwBKinJkntLv6bQKxSAzAJLetUcWGMcXTwteLjxh8twJeUqWwjnarCerlacRDSIjCLyGeImamJNoFq3ACeqrLI/BH1T2E1nZId4rc=
-  file: "Build/nodekit-sample-$FASTLANE_ENV.tar.gz"
-  on:
-    tags: true
+- fastlane build
 env:
-  matrix:
-  - FASTLANE_ENV=ios
-  - FASTLANE_ENV=mac
   global:
   - secure: PfrrUtd9LN9nLFt4bKhj+vK2rXPAAydhKSU4IYkZL2CEUYOsuBYAUoXR1/vAsRv2tUI5Hxf2aH8ZEoNo9hHzu+FkOmY8uU73bCWew+YPdu6QdYk4v8XW/uHH0sfjnYK9vZDiTK5sTrZvxAw/5YAdYGvuj0t3Jyix6pP+iCQ8l4oBbr6utA57Xnk7elnN1ELmUJLujGEsz6FQSKqabBpZYj3dTgAvoQYgl7Dqz7OFo2G6YsuN5wroPx7K5PaXs6VxO6FEwCQeBi/ClN09OhoBosOlxOeZBx+Nbke14A1D+YAnkPcdkGRjWQ2OIK/Y7hM4UmAr2xfYPYTV1RXfoYwtYalkWKXzdJRCKWropImnMQKTE2tcPWg2QpQ27fLK8vYoT3Kkebit6KLrcve5zP3i8GGyAQH3x2xfqy1ZdXrbN/osLEZ4UofMXXUJ9DjvEZhOec9UsFq0Fa17Eriq/vTpVS4TgpNwzv44Z8cacT/ZMP/HZNuWN+7751PvAmU5CafAwReu7Mbha4S5hqCDYHSci59Tkw8Vg0m6W/TcRBtOjxWdjiCRj3qNG/VbnyybEVuWoZtODnLdxnBFB4mmVpWulEk2fNIKzcNP05KtnbRnyLE15qlpfbKANGCbYXCWlQczJ4TtmMYRGDD0hUbL+uF6JlaOzhAqH1Vy6pDAT4dTVME=
   - secure: pCyx+HkdPiJrpn+AX2rBvMhbWT3rIjZKIf2Rl7LZQAWcH4wq4fTVIJuSi0l/uU0PsVy7buxuwWTsjl2DP5NfdP6J+lrijZczb2TsQ2HbJYcUXVg459LT/ctmvYyT4x7lwJtzNnXGxoJK0Isfj6n75XqUH2sJXfzAJcUFO3lkuPaxS046MDh7s1Rz63z88AuK8kte3dyVxWHIZc+RrcrcxV/0N6ANmvGx6axo15j+lv+FFPXOSCqDSO5pZ6Tu5mgnbzhLtZ5Gj/4qb2gJcXZt2xbUmeDXR/UlNx7/JY6v0+l7YklDq/5Lp5THyBuvFsdIpD3Cg3ZCFTexOXs0Z25S7hbUI8iSLzRxBNQztSgO49au8LJcRWRryJmS2hR9G8R8EMmTq4FvaK8FuwsOkws14GwpAM/JEoWnva008CO9WzW+F4Zh9WhLgCH1F7RYb91m2XRIKIMSeZjHr+uySfy2KcbtlrwEwPqLHM0fSiT5f6vSp7y+8UR15fZt+Qi1IiEMaXhzzxga6hFPfmguBE8a0w9WnHKdp0oC4p3UVJYjy5wJjdWG17PUFC18ffVZNrZlaleAbXfSJGPqM2B7GKkg58xLI8z3JfOgobQhwzBPeox30LSgmEcTvLh5EenbiaXHV8ipHGsm2PwO3ISeCJ7HXV2WEuWz9mVZ7eNjBnHnr/w=
