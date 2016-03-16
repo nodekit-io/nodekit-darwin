@@ -18,6 +18,7 @@ test:
     
 deployment:
   release:
+    branch: master
     commands:
       - fastlane release_github
       
