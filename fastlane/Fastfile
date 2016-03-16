@@ -15,7 +15,6 @@ lane :release_github do
     repository_name: "#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV['CIRCLE_PROJECT_REPONAME']}",
     name: "#{ENV['CIRCLE_PROJECT_REPONAME']}-#{ENV['CIRCLE_TAG']}",
     tag_name: "#ENV['CIRCLE_TAG']",
-    description: description,
     upload_assets: ["./#{ENV['FRAMEWORK_NAME']}.Framework.zip"],
     is_draft: false,
     is_prerelease: false
