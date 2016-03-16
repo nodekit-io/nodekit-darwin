@@ -4,12 +4,10 @@ lane :build do
    sh "cd .. && carthage build --no-skip-current"
    
    sh "cd .. && carthage archive #{ENV['FRAMEWORK_NAME']}"
-   
-   release_github
 
 end
 
-private_lane :release_github do
+lane :release_github do
   ENV["FL_GITHUB_RELEASE_API_TOKEN"] = ENV["GITHUB_TOKEN"]
   
   set_github_release(
