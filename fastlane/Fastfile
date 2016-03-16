@@ -10,13 +10,17 @@ end
 lane :release_github do
   ENV["FL_GITHUB_RELEASE_API_TOKEN"] = ENV["GITHUB_TOKEN"]
   
-  if (ENV['GIT_COMMIT_DESC'] =~ /v[0-9]+(\.[0-9]+)*/)
+  commit_desc = sh("git log --format=%B -n 1 #{ENV['CIRCLE_SHA1']}")
+  
+  puts commit_desc
+  
+  if (commit_desc =~ /v[0-9]+(\.[0-9]+)*/)
     set_github_release(
         commitish: "#{ENV['CIRCLE_BRANCH']}",
         repository_name: "#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV['CIRCLE_PROJECT_REPONAME']}",
         name: "#{ENV['CIRCLE_PROJECT_REPONAME']}-#{ENV['CIRCLE_TAG']}",
-        tag_name: "#{ENV['GIT_COMMIT_DESC']}",
-        description: "#{ENV['GIT_COMMIT_DESC']}",
+        tag_name: commit_desc,
+        description: commit_desc,
         upload_assets: ["./#{ENV['FRAMEWORK_NAME']}.Framework.zip"],
         is_draft: false,
         is_prerelease: false
