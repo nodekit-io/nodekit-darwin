@@ -13,8 +13,7 @@ dependencies:
  
 test:  
   override:
-#    - fastlane build
-     - echo "Test"
+     - fastlane build
     
 deployment:
   release:
