@@ -17,11 +17,11 @@ test:
      - echo "Test"
     
 deployment:
-  environment:
-     GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
   release:
     commands:
       - fastlane release_github
+        environment:
+          GIT_COMMIT_DESC: git log --format=%B -n 1 $CIRCLE_SHA1
       
 teardown:
   pre:
