@@ -16,12 +16,12 @@ lane :release_github do
     set_github_release(
         commitish: "#{ENV['CIRCLE_BRANCH']}",
         repository_name: "#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV['CIRCLE_PROJECT_REPONAME']}",
-        name: "#{ENV['CIRCLE_PROJECT_REPONAME']}-#{ENV['CIRCLE_TAG']}",
+        name: "#{ENV['CIRCLE_PROJECT_REPONAME']}-#{commit_desc}",
         tag_name: commit_desc,
         description: commit_desc,
         upload_assets: ["./#{ENV['FRAMEWORK_NAME']}.Framework.zip"],
         is_draft: false,
-        is_prerelease: false
+        is_prerelease: true
     )
   end
   
