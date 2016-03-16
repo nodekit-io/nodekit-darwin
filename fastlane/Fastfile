@@ -14,7 +14,7 @@ lane :release_github do
     commitish: "#{ENV['CIRCLE_BRANCH']}",
     repository_name: "#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV['CIRCLE_PROJECT_REPONAME']}",
     name: "#{ENV['CIRCLE_PROJECT_REPONAME']}-#{ENV['CIRCLE_TAG']}",
-    tag_name: "#ENV['CIRCLE_TAG']",
+    tag_name: "#{ENV['CIRCLE_TAG']}",
     upload_assets: ["./#{ENV['FRAMEWORK_NAME']}.Framework.zip"],
     is_draft: false,
     is_prerelease: false
