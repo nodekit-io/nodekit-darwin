@@ -10,6 +10,7 @@ dependencies:
     - cat ./fastlane/travis_key.pub > ~/.ssh/id_rsa.pub
     - chmod 600 ~/.ssh/id_rsa.pub 
     - fastlane --version
+    - go get github.com/tcnksm/ghr
 
 test:
   override:
@@ -18,3 +19,9 @@ test:
 teardown:
   pre:
     - mv -v *.framework.zip $CIRCLE_ARTIFACTS || true
+    
+deployment:
+  release:
+    tag: /v[0-9]+(\.[0-9]+)*/
+    commands:
+      - ghr -u guycreate $CIRCLE_TAG packages/

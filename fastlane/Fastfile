@@ -4,6 +4,23 @@ lane :build do
    sh "cd .. && carthage build --no-skip-current"
    
    sh "cd .. && carthage archive #{ENV['FRAMEWORK_NAME']}"
+   
+   release_github
 
 end
 
+private_lane :release_github do
+  ENV["FL_GITHUB_RELEASE_API_TOKEN"] = ENV["GITHUB_TOKEN"]
+  
+  set_github_release(
+    commitish: "#{ENV['CIRCLE_BRANCH']},
+    repository_name: "#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV['CIRCLE_PROJECT_REPONAME']}",
+    name: "#{ENV['CIRCLE_PROJECT_REPONAME']}-#{ENV['CIRCLE_TAG']}",
+    tag_name: "#ENV['CIRCLE_TAG']",
+    description: description,
+    upload_assets: ["./#{ENV['FRAMEWORK_NAME']}.Framework.zip"],
+    is_draft: false,
+    is_prerelease: false
+  )
+  
+end
