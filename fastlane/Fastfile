@@ -11,7 +11,7 @@ lane :release_github do
   ENV["FL_GITHUB_RELEASE_API_TOKEN"] = ENV["GITHUB_TOKEN"]
   
   set_github_release(
-    commitish: "#{ENV['CIRCLE_BRANCH']},
+    commitish: "#{ENV['CIRCLE_BRANCH']}",
     repository_name: "#{ENV['CIRCLE_PROJECT_USERNAME']}/#{ENV['CIRCLE_PROJECT_REPONAME']}",
     name: "#{ENV['CIRCLE_PROJECT_REPONAME']}-#{ENV['CIRCLE_TAG']}",
     tag_name: "#ENV['CIRCLE_TAG']",
