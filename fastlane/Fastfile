@@ -1,4 +1,4 @@
-lane :build do
+lane :test do
   match(type: "development", readonly:"true")
   
   ENV['OUTPUT_DIRECTORY'] = "#{ENV['CIRCLE_TEST_REPORTS']}"
@@ -15,8 +15,13 @@ lane :build do
       clean: true
     )
    
-   sh "cd .. && carthage build --no-skip-current" 
-   sh "cd .. && carthage archive #{ENV['FRAMEWORK_NAME']}"
+end
+
+lane :build do
+  match(type: "development", readonly:"true")
+     
+  sh "cd .. && carthage build --no-skip-current" 
+  sh "cd .. && carthage archive #{ENV['FRAMEWORK_NAME']}"
 end
 
 lane :release_github do

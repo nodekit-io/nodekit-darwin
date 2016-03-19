@@ -13,6 +13,7 @@ dependencies:
  
 test:  
   override:
+     - fastlane test
      - fastlane build
      
 deployment:
