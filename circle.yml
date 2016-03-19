@@ -13,13 +13,8 @@ dependencies:
  
 test:  
   override:
-     - fastlane test
-     - mkdir $CIRCLE_TEST_REPORTS/Mac
-     - mv ./Build/Products/Debug/junitresults.xml $CIRCLE_TEST_REPORTS/Mac
-     - mkdir $CIRCLE_TEST_REPORTS/iOS
-     - mv ./Build/Products/Debug-iphonesimulator/junitresults.xml $CIRCLE_TEST_REPORTS/iOS
      - fastlane build
-    
+     
 deployment:
   release:
     branch: master

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <testsuites tests='1' failures='0'>
   <testsuite name='nodekit_iOSTests.NKT_XCTestCase' tests='1' failures='0'>
-    <testcase classname='nodekit_iOSTests.NKT_XCTestCase' name='testNodeKit' time='4.728'/>
+    <testcase classname='nodekit_iOSTests.NKT_XCTestCase' name='testNodeKit' time='3.583'/>
   </testsuite>
 </testsuites>

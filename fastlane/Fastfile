@@ -1,19 +1,22 @@
-lane :test do
- match(type: "development", readonly:"true")
+lane :build do
+  match(type: "development", readonly:"true")
    
- scan(
+  scan(
       scheme: "#{ENV['SCHEME_NAME']}-Mac",
       clean: true
     )
+    
+  sh "mkdir #{ENV['CIRCLE_TEST_REPORTS']}/Mac"
+  sh "mv ../Build/Products/Debug/junitresults.xml #{ENV['CIRCLE_TEST_REPORTS']}/Mac"
  
   scan(
       scheme: "#{ENV['SCHEME_NAME']}-iOS",
       clean: true
     )
-
-end
-
-lane :build do
+    
+   sh "mkdir #{ENV['CIRCLE_TEST_REPORTS']}/iOS"
+   sh "mv ../Build/Products/Debug-iphonesimulator/junitresults.xml #{ENV['CIRCLE_TEST_REPORTS']}/iOS"
+  
     sh "cd .. && carthage build --no-skip-current" 
     sh "cd .. && carthage archive #{ENV['FRAMEWORK_NAME']}"
 end
