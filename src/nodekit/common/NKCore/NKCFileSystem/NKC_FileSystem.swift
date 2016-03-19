@@ -209,7 +209,7 @@ class NKC_FileSystem: NSObject, NKScriptExport {
             fileExtension = "js"
         }
 
-        let mainBundle: NSBundle = NSBundle.mainBundle()
+        let mainBundle: NSBundle = NKNodeKit.mainBundle
    //     var resourcePath: String! = mainBundle.resourcePath
 
         var path = mainBundle.pathForResource(fileName, ofType: fileExtension, inDirectory: directory)

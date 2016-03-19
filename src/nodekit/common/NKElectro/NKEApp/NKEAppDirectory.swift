@@ -28,7 +28,7 @@ struct NKEAppDirectory {
             case "appData":  return NSSearchPathForDirectoriesInDomains(.ApplicationSupportDirectory, .UserDomainMask, true)[0]
             case "userData":  return NSSearchPathForDirectoriesInDomains(.UserDirectory, .UserDomainMask, true)[0]
             case "temp":  return  NSTemporaryDirectory()
-            case "exe": return NSBundle.mainBundle().bundlePath
+            case "exe": return NKNodeKit.mainBundle.bundlePath
             case "module": return ""
             case "desktop": return NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)[0]
             case "documents": return NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
@@ -43,7 +43,7 @@ struct NKEAppDirectory {
     static func getPackage() -> NSDictionary? {
 
 
-        let mainBundle: NSBundle = NSBundle.mainBundle()
+        let mainBundle: NSBundle = NKNodeKit.mainBundle
         let resourcePath: String! = mainBundle.resourcePath
         let fileManager = NSFileManager.defaultManager()
 

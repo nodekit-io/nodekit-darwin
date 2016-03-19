@@ -2,7 +2,6 @@
  * nodekit.io
  *
  * Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
- * Portions Copyright (c) 2013 GitHub, Inc. under MIT License
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +17,6 @@
  */
 
 // Bindings
-// func registerCustomProtocol(scheme: String, handler: NKScriptValue, completion: NKScriptValue?) -> Void {
-// func unregisterCustomProtocol(scheme: String, completion: NKScriptValue?) -> Void {
 // func callbackWriteData(id: Int, res: Dictionary<String, AnyObject>) -> Void {
 // func callbackEnd(id: Int, res: Dictionary<String, AnyObject>) -> Void {
 // func isProtocolHandled(scheme: String, callback: NKScriptValue) -> Void {

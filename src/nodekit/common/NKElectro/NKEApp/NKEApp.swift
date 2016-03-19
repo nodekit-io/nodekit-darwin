@@ -50,7 +50,7 @@ class NKE_App: NSObject, NKEAppProtocol {
     func quit() -> Void {  exit(0) }
     func exit(exitCode: Int) -> Void { exit(exitCode) }
 
-    func getAppPath() -> String { return (NSBundle.mainBundle().bundlePath as NSString).stringByDeletingLastPathComponent }
+    func getAppPath() -> String { return (NKNodeKit.mainBundle.bundlePath as NSString).stringByDeletingLastPathComponent }
     func getPath(name: String) -> String { return NKEAppDirectory.getPath(name) }
     func setPath(name: String, path: String) -> Void { NotImplemented(); }
 

@@ -102,6 +102,7 @@ console.log("Starting PACKAGE.JSON");
 // INVOKE MAIN APP
 process.package =  module._load('app/package.json', null, false);
 process.argv = ["node", __dirname + "/" + process.package['main']]
+console.log("Starting" + process.package['main']);
 module._load(process.package['main'], null, true);
 
 process.nextTick(function(){

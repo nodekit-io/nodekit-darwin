@@ -58,7 +58,7 @@ nodekit.on("ready", function() {
            if (useHttp)
            {
            server = http.createServer(app.buildHttp());
-           server.listen(function(){
+           server.listen(null, "localhost", function(){
                          var port = server.address().port;
                          var p = new BrowserWindow({
                                                    'preloadURL': 'http://localhost:' + port,

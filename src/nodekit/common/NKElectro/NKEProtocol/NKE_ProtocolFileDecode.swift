@@ -31,7 +31,7 @@ class NKE_ProtocolFileDecode: NSObject {
     init(url: NSURL) {
         resourcePath = nil
 
-        let _mainBundle: NSBundle = NSBundle.mainBundle()
+        let _mainBundle: NSBundle = NKNodeKit.mainBundle
         let _nodeKitBundle: NSBundle = NSBundle(forClass: NKNodeKit.self)
 
         let _appPath: NSString = (_mainBundle.bundlePath as NSString).stringByDeletingLastPathComponent

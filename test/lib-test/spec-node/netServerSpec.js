@@ -14,7 +14,7 @@ describe( "net.Server", function() {
 
   it("should fire a 'listening' event", function(done) {
     var server = net.createServer();
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
       server.close();
       done()
     });
@@ -25,14 +25,14 @@ describe( "net.Server", function() {
     server.on('close', function(e) {
       done()
     });
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
       server.close();
     });
   });
 
   it("should fire a 'close' event on a callback passed to close()", function(done) {
     var server = net.createServer();
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
       server.close(function() {
           done()
       });
@@ -41,7 +41,7 @@ describe( "net.Server", function() {
 
   it("should fire a 'connect' callback on client connection", function(done) {
      var server = net.createServer();
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
                   var port = server.address().port;
                   
       var socket = net.connect(port, function() {
@@ -69,7 +69,7 @@ describe( "net.Server", function() {
       });
               });
      
-     server.listen(0, function() {
+     server.listen(0, "localhost", function() {
       var port = server.address().port;
       var socket = net.connect(port, function() {
         socket.on('data', function(buff) {
@@ -92,7 +92,7 @@ describe( "net.Server", function() {
           done()
       });
     });
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
                   var port = server.address().port;
                   
       var client = net.connect(port);
@@ -107,7 +107,7 @@ describe( "net.Server", function() {
       });
       socket.setTimeout(0); // cancels the timeout we just set
     });
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
                   var port = server.address().port;
                   
       var socket = net.connect(port, function() {
@@ -123,7 +123,7 @@ describe( "net.Server", function() {
 
   it( "should provide a remote address", function(done) {
     var server = net.createServer();
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
                   var port = server.address().port;
                   
       var socket = net.connect(port, function() {
@@ -138,17 +138,12 @@ describe( "net.Server", function() {
 
   it( "should provide a server address", function(done) {
     var server = net.createServer();
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
                   var port = server.address().port;
                   
       var socket = net.connect(port, function() {
         var address = server.address();
         expect(address.port).toBe(port);
-        if ( address.family == 'IPv4' ) {
-          expect(address.address).toBe('0.0.0.0');
-        } else if ( address.family == 'IPv6' ) {
-          expect(address.address).toBe('0:0:0:0:0:0:0:0');
-        }
         socket.destroy();
         server.close();
        done();
@@ -176,7 +171,7 @@ describe( "net.Server", function() {
       done()
     });
 
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
      var port = server.address().port;
       var socket = net.connect(port, function() {
         socket.write("crunchy bacon");

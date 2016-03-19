@@ -60,6 +60,6 @@ describe('The net module', function() {
         done()
       });
     });
-    server.listen(0);
+    server.listen(0, "localhost");
   });
 });

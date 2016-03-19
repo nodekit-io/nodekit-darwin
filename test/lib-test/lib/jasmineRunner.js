@@ -4,6 +4,9 @@ glob = require('glob');
 
 module.exports = Jasmine;
 module.exports.JsonReporter = require('./jsonReporter');
+module.exports.JUnitXmlReporter = require("./junit_reporter").JUnitXmlReporter;
+module.exports.ConsoleReporter = require("./terminalReporter").TerminalReporter;
+module.exports.CallBackReporter = require("./callbackReporter");
 
 function Jasmine(container, options) {
     
@@ -16,7 +19,7 @@ function Jasmine(container, options) {
     this.env = this.jasmine.getEnv();
     this.reportersCount = 0;
     this.container = container;
-    this.jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
+    this.jasmine.DEFAULT_TIMEOUT_INTERVAL = 2000;
 }
 
 Jasmine.prototype.addSpecFile = function(filePath) {
@@ -28,28 +31,26 @@ Jasmine.prototype.addReporter = function(reporter) {
     this.reportersCount++;
 };
 
-Jasmine.prototype.configureDefaultReporter = function(options) {
-    
-    var jsonReporter;
-    
-    var defaultOnComplete = function(passed) {
-        console.log(jsonReporter.getJSReportAsString());
-    };
-    
-    options.timer = new this.jasmine.Timer();
-    
-    options.print = options.print || function() {
-        process.stdout.write(util.format.apply(this, arguments));
-    };
-    
-    options.showColors = options.hasOwnProperty('showColors') ? options.showColors : false;
-    
-    options.onComplete = options.onComplete || defaultOnComplete;
-    
-    jsonReporter = new module.exports.JsonReporter(this.container, options);
-    jsonReporter.onComplete = options.onComplete;
-    
-    this.addReporter(jsonReporter);
+Jasmine.prototype.configureJSONReporter = function(options) {
+    var jsonReporter = new module.exports.JsonReporter(this.container, options);
+    this.addReporter(jsonNativeReporter);
+};
+
+Jasmine.prototype.configureJUnitXMLReporter = function(options) {
+    options.savePath = process.exeDirectory;
+    var  reporter = new  module.exports.JUnitXmlReporter(options);
+    this.addReporter(reporter);
+};
+
+Jasmine.prototype.configureConsoleReporter = function(options) {
+    options.verbosity = 3;
+    var  reporter = new  module.exports.ConsoleReporter(options);
+    this.addReporter(reporter);
+};
+
+Jasmine.prototype.configureCallBackReporter = function(options) {
+    var  reporter = new  module.exports.CallBackReporter(options);
+    this.addReporter(reporter);
 };
 
 Jasmine.prototype.addMatchers = function(matchers) {

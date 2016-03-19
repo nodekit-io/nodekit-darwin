@@ -7,8 +7,8 @@ describe('Stream transforms', function() {
   function IncrStream(opts) {
     if ((!this instanceof IncrStream)) return new IncrStream(opts);
     stream.Transform.call(this, opts);
-    this.on('end', function() { console.log("END CALLED"); });
-    this.on('finish', function() { console.log("FINISH CALLED"); });
+    this.on('end', function() {  });
+    this.on('finish', function() {  });
   }
   util.inherits(IncrStream, stream.Transform);
 
@@ -33,8 +33,7 @@ describe('Stream transforms', function() {
   util.inherits(BufferStream, stream.Stream);
 
   BufferStream.prototype.write = function(c) {
-    console.log("BufferStream write " + c);
-    this.chunks.push(c);
+     this.chunks.push(c);
     this.length += c.length;
     return true;
   };
@@ -44,7 +43,6 @@ describe('Stream transforms', function() {
          };
 
   BufferStream.prototype.end = function(c) {
-    console.log("BufferStream end " + c);
     if (c) this.write(c);
     // flatten
     var buf = new Buffer(this.length);
@@ -53,7 +51,6 @@ describe('Stream transforms', function() {
       c.copy(buf, i);
       i += c.length;
     });
-    console.log("BufferStream emit data " + buf);
     this.emit('data', buf);
     this.emit('end');
     return true;
@@ -64,8 +61,7 @@ describe('Stream transforms', function() {
     var incrStream = new IncrStream();
     var buf = new BufferStream();
     incrStream.on('end', function() {
-                  console.log(buf.toString());
-      expect(buf.toString()).toBe("101101");
+    expect(buf.toString()).toBe("101101");
                     done()
     });
     incrStream.pipe(buf);

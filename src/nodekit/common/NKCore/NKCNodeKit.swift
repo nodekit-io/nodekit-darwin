@@ -34,16 +34,28 @@ import Foundation
     }
     
     public class func start(options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate? = nil) {
+        
+        if let val = options["nk.MainBundle"] {
+            mainBundle = val as! NSBundle;
+        }
+        
+        if let _ = options["nk.Test"] {
+            NKMainNoUI.start(options, delegate: delegate)
+        } else
+        {
         #if os(iOS)
             NKMainMobile.start(options, delegate: delegate)
         #elseif os(OSX)
             NKMainDesktop.start(options, delegate: delegate)
         #endif
+        }
     }
+    
+    public static var mainBundle: NSBundle = NSBundle.mainBundle()
     
     // Instance Methods (Not normally Called from Public, but Exposed to Allow Multiple {NK} NodeKit's per process)
     
-     override public init() {
+    override public init() {
         self.context = nil
     }
     
@@ -74,5 +86,14 @@ import Foundation
             self.scriptContextDelegate?.NKScriptEngineReady(context)
             NKEventEmitter.global.emit("nk.Ready", ())
         })
+    }
+}
+
+class NKMainNoUI {
+    private static let nodekit: NKNodeKit = NKNodeKit()
+    
+    class func start(options: Dictionary<String, AnyObject>, delegate nkScriptDelegate: NKScriptContextDelegate?) {
+        nodekit.start(options ?? Dictionary<String, AnyObject>(), delegate: nkScriptDelegate)
+        NKEventEmitter.global.emit("nk.ApplicationDidFinishLaunching", ())
     }
 }

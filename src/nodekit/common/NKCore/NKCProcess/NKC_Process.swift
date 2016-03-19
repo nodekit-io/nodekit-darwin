@@ -67,7 +67,7 @@
         process["platform"] = PLATFORM
         process["devicefamily"] = DEVICEFAMILY
         process["argv"] = ["nodekit"]
-        process["execPath"] = NSBundle.mainBundle().resourcePath!
+        process["execPath"] = NKNodeKit.mainBundle.resourcePath!
         
         setNodePaths(&process)
         
@@ -99,7 +99,7 @@
     
     private class func setNodePaths(inout process: Dictionary<String, AnyObject>) {
         let fileManager = NSFileManager.defaultManager()
-        let mainBundle: NSBundle = NSBundle.mainBundle()
+        let mainBundle: NSBundle = NKNodeKit.mainBundle
         let _nodeKitBundle: NSBundle = NSBundle(forClass: NKNodeKit.self)
         
         let appPath = (mainBundle.bundlePath as NSString).stringByDeletingLastPathComponent
@@ -121,16 +121,19 @@
             resPaths = resourcePath.stringByAppendingString(":").stringByAppendingString(appPath).stringByAppendingString(":").stringByAppendingString(appModulePath).stringByAppendingString(":").stringByAppendingString(nodekitPath)
         } else {
             if (!fileManager.fileExistsAtPath(embeddedPackage)) {
-                log("!Missing package.json in main bundle /Resources/app for \(resourcePath)")
+                log("!Missing package.json in main bundle Resources/app for \(resourcePath)")
                 return
             }
             process["workingDirectory"] = webPath
             
             resPaths = resourcePath.stringByAppendingString(":").stringByAppendingString(webPath).stringByAppendingString(":").stringByAppendingString(appModulePath).stringByAppendingString(":").stringByAppendingString(nodekitPath)
             
+            log(resPaths);
+            
         }
         var env  = NSProcessInfo.processInfo().environment
         env["NODE_PATH"] = resPaths
+        process["exeDirectory"] = appPath
         process["env"] = env
     }
  }

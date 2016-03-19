@@ -1,20 +1,9 @@
 {
-  "name": "jasmine-test",
-  "version": "0.0.1",
-  "description": "Run Jasmine 2 specs",
-  "main": "index",
-  "scripts": {
-    "test": "node test.js"
-  },
-  "keywords": [
-    "jasmine",
-    "nodekit",
-    "nodekit.io"
-  ],
-  "author": "OffGrid Networks",
-  "license": "MIT",
-  "dependencies": {
-    "jasmine-core": "^2.1.0",
-    "glob": "^4.0.6"
-  }
+    "name": "nodekit test",
+    "main": "lib-test/index.js",
+    "description": "{NK} NodeKit Test Framework",
+    "author": "OffGrid Networks",
+    "version": "0.5.0",
+    "repository": "https://github.com/nodekit-io/nodekit",
+    "dependencies": {   }  
 }

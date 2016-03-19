@@ -44,7 +44,6 @@ describe( "http.request", function() {
       request.on( "socket", function(s) {
         socket = s;
       })
-      console.log( "AND GO!" );
       request.end();
   });
 

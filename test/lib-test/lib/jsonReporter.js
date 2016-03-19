@@ -105,8 +105,7 @@ function JsonReporter(container, options) {
         }
     };
     
-    var onComplete = options.onComplete || function() {},
-    specCount,
+    var specCount,
     failureCount,
     failedSpecs = [],
     pendingCount,
@@ -238,7 +237,6 @@ function JsonReporter(container, options) {
     
     this.jasmineDone = function() {
         this._buildReport();
-        onComplete();
     };
  
     

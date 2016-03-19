@@ -81,7 +81,7 @@ describe('http', function(){
       response.end('crunchy bacon');
       expect(response.headersSent).toBe(true);
     });
-    server.listen(0, function() {
+    server.listen(0, "localhost", function() {
                   var port1 = server.address().port;
                   test_options.port = port1;
       var request = http.request(test_options, function(response) {

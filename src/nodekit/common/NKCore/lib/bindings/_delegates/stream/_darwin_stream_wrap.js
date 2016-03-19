@@ -94,7 +94,8 @@ Stream.prototype.writeBuffer = function(req, data) {
 };
 
 Stream.prototype.shutdown = function(req) {
-    this._stream.close();
+    if (this._stream)
+      this._stream.close();
     
     //afterShutdown(status, handle, req)
     req.oncomplete( 0, this, req );

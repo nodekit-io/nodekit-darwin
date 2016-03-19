@@ -32,7 +32,6 @@ describe( "io.nodekit.platform.TCP", function() {
        
              server.onconnection = function(err, newSocket){
                 expect(err).toBe(undefined);
-                console.log("SERVER CONNECTED")
        
                 newSocket.onread = function(length, buf){
                     if (length == -1)
@@ -49,11 +48,9 @@ describe( "io.nodekit.platform.TCP", function() {
             server.listen(5)
             var req = new TCPConnectWrap()
             req.oncomplete = function( status, handle, _req, readable, writable){
-                    console.log("CONNECTED")
                     handle.writeUtf8String(null, 'HELLO WORLD');
             }
        
-            console.log("PORT: " + port);
             client.connect(req, "127.0.0.1", port)
      });
          

@@ -32,16 +32,22 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
         self.app = app
         self.nodekit = NKNodeKit()
         
-        let splash: [String: AnyObject] = (NKNSAppDelegate.options?["nk.splashWindow"] as? [String: AnyObject]) ??  [
-            "nk.browserType": "UIWebView",
-            "title": "",
-            "preloadURL": "internal://localhost/splash/views/StartupSplash.html",
-            "width": 800,
-            "height": 600,
-            "nk.InstallElectro": false
-        ]
+        let testMode = (NKNSAppDelegate.options?["nk.Test"] as? Bool) ?? false
         
-        splashWindow = NKE_BrowserWindow(options: splash)
+        if (!testMode || true)
+        {
+            
+            let splash: [String: AnyObject] = (NKNSAppDelegate.options?["nk.splashWindow"] as? [String: AnyObject]) ??  [
+                "nk.browserType": "UIWebView",
+                "title": "",
+                "preloadURL": "internal://localhost/splash/views/StartupSplash.html",
+                "width": 800,
+                "height": 600,
+                "nk.InstallElectro": false
+            ]
+            
+            splashWindow = NKE_BrowserWindow(options: splash)
+        }
     }
     
     // OS X Delegate Methods
@@ -57,7 +63,7 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
-        return true
+        return false
     }
     
     // NodeKit Delegate Methods
@@ -65,10 +71,14 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
      func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
         NKEventEmitter.global.once("nk.jsApplicationReady") { (data: AnyObject) -> Void in
             
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
-            dispatch_after(delayTime, dispatch_get_main_queue()) {
-                self.splashWindow?.close()
-                self.splashWindow = nil
+            if (self.splashWindow != nil)
+            {
+                
+                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+                dispatch_after(delayTime, dispatch_get_main_queue()) {
+                    self.splashWindow?.close()
+                    self.splashWindow = nil
+                }
             }
         }
 

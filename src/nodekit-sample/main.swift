@@ -25,11 +25,37 @@ import Foundation
 class myNKDelegate: NSObject, NKScriptContextDelegate {
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
         SamplePlugin.attachTo(context)
-    }
+      //  NKT_TestRunner.attachTo(context)
+
+     }
     
     func NKScriptEngineReady(context: NKScriptContext) -> Void {
+      
     }
 }
 
+NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WebKitDeveloperExtras")
+NSUserDefaults.standardUserDefaults().synchronize()
+
+/*NKEventEmitter.global.once("nkt.Ready") { (count: Int) -> Void in
+    
+    NKT_TestRunner.current._start() { (passed: Bool) -> Void in
+        if (!passed)
+        {
+            log(":::::::::JavaScript Tests Did Not Pass")
+            exit(255)
+        } else
+        {
+            log(":::::::::JavaScript Tests Passed")
+            exit(0)
+            
+        }
+        
+    }
+} */
+
 NKNodeKit.start([String: AnyObject](), delegate: myNKDelegate() )
+
+
+
 
