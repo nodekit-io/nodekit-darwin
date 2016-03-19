@@ -1,6 +1,7 @@
 lane :build do
   match(type: "development", readonly:"true")
    
+  sh "mkdir -p ../Build/Products/Debug"
   sh "chmod +w ../Build/Products/Debug"
  
   scan(
@@ -11,6 +12,7 @@ lane :build do
   sh "mkdir #{ENV['CIRCLE_TEST_REPORTS']}/Mac"
   sh "mv ../Build/Products/Debug/junitresults.xml #{ENV['CIRCLE_TEST_REPORTS']}/Mac"
  
+  sh "mkdir -p ../Build/Products/Debug-iphonesimulator"
   sh "chmod +w ../Build/Products/Debug-iphonesimulator"
   
   scan(
