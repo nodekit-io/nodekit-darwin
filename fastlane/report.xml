@@ -3,47 +3,24 @@
   <testsuite name="fastlane.lanes">
     
       
-      <testcase classname="fastlane.lanes" name="0: match" time="4.879905">
+      <testcase classname="fastlane.lanes" name="0: match" time="3.538054">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: scan" time="34.64495">
+      <testcase classname="fastlane.lanes" name="1: scan" time="32.59587">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: mkdir /Users/guy/Projects/nodekit-framework/Build/Mac" time="0.008865">
+      <testcase classname="fastlane.lanes" name="2: mv /Users/guy/Projects/nodekit-framework/Build/junitresults.xml /Users/guy/Projects/nodekit-framework/Build/junitresults-mac.xml" time="0.008703">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: mv ../Build/Products/Debug/junitresults.xml /Users/guy/Projects/nodekit-framework/Build/Mac" time="0.007681">
+      <testcase classname="fastlane.lanes" name="3: scan" time="20.776195">
         
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="4: scan" time="34.769375">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="5: mkdir /Users/guy/Projects/nodekit-framework/Build/iOS" time="0.008845">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="6: mv ../Build/Products/Debug-iphonesimulator/junitresults.xml /Users/guy/Projects/nodekit-framework/Build/iOS" time="0.008719">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="7: cd .. &amp;&amp; carthage build --no-skip-current" time="229.868336">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="8: cd .. &amp;&amp; carthage archive NodeKit" time="3.300538">
+          <failure message="/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/actions/actions_helper.rb:33:in `execute_action'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/runner.rb:129:in `block in execute_action'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/runner.rb:128:in `chdir'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/runner.rb:128:in `execute_action'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/fast_file.rb:149:in `method_missing'&#10;Fastfile:13:in `block in parsing_binding'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/lane.rb:36:in `call'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/lane.rb:36:in `call'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/runner.rb:52:in `block in execute'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/runner.rb:46:in `chdir'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/runner.rb:46:in `execute'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/lane_manager.rb:46:in `cruise_lane'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/lib/fastlane/command_line_handler.rb:30:in `handle'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/bin/fastlane:38:in `block (2 levels) in run'&#10;/Library/Ruby/Gems/2.0.0/gems/commander-4.3.5/lib/commander/command.rb:178:in `call'&#10;/Library/Ruby/Gems/2.0.0/gems/commander-4.3.5/lib/commander/command.rb:178:in `call'&#10;/Library/Ruby/Gems/2.0.0/gems/commander-4.3.5/lib/commander/command.rb:153:in `run'&#10;/Library/Ruby/Gems/2.0.0/gems/commander-4.3.5/lib/commander/runner.rb:428:in `run_active_command'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane_core-0.37.0/lib/fastlane_core/ui/fastlane_runner.rb:23:in `run!'&#10;/Library/Ruby/Gems/2.0.0/gems/commander-4.3.5/lib/commander/delegates.rb:15:in `run!'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/bin/fastlane:156:in `run'&#10;/Library/Ruby/Gems/2.0.0/gems/fastlane-1.66.0/bin/fastlane:162:in `&lt;top (required)&gt;'&#10;/usr/local/bin/fastlane:23:in `load'&#10;/usr/local/bin/fastlane:23:in `&lt;main&gt;'&#10;&#10;[31mError building/testing the application - see the log above[0m" />
         
       </testcase>
     

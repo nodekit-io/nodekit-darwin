@@ -133,7 +133,7 @@
         }
         var env  = NSProcessInfo.processInfo().environment
         env["NODE_PATH"] = resPaths
-        process["exeDirectory"] = appPath
+        process["outputDirectory"] = env["OUTPUT_DIRECTORY"] ?? appPath
         process["env"] = env
     }
  }

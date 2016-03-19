@@ -37,7 +37,7 @@ Jasmine.prototype.configureJSONReporter = function(options) {
 };
 
 Jasmine.prototype.configureJUnitXMLReporter = function(options) {
-    options.savePath = process.exeDirectory;
+    options.savePath = process.outputDirectory;
     var  reporter = new  module.exports.JUnitXmlReporter(options);
     this.addReporter(reporter);
 };

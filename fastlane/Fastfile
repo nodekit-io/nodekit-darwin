@@ -1,30 +1,22 @@
 lane :build do
   match(type: "development", readonly:"true")
-   
-  sh "mkdir -p ../Build/Products/Debug"
-  sh "chmod +w ../Build/Products/Debug"
- 
+  
+  ENV['OUTPUT_DIRECTORY'] = "#{ENV['CIRCLE_TEST_REPORTS']}"
+  
   scan(
       scheme: "#{ENV['SCHEME_NAME']}-Mac",
       clean: true
     )
     
-  sh "mkdir #{ENV['CIRCLE_TEST_REPORTS']}/Mac"
-  sh "mv ../Build/Products/Debug/junitresults.xml #{ENV['CIRCLE_TEST_REPORTS']}/Mac"
- 
-  sh "mkdir -p ../Build/Products/Debug-iphonesimulator"
-  sh "chmod +w ../Build/Products/Debug-iphonesimulator"
-  
+  sh "mv #{ENV['OUTPUT_DIRECTORY']}/junitresults.xml #{ENV['OUTPUT_DIRECTORY']}/junitresults-mac.xml"
+
   scan(
       scheme: "#{ENV['SCHEME_NAME']}-iOS",
       clean: true
     )
-    
-   sh "mkdir #{ENV['CIRCLE_TEST_REPORTS']}/iOS"
-   sh "mv ../Build/Products/Debug-iphonesimulator/junitresults.xml #{ENV['CIRCLE_TEST_REPORTS']}/iOS"
-  
-    sh "cd .. && carthage build --no-skip-current" 
-    sh "cd .. && carthage archive #{ENV['FRAMEWORK_NAME']}"
+   
+   sh "cd .. && carthage build --no-skip-current" 
+   sh "cd .. && carthage archive #{ENV['FRAMEWORK_NAME']}"
 end
 
 lane :release_github do
