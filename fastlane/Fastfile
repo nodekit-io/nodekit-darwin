@@ -1,6 +1,8 @@
 lane :build do
   match(type: "development", readonly:"true")
    
+  sh "chmod +w ../Build/Products/Debug"
+ 
   scan(
       scheme: "#{ENV['SCHEME_NAME']}-Mac",
       clean: true
@@ -9,6 +11,8 @@ lane :build do
   sh "mkdir #{ENV['CIRCLE_TEST_REPORTS']}/Mac"
   sh "mv ../Build/Products/Debug/junitresults.xml #{ENV['CIRCLE_TEST_REPORTS']}/Mac"
  
+  sh "chmod +w ../Build/Products/Debug-iphonesimulator"
+  
   scan(
       scheme: "#{ENV['SCHEME_NAME']}-iOS",
       clean: true
