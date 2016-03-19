@@ -14,7 +14,6 @@ dependencies:
 test:  
   override:
      - fastlane test
-     - rm -rf ./Build
      - fastlane build
      
 deployment:
