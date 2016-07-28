@@ -155,7 +155,7 @@ class NKE_Popover : NSObject {
     
     init( Popover: NSPopover, imageName: String) {
         popover = Popover
-        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(24)
+        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSSquareStatusItemLength)
         super.init()
         setupStatusButton(imageName)
     }
@@ -168,6 +168,10 @@ class NKE_Popover : NSObject {
             
             statusButton.image = image
             
+           statusButton.target = self
+           statusButton.action = #selector(NKE_Popover.onPress(_:))
+           statusButton.sendActionOn(Int((NSEventMask.RightMouseDownMask).rawValue))
+         
             let dummyControl = DummyControl()
             dummyControl.frame = statusButton.bounds
             statusButton.addSubview(dummyControl)
@@ -177,13 +181,27 @@ class NKE_Popover : NSObject {
         }
     }
     
+    func quitApp(sender: AnyObject) {
+        NSApplication.sharedApplication().terminate(self)
+    }
+    
     func onPress(sender: AnyObject) {
-        
-        if popover.shown == false {
-            openPopover()
+        let event:NSEvent! = NSApp.currentEvent!
+        if (event.type == NSEventType.RightMouseDown) {
+            let menu = NSMenu()
+            let quitMenuItem = NSMenuItem(title:"Quit", action:#selector(NKE_Popover.quitApp(_:)), keyEquivalent:"")
+            quitMenuItem.target = self
+            menu.addItem(quitMenuItem)
+            statusItem.popUpStatusItemMenu(menu)
         }
-        else {
-            closePopover()
+        else{
+            
+            if popover.shown == false {
+                openPopover()
+            }
+            else {
+                closePopover()
+            }
         }
     }
     

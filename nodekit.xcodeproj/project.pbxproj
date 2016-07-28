@@ -401,7 +401,6 @@
 		E45F82211D4A24EA0088D28F /* SamplePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePlugin.swift; sourceTree = "<group>"; };
 		E45F82231D4A24EA0088D28F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E45F82241D4A24EA0088D28F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E45F82251D4A24EA0088D28F /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		E45F82261D4A24EA0088D28F /* SamplePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePlugin.swift; sourceTree = "<group>"; };
 		E45F82271D4A25040088D28F /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; path = app; sourceTree = "<group>"; };
 		E45F82781D4A25240088D28F /* nodekit-electro-sample-Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "nodekit-electro-sample-Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -602,7 +601,6 @@
 			children = (
 				E45F82231D4A24EA0088D28F /* Assets.xcassets */,
 				E45F82241D4A24EA0088D28F /* Info.plist */,
-				E45F82251D4A24EA0088D28F /* Launch Screen.storyboard */,
 				E45F82261D4A24EA0088D28F /* SamplePlugin.swift */,
 			);
 			path = "platform-ios";
