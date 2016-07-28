@@ -26,6 +26,27 @@ class NKE_WebContentsBase: NSObject {
     internal var _id: Int = 0
     internal var _type: String = ""
     internal var globalEvents: NKEventEmitter = NKEventEmitter.global
+    
+    override init() {
+        super.init()
+    }
+    
+    required init(window: NKE_BrowserWindow) {
+        super.init()
+        _window = window
+        _id = window.id
+        
+        _window._events.on("did-finish-load") { (id: Int) in
+            self.NKscriptObject?.invokeMethod("emit", withArguments: ["did-finish-load"], completionHandler: nil)
+        }
+        
+        _window._events.on("did-fail-loading") { (id: Int, error: String) in
+            self.NKscriptObject?.invokeMethod("emit", withArguments: ["did-fail-loading", error], completionHandler: nil)
+        }
+        
+        _initIPC()
+    }
+
 }
 
 extension NKE_WebContentsBase: NKScriptExport {
@@ -42,7 +63,9 @@ extension NKE_WebContentsBase: NKScriptExport {
     class func rewriteGeneratedStub(stub: String, forKey: String) -> String {
         switch (forKey) {
         case ".global":
-            if ((NKE_WebContentsBase.loaded++) < 1 ) { return stub; }
+            let temp = NKE_WebContentsBase.loaded
+            NKE_WebContentsBase.loaded += 1
+            if (temp < 1 ) { return stub; }
             let url = NSBundle(forClass: NKE_WebContentsBase.self).pathForResource("web-contents", ofType: "js", inDirectory: "lib-electro")
             let appjs = try? NSString(contentsOfFile: url!, encoding: NSUTF8StringEncoding) as String
             return "function loadplugin(){\n" + appjs! + "\n}\n" + stub + "\n" + "loadplugin();" + "\n"
@@ -52,10 +75,10 @@ extension NKE_WebContentsBase: NKScriptExport {
     }
 
     class func scriptNameForSelector(selector: Selector) -> String? {
-        return selector == Selector("initWithWindow:") ? "" : nil
+        return selector == #selector(NKE_WebContentsBase.init(window:)) ? "" : nil
     }
 
-    internal class func NotImplemented(functionName: String = __FUNCTION__) -> Void {
+    internal class func NotImplemented(functionName: String = #function) -> Void {
         log("!WebContents.\(functionName) is not implemented")
     }
 

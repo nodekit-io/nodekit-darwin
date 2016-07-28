@@ -49,7 +49,7 @@ class NKE_Menu: NSObject, NKEMenuProtocol {
     func setApplicationMenu(menu: [String: AnyObject]) -> Void { NKE_Menu.NotImplemented(); }
     func sendActionToFirstResponder(action: String) -> Void { NKE_Menu.NotImplemented(); } //OS X
 
-    private static func NotImplemented(functionName: String = __FUNCTION__) -> Void {
+    private static func NotImplemented(functionName: String = #function) -> Void {
         log("!menu.\(functionName) is not implemented")
     }
 

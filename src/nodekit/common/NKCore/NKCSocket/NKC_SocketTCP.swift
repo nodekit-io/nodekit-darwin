@@ -67,7 +67,7 @@
     }
 
     class func scriptNameForSelector(selector: Selector) -> String? {
-        return selector == Selector("init") ? "" : nil
+        return selector == #selector(NKC_SocketTCP.init(options:)) ? "" : nil
     }
 
     // local variables and init
@@ -77,6 +77,13 @@
     private var _server: NKC_SocketTCP?
 
     override init() {
+        self._socket = NKC_SwiftSocket(domain: NKC_DomainAddressFamily.INET, type: NKC_SwiftSocketType.Stream, proto: NKC_CommunicationProtocol.TCP)
+        super.init()
+        self._socket!.setDelegate(self, delegateQueue: NKScriptChannel.defaultQueue /* dispatch_get_main_queue() */)
+    }
+    
+    
+    init(options: AnyObject) {
         self._socket = NKC_SwiftSocket(domain: NKC_DomainAddressFamily.INET, type: NKC_SwiftSocketType.Stream, proto: NKC_CommunicationProtocol.TCP)
         super.init()
         self._socket!.setDelegate(self, delegateQueue: NKScriptChannel.defaultQueue /* dispatch_get_main_queue() */)

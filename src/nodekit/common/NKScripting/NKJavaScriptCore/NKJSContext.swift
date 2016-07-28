@@ -69,7 +69,9 @@ extension JSContext: NKScriptContext {
         struct sequence {
             static var number: Int = 0
         }
-        return ++sequence.number
+        let temp = sequence.number
+        sequence.number += 1
+        return temp
     }
 
 

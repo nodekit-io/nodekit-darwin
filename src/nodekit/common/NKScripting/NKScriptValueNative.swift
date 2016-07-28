@@ -70,7 +70,7 @@ public class NKScriptValueNative: NKScriptValue {
             promise = arguments.last as? NKScriptValue
             arguments.removeLast()
         }
-        if selector == "initByScriptWithArguments:" {
+        if selector == #selector(_InitSelector.init(byScriptWithArguments:)) {
             arguments = [arguments]
         }
 
@@ -158,7 +158,7 @@ public class NKScriptValueNative: NKScriptValue {
     internal func invokeNativeMethod(name: String, withArguments arguments: [AnyObject]) {
         if let selector = channel.typeInfo[name]?.selector {
             var args = arguments.map(wrapScriptObject)
-            if plugin is NKScriptExport && name.isEmpty && selector == Selector("invokeDefaultMethodWithArguments:") {
+            if plugin is NKScriptExport && name.isEmpty && selector == #selector(NKScriptExport.invokeDefaultMethodWithArguments(_:)) {
                 args = [args]
             }
             proxy.asyncCall(selector, withObjects: args)
@@ -168,7 +168,7 @@ public class NKScriptValueNative: NKScriptValue {
     internal func invokeNativeMethodSync(name: String, withArguments arguments: [AnyObject]) -> AnyObject! {
         if let selector = channel.typeInfo[name]?.selector {
             var args = arguments.map(wrapScriptObject)
-            if plugin is NKScriptExport && name.isEmpty && selector == Selector("invokeDefaultMethodWithArguments:") {
+            if plugin is NKScriptExport && name.isEmpty && selector == #selector(NKScriptExport.invokeDefaultMethodWithArguments(_:)) {
                 args = [args]
             }
             return proxy.call(selector, withObjects: args)

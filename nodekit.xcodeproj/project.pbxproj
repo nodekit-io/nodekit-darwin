@@ -422,6 +422,7 @@
 		E48176051C99E16800DD09AF /* splash */ = {isa = PBXFileReference; lastKnownFileType = folder; name = splash; path = common/www/splash; sourceTree = "<group>"; };
 		E481761B1C9A08C900DD09AF /* nodekit-sample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "nodekit-sample.entitlements"; sourceTree = "<group>"; };
 		E481761F1C9A444500DD09AF /* NKT_TestRunner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKT_TestRunner.swift; sourceTree = "<group>"; };
+		E4D5D5961D47B3FE002AAAE6 /* NKScripting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NKScripting.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -741,6 +742,7 @@
 				E48174081C99B71B00DD09AF /* NKUIWebView */,
 				E481740C1C99B71B00DD09AF /* NKWKWebView */,
 				E48174121C99B71B00DD09AF /* NKWVWebView */,
+				E4D5D5961D47B3FE002AAAE6 /* NKScripting.h */,
 			);
 			path = NKScripting;
 			sourceTree = "<group>";
@@ -1011,7 +1013,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				TargetAttributes = {
 					E48172BF1C99B65C00DD09AF = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -1457,6 +1459,8 @@
 		E48172B91C99B61300DD09AF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
@@ -1519,6 +1523,7 @@
 				PRODUCT_NAME = NodeKit;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1571,6 +1576,7 @@
 				PRODUCT_NAME = NodeKit;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1622,6 +1628,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.nodekit.NodeKit-MacTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1665,6 +1672,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.nodekit.NodeKit-MacTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 			};
 			name = Release;
 		};
@@ -1719,6 +1727,7 @@
 				PRODUCT_NAME = NodeKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1770,6 +1779,7 @@
 				PRODUCT_NAME = NodeKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1821,6 +1831,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.nodekit.NodeKit-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1862,6 +1873,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.nodekit.NodeKit-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1913,6 +1925,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.nodekit.nodekit-sample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1957,6 +1970,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.nodekit.nodekit-sample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 			};
 			name = Release;
 		};
@@ -2005,6 +2019,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.nodekit.nodekit-sample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2048,6 +2063,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.nodekit.nodekit-sample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = src/nodekit/common/NKScripting/NKScripting.h;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};

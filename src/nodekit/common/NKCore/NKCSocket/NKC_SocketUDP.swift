@@ -48,7 +48,7 @@
     }
 
     class func scriptNameForSelector(selector: Selector) -> String? {
-        return selector == Selector("init") ? "" : nil
+        return selector == #selector(NKC_SocketUDP.init) ? "" : nil
     }
 
     /* NKSocketUDP

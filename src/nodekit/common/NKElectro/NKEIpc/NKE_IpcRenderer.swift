@@ -29,6 +29,11 @@ class NKE_IpcRenderer: NSObject, NKE_IpcProtocol {
         super.init()
     }
 
+    
+    init(options: AnyObject) {
+        super.init()
+    }
+    
     required init(id: Int) {
         super.init()
 
@@ -78,6 +83,6 @@ extension NKE_IpcRenderer: NKScriptExport {
     }
 
     class func scriptNameForSelector(selector: Selector) -> String? {
-        return selector == Selector("initWithOptions:") ? "" : nil
+        return selector == #selector(NKE_IpcRenderer.init(options:)) ? "" : nil
     }
 }

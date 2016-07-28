@@ -32,7 +32,7 @@ extension NKE_Dialog: NKScriptExport {
 
 class NKE_Dialog: NSObject, NKE_DialogProtocol {
 
-    private static func NotImplemented(functionName: String = __FUNCTION__) -> Void {
+    private static func NotImplemented(functionName: String = #function) -> Void {
         log("!dialog.\(functionName) is not available for iOS")
     }
 

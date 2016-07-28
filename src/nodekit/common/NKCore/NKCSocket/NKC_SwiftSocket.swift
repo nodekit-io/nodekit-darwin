@@ -463,7 +463,7 @@ class NKC_SwiftSocket: NSObject {
     }
     
     private func _write(data: dispatch_data_t) {
-        sendCount++
+        sendCount += 1
         
         dispatch_write(fd, data, queue!) {
             asyncData, error in
@@ -722,7 +722,7 @@ class NKC_SwiftSocket: NSObject {
             throw NKC_SwiftSocketError.DispatchFailed(errno)
         }
         
-        try readSource.onEvent { [unowned self]
+        readSource.onEvent { [unowned self]
             _, readCount in
             
            if self.nkDelegate != nil

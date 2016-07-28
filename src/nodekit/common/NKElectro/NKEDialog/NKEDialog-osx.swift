@@ -64,13 +64,13 @@ class NKE_Dialog: NSObject, NKE_DialogProtocol {
         } else {
 
             let file_type_set: NSMutableSet = NSMutableSet()
-            for var i = 0; i < filters.count; ++i {
+            for i in 0 ..< filters.count {
                 let filter: [String: AnyObject]! = filters[i]
 
               //  let name: String = filter["name"] as! String
                 let extensions: [String] = filter["extensions"] as! [String]
 
-                for var j = 0; j < extensions.count; ++j {
+                for j in 0 ..< extensions.count {
                     // If we meet a '*' file extension, we allow all the file types and no
                     // need to set the specified file types.
                     let ext = extensions[j]
@@ -135,13 +135,13 @@ class NKE_Dialog: NSObject, NKE_DialogProtocol {
         } else {
 
             let file_type_set: NSMutableSet = NSMutableSet()
-            for var i = 0; i < filters.count; ++i {
+            for i in 0 ..< filters.count {
                 let filter: [String: AnyObject]! = filters[i]
 
                 //  let name: String = filter["name"] as! String
                 let extensions: [String] = filter["extensions"] as! [String]
 
-                for var j = 0; j < extensions.count; ++j {
+                for j in 0 ..< extensions.count {
                     // If we meet a '*' file extension, we allow all the file types and no
                     // need to set the specified file types.
                     let ext = extensions[j]
@@ -190,7 +190,7 @@ class NKE_Dialog: NSObject, NKE_DialogProtocol {
         default: break
         }
 
-        for var i = 0; i < buttons.count; i++ {
+        for i in 0 ..< buttons.count {
             let buttonTitle: String
             if (buttons[i] == "") {
               buttonTitle = "(empty)"

@@ -41,7 +41,9 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
         struct sequence {
             static var number: Int = 0
         }
-        return ++sequence.number
+        let temp = sequence.number
+         sequence.number += 1
+        return temp
     }
 
     internal var nativeFirstSequence: Int {
@@ -49,7 +51,9 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
             static var number: Int = Int(Int32.max)
 
         }
-        return --sequence.number
+        let temp = sequence.number
+        sequence.number -= 1
+        return temp
     }
 
     internal static var defaultQueue: dispatch_queue_t = {
@@ -127,7 +131,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
 
          principal = NKScriptValueNative(namespace: namespace, channel: self, object: object)
 
-        context.NKinjectJavaScript(NKScriptSource(source: generateStubs(_stdlib_getDemangledTypeName(object)), asFilename: namespace + "/plugin/" + _stdlib_getDemangledTypeName(object) + ".js" ))
+        context.NKinjectJavaScript(NKScriptSource(source: generateStubs(String(object.dynamicType)), asFilename: namespace + "/plugin/" + String(object.dynamicType) + ".js" ))
 
         return principal as NKScriptValue
     }

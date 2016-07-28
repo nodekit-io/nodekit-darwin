@@ -91,19 +91,19 @@ class NKScriptMetaObject: CollectionType {
     private var members = [String: Member]()
     private static let exclusion: Set<Selector> = {
         var methods = instanceMethods(forProtocol: NKScriptExport.self)
-        methods.remove(Selector("invokeDefaultMethodWithArguments:"))
+        methods.remove(#selector(NKScriptExport.invokeDefaultMethodWithArguments(_:)))
         return methods.union([
-            Selector(".cxx_construct"),
-            Selector(".cxx_destruct"),
-            Selector("dealloc"),
-            Selector("copy")
+            #selector(_SpecialSelectors.dealloc),
+            #selector(NSObject.copy as ()->AnyObject)
         ])
     }()
 
     init(plugin: AnyClass) {
         self.plugin = plugin
         enumerateExcluding(self.dynamicType.exclusion) {
-            (var name, var member) -> Bool in
+            (name, member) -> Bool in
+            var name = name
+            var member = member
             switch member {
             case let .Method(selector, _):
                 if let end = name.characters.indexOf(":") {
@@ -115,7 +115,7 @@ class NKScriptMetaObject: CollectionType {
                     if cls.isSelectorExcludedFromScript?(selector) ?? false {
                         return true
                     }
-                    if selector == Selector("invokeDefaultMethodWithArguments:") {
+                    if selector == #selector(NKScriptExport.invokeDefaultMethodWithArguments(_:)) {
                         member = .Method(selector: selector, arity: -1)
                         name = ""
                     } else {
@@ -134,7 +134,7 @@ class NKScriptMetaObject: CollectionType {
                     }
                 }
             case let .Initializer(selector, _):
-                if selector == Selector("initByScriptWithArguments:") {
+                if selector == #selector(_InitSelector.init(byScriptWithArguments:)) {
                     member = .Initializer(selector: selector, arity: -1)
                     name = ""
                 } else if let cls = plugin as? NKScriptExport.Type {
@@ -150,23 +150,26 @@ class NKScriptMetaObject: CollectionType {
         }
     }
 
+    
     private func enumerateExcluding(selectors: Set<Selector>, @noescape callback: ((String, Member)->Bool)) -> Bool {
         var known = selectors
-
+        
         // enumerate properties
-        let properties = class_copyPropertyList(plugin, nil)
-        if properties != nil {
-            for var prop = properties; prop.memory != nil; prop = prop.successor() {
+        let propertyList = class_copyPropertyList(plugin, nil)
+        if propertyList != nil, var prop = Optional(propertyList) {
+            defer { free(propertyList) }
+            while prop.memory != nil {
                 let name = String(UTF8String: property_getName(prop.memory))!
                 // get getter
                 var attr = property_copyAttributeValue(prop.memory, "G")
                 let getter = Selector(attr == nil ? name : String(UTF8String: attr)!)
                 free(attr)
                 if known.contains(getter) {
+                    prop = prop.successor()
                     continue
                 }
                 known.insert(getter)
-
+                
                 // get setter if readwrite
                 var setter = Selector()
                 attr = property_copyAttributeValue(prop.memory, "R")
@@ -184,22 +187,22 @@ class NKScriptMetaObject: CollectionType {
                     }
                 }
                 free(attr)
-
+                
                 let info = Member.Property(getter: getter, setter: setter)
                 if !callback(name, info) {
-                    free(properties)
                     return false
                 }
+                prop = prop.successor()
             }
-            free(properties)
         }
-
+        
         // enumerate methods
-        let methods = class_copyMethodList(plugin, nil)
-        if methods != nil {
-            for var method = methods; method.memory != nil; method = method.successor() {
+        let methodList = class_copyMethodList(plugin, nil)
+        if methodList != nil, var method = Optional(methodList) {
+            defer { free(methodList) }
+            while method.memory != nil {
                 let sel = method_getName(method.memory)
-                if !known.contains(sel) {
+                if !known.contains(sel) && !sel.description.hasPrefix(".") {
                     let arity = Int32(method_getNumberOfArguments(method.memory) - 2)
                     let member: Member
                     if sel.description.hasPrefix("init") {
@@ -207,13 +210,16 @@ class NKScriptMetaObject: CollectionType {
                     } else {
                         member = Member.Method(selector: sel, arity: arity)
                     }
-                    if !callback(sel.description, member) {
-                        free(methods)
+                    var name = sel.description
+                    if let end = name.characters.indexOf(":") {
+                        name = name[name.startIndex ..< end]
+                    }
+                    if !callback(name, member) {
                         return false
                     }
                 }
+                method = method.successor()
             }
-            free(methods)
         }
         return true
     }
@@ -246,13 +252,13 @@ internal func instanceMethods(forProtocol aProtocol: Protocol) -> Set<Selector> 
     var selectors = Set<Selector>()
     for (req, inst) in [(true, true), (false, true)] {
         let methodList = protocol_copyMethodDescriptionList(aProtocol.self, req, inst, nil)
-        if methodList != nil {
-            for var desc = methodList; desc.memory.name != nil; desc = desc.successor() {
+        if methodList != nil, var desc = Optional(methodList) {
+            while desc.memory.name != nil {
                 selectors.insert(desc.memory.name)
+                desc = desc.successor()
             }
             free(methodList)
         }
     }
     return selectors
 }
-

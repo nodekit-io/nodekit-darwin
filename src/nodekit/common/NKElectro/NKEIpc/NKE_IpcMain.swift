@@ -31,6 +31,15 @@ class NKE_IpcMain: NSObject, NKE_IpcProtocol {
               self.NKscriptObject?.invokeMethod("emit", withArguments: ["nk.IPCtoMain", item.sender, item.channel, item.replyId, item.arg], completionHandler: nil)
         }
     }
+    
+    init(options: AnyObject){
+        super.init()
+        
+        globalEvents.on("nk.IPCtoMain") { (item: NKE_IPC_Event) -> Void in
+            
+            self.NKscriptObject?.invokeMethod("emit", withArguments: ["nk.IPCtoMain", item.sender, item.channel, item.replyId, item.arg], completionHandler: nil)
+        }
+    }
 
     func ipcSend(channel: String, replyId: String, arg: [AnyObject]) -> Void {
         NSException(name: "Illegal function call", reason: "Event subscription only API.  Sends are handled in WebContents API", userInfo: nil).raise()
@@ -47,6 +56,8 @@ class NKE_IpcMain: NSObject, NKE_IpcProtocol {
 
 
 extension NKE_IpcMain: NKScriptExport {
+    
+  
 
     static func attachTo(context: NKScriptContext) {
         context.NKloadPlugin(NKE_IpcMain(), namespace: "io.nodekit.electro.ipcMain", options: [String:AnyObject]())
@@ -64,6 +75,6 @@ extension NKE_IpcMain: NKScriptExport {
     }
 
     class func scriptNameForSelector(selector: Selector) -> String? {
-        return selector == Selector("initWithOptions:") ? "" : nil
+        return selector == #selector(NKE_IpcMain.init(options:)) ? "" : nil
     }
 }

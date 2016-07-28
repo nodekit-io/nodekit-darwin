@@ -62,7 +62,7 @@ import Foundation
     var context: NKScriptContext?
     private var scriptContextDelegate: NKScriptContextDelegate?
     
-    public func start(var options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate? = nil) {
+    public func start(inout options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate? = nil) {
         self.scriptContextDelegate = delegate
         options["Engine"] = options["Engine"] ?? NKEngineType.JavaScriptCore.rawValue
         NKScriptContextFactory().createContext(options, delegate: self)
@@ -93,7 +93,8 @@ class NKMainNoUI {
     private static let nodekit: NKNodeKit = NKNodeKit()
     
     class func start(options: Dictionary<String, AnyObject>, delegate nkScriptDelegate: NKScriptContextDelegate?) {
-        nodekit.start(options ?? Dictionary<String, AnyObject>(), delegate: nkScriptDelegate)
+        var options = options ?? Dictionary<String, AnyObject>()
+        nodekit.start(&options, delegate: nkScriptDelegate)
         NKEventEmitter.global.emit("nk.ApplicationDidFinishLaunching", ())
     }
 }

@@ -50,8 +50,8 @@ public class NKScriptInvocation {
         }
     }
 
-    public class func construct(`class`: AnyClass, initializer: Selector = Selector("init"), withArguments arguments: [Any!] = []) -> AnyObject? {
-        let alloc = Selector("alloc")
+    public class func construct(`class`: AnyClass, initializer: Selector = #selector(NSObject.init), withArguments arguments: [Any!] = []) -> AnyObject? {
+        let alloc = #selector(_SpecialSelectors.alloc)
         guard let obj = invoke(`class`, selector: alloc, withArguments: []) as? AnyObject else {
             return nil
         }
@@ -169,13 +169,13 @@ public func invoke(target: AnyObject, selector: Selector, withArguments argument
      //   NSException(name: NSInvalidArgumentException, reason: reason, userInfo: nil).raise()
     }
 
-    let sig = _NSMethodSignature.signatureWithObjCTypes(method_getTypeEncoding(method))!
-    let inv = _NSInvocation.invocationWithMethodSignature(sig)
+    let sig = (_NSMethodSignature as! _NSMethodSignatureFactory).signatureWithObjCTypes(method_getTypeEncoding(method))
+    let inv = (_NSInvocation as! _NSInvocationFactory).invocationWithMethodSignature(sig)
 
     // Setup arguments
     assert(arguments.count + 2 <= Int(sig.numberOfArguments), "Too many arguments for calling -[\(target.dynamicType) \(selector)]")
     var args = [[Int]](count: arguments.count, repeatedValue: [])
-    for var i = 0; i < arguments.count; ++i {
+    for i in 0 ..< arguments.count {
         let type = sig.getArgumentTypeAtIndex(i + 2)
         let typeChar = Character(UnicodeScalar(UInt8(type[0])))
 
@@ -218,7 +218,7 @@ public func invoke(target: AnyObject, selector: Selector, withArguments argument
     if thread == nil || (thread == NSThread.currentThread() && wait) {
         inv.invokeWithTarget(target)
     } else {
-        let selector = Selector("invokeWithTarget:")
+        let selector = #selector(_SpecialSelectors.invokeWithTarget(_:))
         inv.retainArguments()
         inv.performSelector(selector, onThread: thread!, withObject: target, waitUntilDone: wait)
         guard wait else { return Void() }
@@ -353,7 +353,7 @@ private extension Selector {
     var family: Family {
         // See: http://clang.llvm.org/docs/AutomaticReferenceCounting.html#id34
         var s = unsafeBitCast(self, UnsafePointer<Int8>.self)
-        while s.memory == 0x5f { ++s }  // skip underscore
+        while s.memory == 0x5f { s += 1 }  // skip underscore
         for p in Selector.prefixes {
             let lowercase: Range<CChar> = 97...122
             let l = p.count

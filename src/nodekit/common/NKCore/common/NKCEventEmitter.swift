@@ -47,7 +47,8 @@ class NKEventSubscriptionGeneric<T>: NKEventSubscription {
     private let id: Int
 
     init(emitter: NKEventEmitter, eventType: String,  handler: NKHandler) {
-        id = seq++
+        id = seq
+        seq += 1
         self.eventType = eventType
         self.emitter = emitter
         self.handler = handler

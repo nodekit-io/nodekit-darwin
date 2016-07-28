@@ -91,11 +91,11 @@ class NKE_BrowserWindow: NSObject {
         }
     }
 
-    private static func NotImplemented(functionName: String = __FUNCTION__) -> Void {
+    private static func NotImplemented(functionName: String = #function) -> Void {
         log("!browserWindow.\(functionName) is not implemented")
     }
 
-    private func NotImplemented(functionName: String = __FUNCTION__) -> Void {
+    private func NotImplemented(functionName: String = #function) -> Void {
         log("!browserWindow.\(functionName) is not implemented")
     }
 }
@@ -120,7 +120,7 @@ extension NKE_BrowserWindow: NKScriptExport {
     }
 
     class func scriptNameForSelector(selector: Selector) -> String? {
-        return selector == Selector("initWithOptions:") ? "" : nil
+        return selector == #selector(NKE_BrowserWindow.init(options:)) ? "" : nil
     }
     class func isSelectorExcludedFromScript(selector: Selector) -> Bool {
         return selector.description.hasPrefix("webView") ||

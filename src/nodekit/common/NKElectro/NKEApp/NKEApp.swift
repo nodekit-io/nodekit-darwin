@@ -108,11 +108,11 @@ class NKE_App: NSObject, NKEAppProtocol {
     // Event: 'gpu-process-crashed'
     }
 
-    private static func NotImplemented(functionName: String = __FUNCTION__) -> Void {
+    private static func NotImplemented(functionName: String = #function) -> Void {
         log("!app.\(functionName) is not implemented")
     }
 
-    private func NotImplemented(functionName: String = __FUNCTION__) -> Void {
+    private func NotImplemented(functionName: String = #function) -> Void {
          log("!app.\(functionName) is not implemented")
     }
 }

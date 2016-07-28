@@ -53,7 +53,8 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
     // OS X Delegate Methods
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        nodekit.start(NKNSAppDelegate.options ?? Dictionary<String, AnyObject>(), delegate: self)
+        var options = NKNSAppDelegate.options ?? Dictionary<String, AnyObject>()
+        nodekit.start(&options, delegate: self)
         NKEventEmitter.global.emit("nk.ApplicationDidFinishLaunching", ())
      }
 
