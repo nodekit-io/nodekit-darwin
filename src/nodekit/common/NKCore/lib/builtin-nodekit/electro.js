@@ -30,7 +30,7 @@ var electro = {
     'protocol': io.nodekit.electro.protocol,
     'session': "not implemented",
     'WebContents': io.nodekit.electro.WebContents,
-    'Tray': "not implemented"
+    'Tray': io.nodekit.electro.Tray || "not implemented"
 }
 
 electro.protocol.createServer = require('electro_protocol').createServer

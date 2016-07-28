@@ -16,21 +16,24 @@
 * limitations under the License.
 */
 
-import Cocoa
+import Foundation
 
-class NKMainDesktop {
-      class func start(options: Dictionary<String, AnyObject>, delegate nkScriptDelegate: NKScriptContextDelegate?) {
-        let app      = NSApplication.sharedApplication()
-        
-        NKNSAppDelegate.options = options;
-        NKNSAppDelegate.delegate = nkScriptDelegate;
-        let nsDelegate = NKNSAppDelegate(app: app)
-        app.delegate = nsDelegate
-        
+/* Uncomment the following import if using in a standalone project with NodeKit as a framework */
+// import NodeKit
+
+
+class myNKDelegate: NSObject, NKScriptContextDelegate {
+    func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
+        SamplePlugin.attachTo(context)
+     }
     
-        app.setActivationPolicy(.Regular)
-        atexit_b { app.setActivationPolicy(.Prohibited); return }
-        app.activateIgnoringOtherApps(true)
-        app.run()
+    func NKScriptEngineReady(context: NKScriptContext) -> Void {
+      
     }
 }
+
+NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WebKitDeveloperExtras")
+NSUserDefaults.standardUserDefaults().synchronize()
+
+NKNodeKit.start(["nk.NoSplash": true], delegate: myNKDelegate() )
+

@@ -34,6 +34,7 @@ class NKE_BootElectroMain: NSObject {
         NKE_IpcMain.attachTo(context)
         NKE_Menu.attachTo(context)
         NKE_Protocol.attachTo(context)
+        NKE_Tray.attachTo(context)
 
         //   context.NKloadPlugin(NKEMenu(), namespace: "io.nodekit.electro.menu", options: ["PluginBridge": NKScriptExportType.NKScriptExport.rawValue]);
 

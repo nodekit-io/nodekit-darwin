@@ -99,6 +99,10 @@ struct NKEBrowserOptions {
     static let kOpenerID: String = "openerId"
     // Enable blink features.
     static let kBlinkFeatures: String = "blinkFeatures"
+    // Task Bar Popover
+    static let kTaskBarPopup: String = "nk.taskBarPopup"
+    static let kTaskBarIcon: String = "nk.taskBarIcon"
+
 }
 
 

@@ -18,6 +18,7 @@
 
 import Foundation
 import WebKit
+import Cocoa
 
 extension NKE_BrowserWindow {
 
@@ -31,8 +32,8 @@ extension NKE_BrowserWindow {
         let id = NKScriptContextFactory.sequenceNumber
 
         let createBlock = {() -> Void in
-
-            let window = self.createWindow(options) as! NSWindow
+            
+            let window = self.createWindow(options) as! NSViewController
             self._window = window
 
             let urlAddress: String = (options[NKEBrowserOptions.kPreloadURL] as? String) ?? "about:blank"
@@ -54,24 +55,13 @@ extension NKE_BrowserWindow {
             self._webView = webView
 
             webView.autoresizingMask = [NSAutoresizingMaskOptions.ViewWidthSizable, NSAutoresizingMaskOptions.ViewHeightSizable]
-            window.contentView = webView
-
+            window.view = webView
+            window.preferredContentSize = CGSize(width: width, height: height)
             webView.NKgetScriptContext(id, options: [String: AnyObject](), delegate: self)
 
+            // PROTOCOL NOT SUPPORTED ON WKWEBVIEW
             //  NSURLProtocol.registerClass(NKUrlProtocolLocalFile)
             //  NSURLProtocol.registerClass(NKUrlProtocolCustom)
-
-            /*     NKJavascriptBridge.registerStringViewer({ (msg: String?, title: String?) -> () in
-            webview.loadHTMLString(msg!, baseURL: NSURL(string: "about:blank"))
-            return
-            })
-
-            NKJavascriptBridge.registerNavigator ({ (uri: String?, title: String?) -> () in
-            let requestObj: NSURLRequest = NSURLRequest(URL: NSURL(string: uri!)!)
-            self.mainWindow.title = title!
-            webview.loadRequest(requestObj)
-            return
-            }) */
 
             let url = NSURL(string: urlAddress)
             let requestObj: NSURLRequest = NSURLRequest(URL: url!)

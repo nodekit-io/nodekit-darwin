@@ -23,22 +23,40 @@ import Cocoa
 extension NKE_BrowserWindow {
 
     internal func createWindow(options: Dictionary<String, AnyObject>) -> AnyObject {
-        let width: CGFloat = CGFloat((options[NKEBrowserOptions.kWidth] as? Int) ?? NKEBrowserDefaults.kWidth)
-        let height: CGFloat = CGFloat((options[NKEBrowserOptions.kHeight] as? Int) ?? NKEBrowserDefaults.kHeight)
-        let title: String = (options[NKEBrowserOptions.kTitle] as? String) ?? NKEBrowserDefaults.kTitle
-
-        let windowRect: NSRect = (NSScreen.mainScreen()!).frame
-        let frameRect: NSRect = NSMakeRect(
-            (NSWidth(windowRect) - width)/2,
-            (NSHeight(windowRect) - height)/2,
-            width, height)
-
-        let window = NSWindow(contentRect: frameRect, styleMask: NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask, backing: NSBackingStoreType.Buffered, defer: false, screen: NSScreen.mainScreen())
-        objc_setAssociatedObject(self, unsafeAddressOf(NSWindow), window, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
-         window.title = title
-        window.makeKeyAndOrderFront(nil)
-        return window
+         let isTaskBarPopup = (options[NKEBrowserOptions.kTaskBarPopup] as? Bool) ?? false ;
+        let TaskBarIcon = (options[NKEBrowserOptions.kTaskBarIcon] as? String) ?? "" ;
+        
+        if !isTaskBarPopup {
+            let width: CGFloat = CGFloat((options[NKEBrowserOptions.kWidth] as? Int) ?? NKEBrowserDefaults.kWidth)
+            let height: CGFloat = CGFloat((options[NKEBrowserOptions.kHeight] as? Int) ?? NKEBrowserDefaults.kHeight)
+            
+            let title: String = (options[NKEBrowserOptions.kTitle] as? String) ?? NKEBrowserDefaults.kTitle
+            
+            let windowRect: NSRect = (NSScreen.mainScreen()!).frame
+            let frameRect: NSRect = NSMakeRect(
+                (NSWidth(windowRect) - width)/2,
+                (NSHeight(windowRect) - height)/2,
+                width, height)
+            
+            let window = NSWindow(contentRect: frameRect, styleMask: NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask, backing: NSBackingStoreType.Buffered, defer: false, screen: NSScreen.mainScreen())
+            objc_setAssociatedObject(self, unsafeAddressOf(NSWindow), window, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            
+            window.title = title
+            window.makeKeyAndOrderFront(nil)
+            return window.contentViewController!
+        } else
+        {
+            let window = NSPopover()
+            window.contentViewController = NSViewController()
+            
+            objc_setAssociatedObject(self, unsafeAddressOf(NSWindow), window, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            
+            let nke_popover = NKE_Popover(Popover: window, imageName: TaskBarIcon)
+            
+            objc_setAssociatedObject(self, unsafeAddressOf(NKE_Popover), nke_popover, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            
+            return window.contentViewController!
+        }
     }
 }
 
@@ -127,3 +145,76 @@ extension NKE_BrowserWindow: NKE_BrowserWindowProtocol {
         NSException(name: "NotImplemented", reason: "This function is not implemented", userInfo: nil).raise()
     }
 }
+
+class NKE_Popover : NSObject {
+    
+    let statusItem: NSStatusItem
+    let popover: NSPopover
+    var popoverMonitor: AnyObject?
+    
+    
+    init( Popover: NSPopover, imageName: String) {
+        popover = Popover
+        statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(24)
+        super.init()
+        setupStatusButton(imageName)
+    }
+    
+    func setupStatusButton(imageName: String) {
+        if let statusButton = statusItem.button {
+            
+            let mainBundle: NSBundle = NSBundle.mainBundle()
+            guard let image: NSImage = mainBundle.imageForResource(imageName) else { return }
+            
+            statusButton.image = image
+            
+            let dummyControl = DummyControl()
+            dummyControl.frame = statusButton.bounds
+            statusButton.addSubview(dummyControl)
+            statusButton.superview!.subviews = [statusButton, dummyControl]
+            dummyControl.action = #selector(NKE_Popover.onPress(_:))
+            dummyControl.target = self
+        }
+    }
+    
+    func onPress(sender: AnyObject) {
+        
+        if popover.shown == false {
+            openPopover()
+        }
+        else {
+            closePopover()
+        }
+    }
+    
+    func openPopover() {
+        
+        if let statusButton = statusItem.button {
+            statusButton.highlight(true)
+            popover.showRelativeToRect(NSZeroRect, ofView: statusButton, preferredEdge: NSRectEdge.MinY)
+            popoverMonitor = NSEvent.addGlobalMonitorForEventsMatchingMask(.LeftMouseDownMask, handler: { (event: NSEvent) -> Void in
+                self.closePopover()
+            })
+        }
+    }
+    
+    func closePopover() {
+        popover.close()
+        if let statusButton = statusItem.button {
+            statusButton.highlight(false)
+        }
+        if let monitor : AnyObject = popoverMonitor {
+            NSEvent.removeMonitor(monitor)
+            popoverMonitor = nil
+        }
+    }
+}
+
+class DummyControl : NSControl {
+    override func mouseDown(theEvent: NSEvent) {
+        superview!.mouseDown(theEvent)
+        sendAction(action, to: target)
+    }
+}
+
+

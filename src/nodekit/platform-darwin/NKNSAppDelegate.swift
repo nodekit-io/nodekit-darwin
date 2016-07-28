@@ -33,8 +33,9 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
         self.nodekit = NKNodeKit()
         
         let testMode = (NKNSAppDelegate.options?["nk.Test"] as? Bool) ?? false
+        let noSplash = (NKNSAppDelegate.options?["nk.NoSplash"] as? Bool) ?? false
         
-        if (!testMode || true)
+        if (!testMode && !noSplash)
         {
             
             let splash: [String: AnyObject] = (NKNSAppDelegate.options?["nk.splashWindow"] as? [String: AnyObject]) ??  [
