@@ -32,12 +32,9 @@ extension NKE_Menu: NKScriptExport {
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {
         switch (forKey) {
         case ".global":
-            let url = NSBundle(forClass: NKE_Menu.self).pathForResource("menu", ofType: "js", inDirectory: "lib-electro")
-            let appjs = try? NSString(contentsOfFile: url!, encoding: NSUTF8StringEncoding) as String
-            let url2 = NSBundle(forClass: NKE_Menu.self).pathForResource("menu-item", ofType: "js", inDirectory: "lib-electro")
-            let appjs2 = try? NSString(contentsOfFile: url2!, encoding: NSUTF8StringEncoding) as String
+            let appjs = NKStorage.getResource("lib-electro/menu.js", NKElectro.self)
+            let appjs2 = NKStorage.getResource("lib-electro/menu-item.js", NKElectro.self)
             return "function loadplugin1(){\n" + appjs! + "\n}\n" + "\n" + "function loadplugin2(){\n" + appjs2! + "\n}\n" + stub + "\n" + "loadplugin1(); loadplugin2();" + "\n"
-
         default:
             return stub
         }

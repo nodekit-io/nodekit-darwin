@@ -66,9 +66,7 @@ extension NKE_WebContentsBase: NKScriptExport {
             let temp = NKE_WebContentsBase.loaded
             NKE_WebContentsBase.loaded += 1
             if (temp < 1 ) { return stub; }
-            let url = NSBundle(forClass: NKE_WebContentsBase.self).pathForResource("web-contents", ofType: "js", inDirectory: "lib-electro")
-            let appjs = try? NSString(contentsOfFile: url!, encoding: NSUTF8StringEncoding) as String
-            return "function loadplugin(){\n" + appjs! + "\n}\n" + stub + "\n" + "loadplugin();" + "\n"
+            return NKStorage.getPluginWithStub(stub, "lib-electro/web-contents.js", NKElectro.self)
         default:
             return stub
         }

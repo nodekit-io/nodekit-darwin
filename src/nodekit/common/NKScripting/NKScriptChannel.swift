@@ -28,7 +28,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
     internal weak var userContentController: NKScriptContentController?
     private var isFactory = false
 
-    var typeInfo: NKScriptMetaObject!
+    var typeInfo: NKScriptTypeInfo!
 
     internal var instances = [Int: NKScriptValueNative]()
     private var userScript: AnyObject?
@@ -95,20 +95,17 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
         if objc_getAssociatedObject(context, key) != nil { return }
         objc_setAssociatedObject(context, key, self, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
-        let bundle = NSBundle(forClass: NKScriptChannel.self)
-        guard let path = bundle.pathForResource("nkscripting", ofType: "js"),
-            let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) else {
+        guard let source = NKStorage.getResource("lib-scripting/nkscripting.js", NKScriptChannel.self) else {
                 die("Failed to read provision script: nkscripting")
         }
 
-        context!.NKinjectJavaScript(NKScriptSource(source: source as String, asFilename: "io.nodekit.scripting/NKScripting/nkscripting.js", namespace: "NKScripting"))
-      
-        guard let path2 = bundle.pathForResource("promise", ofType: "js"),
-        let source2 = try? NSString(contentsOfFile: path2, encoding: NSUTF8StringEncoding) else {
-                die("Failed to read provision script: nkscripting")
+        context!.NKinjectJavaScript(NKScriptSource(source: source, asFilename: "io.nodekit.scripting/NKScripting/nkscripting.js", namespace: "NKScripting"))
+        
+        guard let source2 = NKStorage.getResource("lib-scripting/promise.js", NKScriptChannel.self) else {
+            die("Failed to read provision script: promise")
         }
 
-        context!.NKinjectJavaScript(NKScriptSource(source: source2 as String, asFilename: "io.nodekit.scripting/NKScripting/promise.js", namespace: "Promise"))
+        context!.NKinjectJavaScript(NKScriptSource(source: source2, asFilename: "io.nodekit.scripting/NKScripting/promise.js", namespace: "Promise"))
      
         log("+E\(context!.NKid) JavaScript Engine is ready for loading plugins")
     }
@@ -122,11 +119,11 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
 
         if (object is AnyClass) {
             isFactory = true
-            typeInfo = NKScriptMetaObject(plugin: object as! AnyClass)
+            typeInfo = NKScriptTypeInfo(plugin: object as! AnyClass)
             objc_setAssociatedObject(typeInfo.plugin, unsafeAddressOf(NKScriptChannel), self, objc_AssociationPolicy.OBJC_ASSOCIATION_ASSIGN)
         } else {
             isFactory = false
-            typeInfo = NKScriptMetaObject(plugin: object.dynamicType)
+            typeInfo = NKScriptTypeInfo(plugin: object.dynamicType)
         }
 
          principal = NKScriptValueNative(namespace: namespace, channel: self, object: object)

@@ -30,9 +30,7 @@ class NKE_Protocol: NSObject, NKScriptExport {
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {
         switch (forKey) {
         case ".global":
-            let url = NSBundle(forClass: NKE_Menu.self).pathForResource("protocol", ofType: "js", inDirectory: "lib-electro")
-            let appjs = try? NSString(contentsOfFile: url!, encoding: NSUTF8StringEncoding) as String
-            return "function loadplugin(){\n" + appjs! + "\n}\n" + stub + "\n" + "loadplugin();" + "\n"
+            return NKStorage.getPluginWithStub(stub, "lib-electro/protocol.js", NKElectro.self)
         default:
             return stub
         }

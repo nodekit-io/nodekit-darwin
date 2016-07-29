@@ -27,9 +27,7 @@ class NKC_Crypto: NSObject, NKScriptExport {
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {
         switch (forKey) {
         case ".global":
-            let url = NSBundle(forClass: NKC_Crypto.self).pathForResource("crypto", ofType: "js", inDirectory: "lib/platform")
-            let appjs = try? NSString(contentsOfFile: url!, encoding: NSUTF8StringEncoding) as String
-            return "function loadplugin(){\n" + appjs! + "\n}\n" + stub + "\n" + "loadplugin();" + "\n"
+            return NKStorage.getPluginWithStub(stub, "lib/platform/crypto.js", NKNodeKit.self)
         default:
             return stub
         }

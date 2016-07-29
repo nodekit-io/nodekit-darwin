@@ -27,9 +27,7 @@
     class func rewriteGeneratedStub(stub: String, forKey: String) -> String {
         switch (forKey) {
         case ".global":
-            let url = NSBundle(forClass: NKC_SocketUDP.self).pathForResource("udp", ofType: "js", inDirectory: "lib/platform")
-            let appjs = try? NSString(contentsOfFile: url!, encoding: NSUTF8StringEncoding) as String
-            return "function loadplugin(){\n" + appjs! + "\n}\n" + stub + "\n" + "loadplugin();" + "\n"
+            return NKStorage.getPluginWithStub(stub, "lib/platform/udp.js", NKNodeKit.self)
         default:
             return stub
         }

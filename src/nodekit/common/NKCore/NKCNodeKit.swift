@@ -72,7 +72,7 @@ import Foundation
         self.context = context
         
         // INSTALL JAVASCRIPT ENVIRONMENT ON MAIN CONTEXT
-        NKE_BootElectroMain.addElectro(context)
+        NKElectro.addElectro(context)
         NKC_BootCore.addCorePlatform(context)
         NKC_BootCore.bootCore(context)
         

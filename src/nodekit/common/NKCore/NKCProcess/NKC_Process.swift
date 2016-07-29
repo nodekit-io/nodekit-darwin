@@ -27,8 +27,7 @@
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {
         switch (forKey) {
         case ".global":
-             let url = NSBundle(forClass: NKC_Process.self).pathForResource("process", ofType: "js", inDirectory: "lib/platform")
-            let appjs = try? NSString(contentsOfFile: url!, encoding: NSUTF8StringEncoding) as String
+             let appjs = NKStorage.getResource("lib/platform/process.js", NKNodeKit.self)
              
             // UNIQUE SCRIPT FOR PROCESS
              return "function loadplugin(){\n" + "this.process = this.process || Object.create(null);\n" + NKC_Process.syncProcessDictionary() + "\n" + appjs! + "\n}\n" + stub + "\n" + "loadplugin();" + "\n"

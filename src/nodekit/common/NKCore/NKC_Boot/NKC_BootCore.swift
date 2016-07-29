@@ -38,10 +38,12 @@ class NKC_BootCore: NSObject {
     }
     
     class func bootCore(context: NKScriptContext) {
-        // INJECT NODE BOOTSTRAP
-        let url = NSBundle(forClass: NKNodeKit.self).pathForResource("_nodekit_bootstrapper", ofType: "js", inDirectory: "lib")
-        let script = try? NSString(contentsOfFile: url!, encoding: NSUTF8StringEncoding) as String
-        context.NKinjectJavaScript(NKScriptSource(source: script!, asFilename: "io.nodekit.core/lib/_nodekit_bootstrapper.js", namespace: "io.nodekit.bootstrapper"))
+    
+        guard let script = NKStorage.getResource("lib/_nodekit_bootstrapper.js", NKNodeKit.self) else {
+            die("Failed to read bootstrapper script")
+        }
+
+        context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.core/lib/_nodekit_bootstrapper.js", namespace: "io.nodekit.bootstrapper"))
         
     }
 }

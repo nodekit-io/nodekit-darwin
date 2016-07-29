@@ -21,7 +21,7 @@
 import Foundation
 import ObjectiveC
 
-class NKScriptMetaObject: CollectionType {
+class NKScriptTypeInfo: CollectionType {
     enum Member {
         case Method(selector: Selector, arity: Int32)
         case Property(getter: Selector, setter: Selector)
@@ -225,7 +225,7 @@ class NKScriptMetaObject: CollectionType {
     }
 }
 
-extension NKScriptMetaObject {
+extension NKScriptTypeInfo {
     // SequenceType
     typealias Generator = DictionaryGenerator<String, Member>
     func generate() -> Generator {

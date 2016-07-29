@@ -111,9 +111,7 @@ extension NKE_BrowserWindow: NKScriptExport {
     class func rewriteGeneratedStub(stub: String, forKey: String) -> String {
         switch (forKey) {
         case ".global":
-            let url = NSBundle(forClass: NKE_BrowserWindow.self).pathForResource("browser-window", ofType: "js", inDirectory: "lib-electro")
-            let appjs = try? NSString(contentsOfFile: url!, encoding: NSUTF8StringEncoding) as String
-            return "function loadplugin(){\n" + appjs! + "\n}\n" + stub + "\n" + "loadplugin();" + "\n"
+            return NKStorage.getPluginWithStub(stub, "lib-electro/browser-window.js", NKElectro.self)
         default:
             return stub
         }
