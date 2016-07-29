@@ -22,7 +22,12 @@ import Foundation
 public class NKStorage {
   
     public static func getResource(module: String, _ t: AnyClass? = nil) -> String? {
-        
+
+        if module.lowercaseString.rangeOfString(".nkar/") != nil {
+            return getNKARResource(module, t)
+        }
+
+    
         let bundle = (t != nil) ?  NSBundle(forClass: t!) :  NKNodeKit.mainBundle
         
         guard let path = getPath_(bundle, module),
@@ -35,6 +40,30 @@ public class NKStorage {
         
         return source as String
     
+    }
+    
+    static var unzipper_ : NKArchiveReader? = nil
+    
+    public static func getNKARResource(module: String, _ t: AnyClass? = nil) -> String? {
+        
+        let moduleArr = module.componentsSeparatedByString(".nkar/")
+        
+        let nkarModule: String = moduleArr[0] + ".nkar"
+        
+        let resource: String = moduleArr[1]
+        
+        let bundle = (t != nil) ?  NSBundle(forClass: t!) :  NKNodeKit.mainBundle
+       
+        unzipper_ = unzipper_ ?? NKArchiveReader.create()
+        
+        guard let nkarPath = getPath_(bundle, nkarModule),
+            
+         let data = unzipper_?.dataForFile(nkarPath, filename: resource)
+            
+        else { return nil }
+        
+        return NSString(data: data, encoding: NSUTF8StringEncoding) as String?
+        
     }
     
     public static func getPluginWithStub(stub: String, _ module: String, _ t: AnyClass? = nil) -> String {
