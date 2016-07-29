@@ -144,6 +144,10 @@
 		E45F82FA1D4B86750088D28F /* NKLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F82F61D4B86750088D28F /* NKLogging.swift */; };
 		E45F82FB1D4B86750088D28F /* NKLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F82F61D4B86750088D28F /* NKLogging.swift */; };
 		E45F83031D4C05C30088D28F /* NKDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F83021D4C05C30088D28F /* NKDateFormatter.swift */; };
+		E45F83041D4C09170088D28F /* NKDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F83021D4C05C30088D28F /* NKDateFormatter.swift */; };
+		E45F83051D4C09180088D28F /* NKDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F83021D4C05C30088D28F /* NKDateFormatter.swift */; };
+		E45F83061D4C09180088D28F /* NKDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F83021D4C05C30088D28F /* NKDateFormatter.swift */; };
+		E45F83071D4C09190088D28F /* NKDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F83021D4C05C30088D28F /* NKDateFormatter.swift */; };
 		E48172CB1C99B65D00DD09AF /* NodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48172C01C99B65C00DD09AF /* NodeKit.framework */; };
 		E48172E71C99B69A00DD09AF /* NodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48172DD1C99B69900DD09AF /* NodeKit.framework */; };
 		E481749D1C99B79900DD09AF /* NKMainDesktop.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48174281C99B71B00DD09AF /* NKMainDesktop.swift */; };
@@ -1375,6 +1379,7 @@
 				E45F825C1D4A25240088D28F /* NKScriptValueNative.swift in Sources */,
 				E45F825D1D4A25240088D28F /* NKEDialogProtocol.swift in Sources */,
 				E45F825E1D4A25240088D28F /* NKMainDesktop.swift in Sources */,
+				E45F83071D4C09190088D28F /* NKDateFormatter.swift in Sources */,
 				E45F82621D4A25240088D28F /* NKE_WebContentsUI_OSX.swift in Sources */,
 				E45F82631D4A25240088D28F /* NKE_Protocol.swift in Sources */,
 				E45F82641D4A25240088D28F /* NKEBrowserWindow_OSX.swift in Sources */,
@@ -1527,6 +1532,7 @@
 				E48174A11C99B79E00DD09AF /* NKUIAppDelegate.swift in Sources */,
 				E45F82BD1D4B83D70088D28F /* NKWKContextFactory.swift in Sources */,
 				E48174D61C99B82000DD09AF /* NKE_WebContentsProtocol.swift in Sources */,
+				E45F83041D4C09170088D28F /* NKDateFormatter.swift in Sources */,
 				E48174B21C99B7D200DD09AF /* NKCNodeKit.swift in Sources */,
 				E48174FB1C99B84400DD09AF /* NKScriptSource.swift in Sources */,
 				E48174FC1C99B84400DD09AF /* NKScriptValue.swift in Sources */,
@@ -1605,6 +1611,7 @@
 				E481755A1C99CB2F00DD09AF /* NKScriptValueNative.swift in Sources */,
 				E481758B1C99CB6C00DD09AF /* NKEDialogProtocol.swift in Sources */,
 				E48175DE1C99CCE000DD09AF /* NKMainDesktop.swift in Sources */,
+				E45F83051D4C09180088D28F /* NKDateFormatter.swift in Sources */,
 				E48175C11C99CC2100DD09AF /* NKC_Crypto.swift in Sources */,
 				E48175801C99CB6400DD09AF /* NKE_WebContentsUI_OSX.swift in Sources */,
 				E48175B11C99CB7F00DD09AF /* NKE_Protocol.swift in Sources */,
@@ -1667,6 +1674,7 @@
 				E481757B1C99CB5E00DD09AF /* NKE_BrowserWindow_WK_IOS.swift in Sources */,
 				E481755B1C99CB3000DD09AF /* NKScriptChannel.swift in Sources */,
 				E48175791C99CB5E00DD09AF /* NKE_BrowserWindow_IOS.swift in Sources */,
+				E45F83061D4C09180088D28F /* NKDateFormatter.swift in Sources */,
 				E48175A81C99CB7900DD09AF /* NKEMenu-ios.swift in Sources */,
 				E481758E1C99CB6C00DD09AF /* NKEDialogProtocol.swift in Sources */,
 				E48175C21C99CC2200DD09AF /* NKC_Crypto.swift in Sources */,
