@@ -18,14 +18,20 @@
  */
 
 var app = io.nodekit.electro.app;
+
 var bindings = app;
 
 app.commandLine = {
+    
 appendSwitch: bindings.appendSwitch,
+    
 appendArgument: bindings.appendArgument
+    
 };
 
 if (process.platform === 'darwin') {
+    
+    
     app.dock = {
     bounce: function(type) {
         if (type == null) {

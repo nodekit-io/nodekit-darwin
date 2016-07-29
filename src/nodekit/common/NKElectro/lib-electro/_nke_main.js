@@ -17,13 +17,18 @@
  */
 
 this.process = this.process || {}
+
 var process = this.process;
 
 process.platform = process.platform || "darwin"
+
 process.type = "main"
+
 process.versions = {}
 
 process.waitFor = function(signal) {
+
     window.prompt("nk.Signal", signal);
+
 }
 

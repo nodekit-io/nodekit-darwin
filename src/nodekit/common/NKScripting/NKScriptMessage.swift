@@ -19,16 +19,25 @@
 import Foundation
 
 public class NKScriptMessage: NSObject {
+    
     public var body: AnyObject
+    
     public var name: String
 
     init(name: String, body: AnyObject) {
+    
         self.body = body
+        
         self.name = name
+    
     }
+
 }
 
 public protocol NKScriptMessageHandler {
+
     func userContentController(didReceiveScriptMessage message: NKScriptMessage)
+    
     func userContentControllerSync(didReceiveScriptMessage message: NKScriptMessage) -> AnyObject!
+
 }

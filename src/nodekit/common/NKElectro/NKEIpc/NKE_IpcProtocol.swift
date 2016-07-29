@@ -20,13 +20,12 @@
 import Foundation
 
 protocol NKE_IpcProtocol: NKScriptExport {
+    
     func ipcSend(channel: String, replyId: String, arg: [AnyObject]) -> Void
+    
     func ipcReply(dest: Int, channel: String, replyId: String, result: AnyObject) -> Void
+
 }
-
-// .on(channel, (event, arg)-> () {} )
-// where event = {"returnValue": , "sender": }
-
 
 /* EXAMPLE USAGE
 

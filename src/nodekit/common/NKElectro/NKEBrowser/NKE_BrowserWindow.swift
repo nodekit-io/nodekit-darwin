@@ -24,28 +24,41 @@ class NKE_BrowserWindow: NSObject {
     internal var _events: NKEventEmitter = NKEventEmitter()
 
     internal static var _windowArray: [Int: NKE_BrowserWindow] = [Int: NKE_BrowserWindow]()
+   
     internal var _window: AnyObject?
 
     internal weak var _context: NKScriptContext?
+    
     internal weak var _webView: AnyObject?
+    
     internal var _browserType: NKEBrowserType = NKEBrowserType.WKWebView
 
     internal var _id: Int = 0
+    
     private var _type: String = ""
+    
     internal var _options: Dictionary <String, AnyObject> =  Dictionary <String, AnyObject>()
+    
     private var _nke_renderer: AnyObject?
+    
     internal var _webContents: NKE_WebContentsBase? = nil
 
     override init() {
+    
         super.init()
+    
     }
 
     // Creates a new BrowserWindow with native properties as set by the options.
+    
     required init(options: Dictionary<String, AnyObject>) {
+    
         super.init()
 
         // PARSE & STORE OPTIONS
+        
         self._options["nk.InstallElectro"] = options["nk.InstallElectro"] as? Bool ?? true
+        
         let allowCustomProtocol: Bool = options[NKEBrowserOptions.nkAllowCustomProtocol] as? Bool ?? false
         
         let defaultBrowser: String = allowCustomProtocol ? NKEBrowserType.UIWebView.rawValue : NKEBrowserType.WKWebView.rawValue
@@ -53,18 +66,31 @@ class NKE_BrowserWindow: NSObject {
         self._browserType = NKEBrowserType(rawValue: (options[NKEBrowserOptions.nkBrowserType] as? String) ?? defaultBrowser)!
 
         switch self._browserType {
+        
         case .WKWebView:
+        
             log("+creating Nitro Renderer")
+            
             self._id = self.createWKWebView(options)
+            
             self._type = "Nitro"
+            
             let webContents: NKE_WebContentsWK = NKE_WebContentsWK(window: self)
+            
             self._webContents = webContents
+        
         case .UIWebView:
+        
             log("+creating JavaScriptCore Renderer")
+            
             self._id = self.createUIWebView(options)
+            
             self._type = "JavaScriptCore"
+            
             let webContents: NKE_WebContentsUI = NKE_WebContentsUI(window: self)
+            
             self._webContents = webContents
+        
         }
 
         NKE_BrowserWindow._windowArray[self._id] = self
@@ -74,78 +100,124 @@ class NKE_BrowserWindow: NSObject {
     static func fromId(id: Int) -> NKE_BrowserWindowProtocol? { return NKE_BrowserWindow._windowArray[id] }
 
     var id: Int {
+        
         get {
-         return _id
+        
+            return _id
+        
         }
+    
     }
 
     var type: String {
+    
         get {
+        
             return _type
+        
         }
+    
     }
 
     var webContents: NKE_WebContentsBase {
+    
         get {
+        
             return _webContents!
+        
         }
+    
     }
 
     private static func NotImplemented(functionName: String = #function) -> Void {
+    
         log("!browserWindow.\(functionName) is not implemented")
+    
     }
 
     private func NotImplemented(functionName: String = #function) -> Void {
+    
         log("!browserWindow.\(functionName) is not implemented")
+    
     }
+
 }
 
 
 extension NKE_BrowserWindow: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
+
         let principal = NKE_BrowserWindow.self
+        
         context.NKloadPlugin(principal, namespace: "io.nodekit.electro.BrowserWindow", options: [String:AnyObject]())
+    
     }
 
     class func rewriteGeneratedStub(stub: String, forKey: String) -> String {
+    
         switch (forKey) {
+        
         case ".global":
+            
             return NKStorage.getPluginWithStub(stub, "lib-electro/browser-window.js", NKElectro.self)
+        
         default:
+        
             return stub
+        
         }
+    
     }
 
     class func scriptNameForSelector(selector: Selector) -> String? {
+    
         return selector == #selector(NKE_BrowserWindow.init(options:)) ? "" : nil
+    
     }
+    
     class func isSelectorExcludedFromScript(selector: Selector) -> Bool {
+    
         return selector.description.hasPrefix("webView") ||
         selector.description.hasPrefix("NKScriptEngineLoaded") ||
          selector.description.hasPrefix("NKApplicationReady")
+    
     }
+
 }
 
 extension NKE_BrowserWindow: NKScriptContextDelegate {
+
     internal func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
+    
         log("+E\(context.NKid) Renderer Loaded")
 
         if (!(self._options["nk.InstallElectro"] as! Bool)) { return;}
+        
         self._context = context
 
         // INSTALL JAVASCRIPT ENVIRONMENT ON RENDERER CONTEXT
+        
         NKE_BootElectroRenderer.bootTo(context)
+    
     }
 
     internal func NKScriptEngineReady(context: NKScriptContext) -> Void {
+    
         switch self._browserType {
+        
         case .WKWebView:
+        
             WKScriptEnvironmentReady()
-         case .UIWebView:
+        
+        case .UIWebView:
+        
             UIScriptEnvironmentReady()
+        
         }
+       
         log("+E\(id) Renderer Ready")
         
     }
+
 }

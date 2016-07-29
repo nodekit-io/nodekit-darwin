@@ -18,23 +18,37 @@
 
 
 this.process = this.process || {}
+
 var process = this.process;
 
 process.platform = "darwin"
+
 process.type = "renderer"
+
 process.versions = {}
 
 process.waitFor = function(signal) {
+
     console.log(window.prompt("nk.Signal", signal));
+
 }
 
 var _require = this.require || function(){}
+
 this.require = function(id){
+
     switch(id.toLowerCase()) {
-      case "electro":
-      case "electron":
+    
+        case "electro":
+      
+        case "electron":
+        
             return io.nodekit.electro
+        
         default:
+        
             return _require(id);
+    
     }
+
 }

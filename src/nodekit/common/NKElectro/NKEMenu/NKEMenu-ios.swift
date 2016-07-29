@@ -18,6 +18,7 @@
 */
 
 import Foundation
+
 import UIKit
 
 // NKElectro MENU Placeholder code only:  on roadmap but lower priority as not supported on mobile
@@ -25,29 +26,45 @@ import UIKit
 extension NKE_Menu: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
+
         let principal = NKE_Menu()
+        
         context.NKloadPlugin(principal, namespace: "io.nodekit.electro._menu", options: [String:AnyObject]())
+    
     }
 
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {
+    
         switch (forKey) {
+        
         case ".global":
+        
             let appjs = NKStorage.getResource("lib-electro/menu.js", NKElectro.self)
+            
             let appjs2 = NKStorage.getResource("lib-electro/menu-item.js", NKElectro.self)
+            
             return "function loadplugin1(){\n" + appjs! + "\n}\n" + "\n" + "function loadplugin2(){\n" + appjs2! + "\n}\n" + stub + "\n" + "loadplugin1(); loadplugin2();" + "\n"
+        
         default:
+        
             return stub
+        
         }
+    
     }
+
 }
 
 class NKE_Menu: NSObject, NKEMenuProtocol {
 
     func setApplicationMenu(menu: [String: AnyObject]) -> Void { NKE_Menu.NotImplemented(); }
+
     func sendActionToFirstResponder(action: String) -> Void { NKE_Menu.NotImplemented(); } //OS X
 
     private static func NotImplemented(functionName: String = #function) -> Void {
+    
         log("!menu.\(functionName) is not implemented")
+    
     }
 
 }

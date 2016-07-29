@@ -21,21 +21,31 @@ import Foundation
 class NKE_ProtocolFileDecode: NSObject {
 
     var resourcePath: NSString?   // The path to the bundle resource
+  
     var urlPath: NSString  // The relative path from root
+    
     var fileName: NSString // The filename, with extension
+    
     var fileBase: NSString   // The filename, without the extension
+    
     var fileExtension: NSString // The file extension
+    
     var mimeType: NSString?    // The mime type
+    
     var textEncoding: NSString?   // The text encoding
 
     init(url: NSURL) {
+    
         resourcePath = nil
 
         let _mainBundle: NSBundle = NKNodeKit.mainBundle
+        
         let _nodeKitBundle: NSBundle = NSBundle(forClass: NKNodeKit.self)
 
         let _appPath: NSString = (_mainBundle.bundlePath as NSString).stringByDeletingLastPathComponent
+        
         let _fileManager: NSFileManager = NSFileManager.defaultManager()
+        
         var _fileTypes: [NSString: NSString] = ["html": "text/html" ,
             "js" : "application/javascript" ,
             "css": "text/css" ]
@@ -43,20 +53,24 @@ class NKE_ProtocolFileDecode: NSObject {
         urlPath = (url.path! as NSString).stringByDeletingLastPathComponent
 
         fileExtension = url.pathExtension!.lowercaseString
+        
         fileName = url.lastPathComponent!
+        
         if (fileExtension.length == 0) {
+        
             fileBase = fileName
+       
         } else {
+        
             fileBase = fileName.substringToIndex(fileName.length - fileExtension.length - 1)
-            }
+            
+        }
 
         mimeType = nil
+        
         textEncoding = nil
 
-
         super.init()
-
-
 
         if (fileName.length > 0) {
 
@@ -67,41 +81,61 @@ class NKE_ProtocolFileDecode: NSObject {
             }
 
               if ((resourcePath == nil) && (fileExtension.length > 0)) {
+        
                 resourcePath = _mainBundle.pathForResource(fileBase as String, ofType:fileExtension as String, inDirectory: ("app" as NSString).stringByAppendingPathComponent(urlPath as String))
+            
             }
 
             if ((resourcePath == nil) && (fileExtension.length > 0)) {
+            
                 resourcePath = _mainBundle.pathForResource(fileBase as String, ofType:fileExtension as String, inDirectory: urlPath as String)
+            
             }
 
             if ((resourcePath == nil) && (fileExtension.length == 0)) {
+            
                 resourcePath = _mainBundle.pathForResource(fileBase as String, ofType:"html", inDirectory: ("app" as NSString).stringByAppendingPathComponent(urlPath as String))
+           
             }
 
             if ((resourcePath == nil) && (fileExtension.length == 0)) {
+            
                 resourcePath = _mainBundle.pathForResource("index", ofType:"html", inDirectory: ("app" as NSString).stringByAppendingPathComponent(urlPath as String))
+            
             }
 
             if ((resourcePath == nil)  && (fileExtension.length > 0)) {
+           
                 resourcePath = _nodeKitBundle.pathForResource(fileBase as String, ofType:fileExtension as String, inDirectory: urlPath as String)
+            
             }
 
             if ((resourcePath == nil)  && (fileExtension.length == 0)) {
+           
                 resourcePath = _nodeKitBundle.pathForResource(fileBase as String, ofType:"html", inDirectory: urlPath as String)
+            
             }
 
             mimeType = _fileTypes[fileExtension]
 
             if (mimeType != nil) {
+            
                 if mimeType!.hasPrefix("text") {
+                
                     textEncoding = "utf-8"
+                
                 }
+            
             }
+        
         }
 
     }
 
     func exists() -> Bool {
+        
         return (resourcePath != nil)
+    
     }
+
 }

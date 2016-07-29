@@ -23,9 +23,13 @@ public class NKMainMobile {
     public class func start (options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate?) {
         
         NKUIAppDelegate.options = options;
+    
         NKUIAppDelegate.delegate = delegate;
 
-        UIApplicationMain(Process.argc, Process.unsafeArgv, NSStringFromClass(UIApplication), NSStringFromClass(NKUIAppDelegate))
+        UIApplicationMain(Process.argc, Process.unsafeArgv, NSStringFromClass(UIApplication),
+                          
+            NSStringFromClass(NKUIAppDelegate))
 
         }
+    
 }

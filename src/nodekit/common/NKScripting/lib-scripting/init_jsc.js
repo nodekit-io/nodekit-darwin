@@ -2,7 +2,6 @@
  * nodekit.io
  *
  * Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
- * Portions Copyright (c) 2013 GitHub, Inc. under MIT License
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +16,18 @@
  * limitations under the License.
  */
 
-import Foundation
+this.process = this.process || {}
+var process = this.process;
 
-protocol NKE_DialogProtocol: NKScriptExport {
+process.platform = process.platform || "darwin"
+process.type = "main"
+process.versions = {}
 
-    func showOpenDialog(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?) -> Void
-   
-    func showSaveDialog(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?)-> Void
-    
-    func showMessageBox(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?) -> Void
-    
-    func showErrorBox(title: String, content: String) -> Void
-
+process.waitFor = function(signal) {
+    window.prompt("nk.Signal", signal);
 }
+
+this.console = this.console || function () { };
+console.log = console.log || NKScriptingBridge.log;
+
+console.log("+JavaScriptCore Engine Initialized");

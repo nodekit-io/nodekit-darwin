@@ -22,26 +22,39 @@ import Foundation
 protocol NKE_WebContentsProtocol: NKScriptExport, NKE_IpcProtocol {
 
     func loadURL(url: String, options: [String: AnyObject]) -> Void
+   
     func getURL() -> String
+    
     func getTitle() -> String
+    
     func isLoading() -> Bool
+    
     func stop() -> Void
+    
     func reload() -> Void
+    
     func reloadIgnoringCache() -> Void
+    
     func canGoBack() -> Bool
+    
     func canGoForward() -> Bool
 
     func goBack() -> Void
+    
     func goForward() -> Void
 
     func setUserAgent(userAgent: String) -> Void
+  
     func getUserAgent() -> String
+    
     func executeJavaScript(code: String, userGesture: String) -> Void
 
     func ipcSend(channel: String, replyId: String, arg: [AnyObject]) -> Void
+    
     func ipcReply(dest: Int, channel: String, replyId: String, result: AnyObject) -> Void
 
     // Event:  'did-fail-load'
+    
     // Event:  'did-finish-load'
 
 

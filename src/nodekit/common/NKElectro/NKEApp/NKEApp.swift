@@ -22,18 +22,29 @@ import Foundation
 extension NKE_App: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
+    
         let principal = NKE_App()
+        
         context.NKloadPlugin(principal, namespace: "io.nodekit.electro.app", options: [String:AnyObject]())
+    
     }
 
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {
+    
         switch (forKey) {
+        
         case ".global":
+        
             return NKStorage.getPluginWithStub(stub, "lib-electro/app.js", NKElectro.self)
+        
         default:
+        
             return stub
+        
         }
+    
     }
+
 }
 
 class NKE_App: NSObject, NKEAppProtocol {
@@ -41,54 +52,80 @@ class NKE_App: NSObject, NKEAppProtocol {
     private var events: NKEventEmitter = NKEventEmitter.global
  
     override init() {
+   
         super.init()
+        
         initializeEvents()
+    
     }
 
     func quit() -> Void {  exit(0) }
+
     func exit(exitCode: Int) -> Void { exit(exitCode) }
 
     func getAppPath() -> String { return (NKNodeKit.mainBundle.bundlePath as NSString).stringByDeletingLastPathComponent }
+    
     func getPath(name: String) -> String { return NKEAppDirectory.getPath(name) }
+    
     func setPath(name: String, path: String) -> Void { NotImplemented(); }
 
     func getVersion() -> String { return (NKEAppDirectory.getPackage()?["version"] as? String) ?? "" }
+    
     func getName() -> String { return (NKEAppDirectory.getPackage()?["name"] as? String) ?? ""  }
+    
     func getLocale() -> String { NotImplemented(); return "" }
+    
     func addRecentDocument(path: String) -> Void { NotImplemented(); } //OS X WINDOWS
+    
     func clearRecentDocuments() -> Void { NotImplemented(); } //OS X WINDOWS
+    
     func setUserTasks(tasks: [Dictionary<String, AnyObject>]) -> Void { NotImplemented(); } //WINDOWS
+    
     func allowNTLMCredentialsForAllDomains(allow: Bool) -> Void { NotImplemented(); }
+    
     func makeSingleInstance(callback: AnyObject) -> Void { NotImplemented(); }
+    
     func setAppUserModelId(id: String) -> Void { NotImplemented(); } //WINDOWS
 
     func appendSwitch(`switch`: String, value: String?) -> Void { NotImplemented(); }
+    
     func appendArgument(value: String) -> Void { NotImplemented(); }
+    
     func dockBounce(type: String?) -> Int { NotImplemented(); return 0 }//OS X
+    
     func dockCancelBounce(id: Int) -> Void { NotImplemented(); } //OS X
+    
     func dockSetBadge(text: String) -> Void { NotImplemented(); } //OS X
+    
     func dockGetBadge() -> String { NotImplemented(); return "" } //OS X
+    
     func dockHide() -> Void { NotImplemented(); } //OS X
+    
     func dockShow() -> Void { NotImplemented(); } //OS X
+    
     func dockSetMenu(menu: AnyObject) -> Void { NotImplemented(); } //OS X
 
-
-    // Event: 'will-finish-launching'
-
     private func initializeEvents() {
-    // Event: 'ready'
+
         events.once("nk.jsApplicationReady") { (data: AnyObject) -> Void in
-             self.NKscriptObject?.invokeMethod("emit", withArguments: ["ready"], completionHandler: nil)
+        
+            self.NKscriptObject?.invokeMethod("emit", withArguments: ["ready"], completionHandler: nil)
+        
         }
 
         events.once("nk.ApplicationDidFinishLaunching") { () -> Void in
+        
             self.NKscriptObject?.invokeMethod("emit", withArguments: ["will-finish-launching"], completionHandler: nil)
+        
         }
 
         events.once("nk.ApplicationWillTerminate") { () -> Void in
+        
             self.NKscriptObject?.invokeMethod("emit", withArguments: ["will-quit"], completionHandler: nil)
+            
             self.NKscriptObject?.invokeMethod("emit", withArguments: ["quit"], completionHandler: nil)
-      }
+      
+        }
 
     // Event: 'window-all-closed'
     // Event: 'before-quit'
@@ -107,10 +144,15 @@ class NKE_App: NSObject, NKEAppProtocol {
     }
 
     private static func NotImplemented(functionName: String = #function) -> Void {
+        
         log("!app.\(functionName) is not implemented")
+    
     }
 
     private func NotImplemented(functionName: String = #function) -> Void {
-         log("!app.\(functionName) is not implemented")
+    
+        log("!app.\(functionName) is not implemented")
+    
     }
+
 }

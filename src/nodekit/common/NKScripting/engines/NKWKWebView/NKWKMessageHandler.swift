@@ -24,26 +24,41 @@ import WebKit
 public class NKWKMessageHandler: NSObject, WKScriptMessageHandler {
 
     private var name: String
+  
     private var messageHandler: NKScriptMessageHandler
+    
     private weak var context: NKScriptContext?
 
     init(name: String, messageHandler: NKScriptMessageHandler, context: NKScriptContext) {
+    
         self.messageHandler = messageHandler
+        
         self.name = name
+        
         self.context = context
     }
 
    public func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        // A workaround for crash when postMessage(undefined)
-        guard unsafeBitCast(message.body, COpaquePointer.self) != nil else { return }
+    
+    // A workaround for crash when postMessage(undefined)
+    
+    guard unsafeBitCast(message.body, COpaquePointer.self) != nil else { return }
 
-     if let body = message.body as? [String: AnyObject], let _ = body["$nk.sync"] as? Bool, let id = body["$id"] as? String {
-            let result = messageHandler.userContentControllerSync(didReceiveScriptMessage: NKScriptMessage(name: name, body: message.body))
-            let resultJSON = context?.NKserialize(result)
-            NKEventEmitter.global.emit(id, resultJSON)
-            return
-        }
-
-        messageHandler.userContentController(didReceiveScriptMessage: NKScriptMessage(name: name, body: message.body))
+    
+    if let body = message.body as? [String: AnyObject], let _ = body["$nk.sync"] as? Bool, let id = body["$id"] as? String {
+    
+        let result = messageHandler.userContentControllerSync(didReceiveScriptMessage: NKScriptMessage(name: name, body: message.body))
+        
+        let resultJSON = context?.NKserialize(result)
+        
+        NKEventEmitter.global.emit(id, resultJSON)
+    
+        return
     }
+
+    
+    messageHandler.userContentController(didReceiveScriptMessage: NKScriptMessage(name: name, body: message.body))
+    
+    }
+
 }

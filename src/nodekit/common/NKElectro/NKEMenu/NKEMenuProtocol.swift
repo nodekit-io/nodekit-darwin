@@ -22,5 +22,8 @@ import Foundation
 protocol NKEMenuProtocol: NKScriptExport {
 
     func setApplicationMenu(menu: [String: AnyObject]) -> Void
+  
     func sendActionToFirstResponder(action: String) -> Void //OS X
-   }
+   
+}
+

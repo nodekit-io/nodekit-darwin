@@ -21,29 +21,43 @@
 import Foundation
 
 public protocol NKScriptContext: class {
+    
     var NKid: Int { get }
 
     func NKloadPlugin(object: AnyObject, namespace: String, options: Dictionary<String, AnyObject>) -> Void
+    
     func NKinjectJavaScript(script: NKScriptSource) -> Void
+    
     func NKevaluateJavaScript(javaScriptString: String, completionHandler: ((AnyObject?,NSError?) -> Void)?)
+    
     func NKserialize(object: AnyObject?) -> String
 
     static func NKcurrentContext() -> NKScriptContext!
- }
+ 
+}
 
 public protocol NKScriptContextHost: class {
+
     var NKid: Int { get }
+    
     func NKgetScriptContext(id: Int, options: [String: AnyObject], delegate cb: NKScriptContextDelegate) -> Void
+
 }
 
 internal protocol NKScriptContentController: class {
+
     func NKaddScriptMessageHandler (scriptMessageHandler: NKScriptMessageHandler, name: String)
+    
     func NKremoveScriptMessageHandlerForName (name: String)
+
 }
 
 public protocol NKScriptContextDelegate: class {
+
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void
+    
     func NKScriptEngineReady(context: NKScriptContext) -> Void
+
 }
 
 public class NKJSContextId {}

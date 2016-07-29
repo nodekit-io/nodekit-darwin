@@ -15,40 +15,54 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import Foundation
 
-//struct NKGlobals {
-//    static let NKeventQueue : dispatch_queue_t! = dispatch_queue_create("io.nodekit.eventQueue", nil)
-//}
+import Foundation
 
 @objc public class NKNodeKit: NSObject, NKScriptContextDelegate {
     
     // Common Public Methods
     
     public class func start() {
+
         #if os(iOS)
+        
             NKMainMobile.start(Dictionary<String, AnyObject>(), delegate: nil)
+        
         #elseif os(OSX)
+        
             NKMainDesktop.start(Dictionary<String, AnyObject>(), delegate: nil)
+       
         #endif
+    
     }
     
     public class func start(options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate? = nil) {
         
         if let val = options["nk.MainBundle"] {
+
             mainBundle = val as! NSBundle;
+        
         }
         
         if let _ = options["nk.Test"] {
+        
             NKMainNoUI.start(options, delegate: delegate)
-        } else
-        {
-        #if os(iOS)
-            NKMainMobile.start(options, delegate: delegate)
-        #elseif os(OSX)
-            NKMainDesktop.start(options, delegate: delegate)
-        #endif
+        
+        } else {
+        
+           
+            #if os(iOS)
+            
+                NKMainMobile.start(options, delegate: delegate)
+        
+            #elseif os(OSX)
+            
+                NKMainDesktop.start(options, delegate: delegate)
+      
+            #endif
+        
         }
+    
     }
     
     public static var mainBundle: NSBundle = NSBundle.mainBundle()
@@ -56,45 +70,69 @@ import Foundation
     // Instance Methods (Not normally Called from Public, but Exposed to Allow Multiple {NK} NodeKit's per process)
     
     override public init() {
+    
         self.context = nil
+    
     }
     
     var context: NKScriptContext?
+    
     private var scriptContextDelegate: NKScriptContextDelegate?
     
     public func start(inout options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate? = nil) {
+    
         self.scriptContextDelegate = delegate
+        
         options["Engine"] = options["Engine"] ?? NKEngineType.JavaScriptCore.rawValue
+        
         NKScriptContextFactory().createContext(options, delegate: self)
+    
     }
     
     public func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
+    
         self.context = context
         
         // INSTALL JAVASCRIPT ENVIRONMENT ON MAIN CONTEXT
+        
         NKElectro.addElectro(context)
+        
         NKC_BootCore.addCorePlatform(context)
+        
         NKC_BootCore.bootCore(context)
         
         // NOTIFIY DELEGATE THAT SCRIPT ENGINE IS LOADED
+        
         self.scriptContextDelegate?.NKScriptEngineDidLoad(context)
+    
     }
     
     public func NKScriptEngineReady(context: NKScriptContext) -> Void {
+    
         // NOTIFIY DELEGATE ON MAIN QUEUE THAT SCRIPT ENGINE IS LOADED
         dispatch_async(dispatch_get_main_queue(),{
+        
             self.scriptContextDelegate?.NKScriptEngineReady(context)
+            
             NKEventEmitter.global.emit("nk.Ready", ())
+        
         })
+    
     }
 }
 
 class NKMainNoUI {
+    
     private static let nodekit: NKNodeKit = NKNodeKit()
     
     class func start(options: Dictionary<String, AnyObject>, delegate nkScriptDelegate: NKScriptContextDelegate?) {
+    
         var options = options ?? Dictionary<String, AnyObject>()
+        
         nodekit.start(&options, delegate: nkScriptDelegate)
+        
         NKEventEmitter.global.emit("nk.ApplicationDidFinishLaunching", ())
+    
     }
+
 }

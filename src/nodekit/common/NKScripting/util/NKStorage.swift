@@ -20,51 +20,70 @@
 import Foundation
 
 public class NKStorage {
+  
     public static func getResource(module: String, _ t: AnyClass? = nil) -> String? {
         
         let bundle = (t != nil) ?  NSBundle(forClass: t!) :  NKNodeKit.mainBundle
         
         guard let path = getPath_(bundle, module),
+    
             let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) else {
+            
                 return nil
+        
         }
+        
         return source as String
+    
     }
     
     public static func getPluginWithStub(stub: String, _ module: String, _ t: AnyClass? = nil) -> String {
         
         guard let appjs = NKStorage.getResource(module, t) else {
+    
             die("Failed to read script")
+        
         }
+       
         return "function loadplugin(){\n" + appjs + "\n}\n" + stub + "\n" + "loadplugin();" + "\n"
     }
     
     private static func getPath_(mainBundle: NSBundle, _ module: String) -> String? {
         
         let directory = (module as NSString).stringByDeletingLastPathComponent
+        
         var fileName = (module as NSString).lastPathComponent
+        
         var fileExtension = (fileName as NSString).pathExtension
+        
         fileName = (fileName as NSString).stringByDeletingPathExtension
         
         if (fileExtension=="") {
+        
             fileExtension = "js"
+        
         }
         
         var path = mainBundle.pathForResource(fileName, ofType: fileExtension, inDirectory: directory)
         
         if (path == nil) {
-            let _nodeKitBundle: NSBundle = NSBundle(forClass: NKNodeKit.self)
             
+            let _nodeKitBundle: NSBundle = NSBundle(forClass: NKNodeKit.self)
+        
             path = _nodeKitBundle.pathForResource(fileName, ofType: fileExtension, inDirectory: directory)
             
             if (path == nil) {
                 
                 log("!Error - source file not found: \(directory + "/" + fileName + "." + fileExtension)")
+        
                 return nil
+            
             }
+        
         }
         
         return path!
         
     }
+    
 }

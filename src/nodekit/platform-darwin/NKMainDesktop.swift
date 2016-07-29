@@ -19,18 +19,27 @@
 import Cocoa
 
 class NKMainDesktop {
+    
       class func start(options: Dictionary<String, AnyObject>, delegate nkScriptDelegate: NKScriptContextDelegate?) {
+     
         let app      = NSApplication.sharedApplication()
         
         NKNSAppDelegate.options = options;
+        
         NKNSAppDelegate.delegate = nkScriptDelegate;
+        
         let nsDelegate = NKNSAppDelegate(app: app)
+        
         app.delegate = nsDelegate
         
-    
         app.setActivationPolicy(.Regular)
+        
         atexit_b { app.setActivationPolicy(.Prohibited); return }
+        
         app.activateIgnoringOtherApps(true)
+        
         app.run()
+    
     }
+
 }

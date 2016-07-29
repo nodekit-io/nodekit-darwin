@@ -21,18 +21,29 @@
 import Foundation
 
 public enum NKScriptExportType: Int {
+    
     case NKScriptExport = 0
+    
     case JSExport
+
 }
 
 @objc public protocol NKScriptExport : class {
+
     optional var channelIdentifier: String { get }
+    
     optional func rewriteGeneratedStub(stub: String, forKey: String) -> String
+    
     optional func invokeDefaultMethodWithArguments(args: [AnyObject]!) -> AnyObject!
+    
     optional func finalizeForScript()
 
     optional static func scriptNameForKey(name: UnsafePointer<Int8>) -> String?
+    
     optional static func scriptNameForSelector(selector: Selector) -> String?
+    
     optional static func isSelectorExcludedFromScript(selector: Selector) -> Bool
+    
     optional static func isKeyExcludedFromScript(name: UnsafePointer<Int8>) -> Bool
+
 }

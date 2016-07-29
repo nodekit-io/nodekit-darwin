@@ -18,13 +18,17 @@
 */
 
 import Foundation
+
 import UIKit
 
 extension NKE_Dialog: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
+
         let principal = NKE_Dialog()
+        
         context.NKloadPlugin(principal, namespace: "io.nodekit.electro.dialog", options: [String:AnyObject]())
+    
     }
 
 }
@@ -33,33 +37,37 @@ extension NKE_Dialog: NKScriptExport {
 class NKE_Dialog: NSObject, NKE_DialogProtocol {
 
     private static func NotImplemented(functionName: String = #function) -> Void {
+    
         log("!dialog.\(functionName) is not available for iOS")
+    
     }
 
 
     func showOpenDialog(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?) -> Void {
+    
         NKE_Dialog.NotImplemented()
+    
     }
 
 
     func showSaveDialog(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?)-> Void {
+    
         NKE_Dialog.NotImplemented()
-     }
+     
+    }
 
     func showMessageBox(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?) -> Void {
-   //     let type: String = (options?["type"] as? String) ?? "none"
+ 
         let buttons: [String] = (options?["buttons"] as? [String]) ?? ["Ok"]
+        
         let title: String = (options?["title"] as? String) ?? ""
+        
         let message: String = (options?["message"] as? String) ?? ""
- //       let detail: String = (options?["detail"] as? String) ?? ""
-        //  let icon: NKNativeImage? = (options?["detail"] as? NKNativeImage)
-        //  let cancelId: Int = (options?["cancelId"] as? String) ?? 0
-        //    let noLink: Bool = (options?["cancelId"] as? Bool) ?? false
-
-
+ 
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
 
         for var i = 0; i < buttons.count; i++ {
+ 
             let buttonTitle: String = buttons[i] ?? ""
 
             let buttonAction = UIAlertAction(title: buttonTitle, style: (buttonTitle == "Cancel" ? .Cancel : .Default)) { (action) in
@@ -67,6 +75,7 @@ class NKE_Dialog: NSObject, NKE_DialogProtocol {
                 }
 
             alertController.addAction(buttonAction)
+        
         }
 
         guard let viewController = UIApplication.sharedApplication().delegate!.window!?.rootViewController else {return;}
@@ -76,7 +85,9 @@ class NKE_Dialog: NSObject, NKE_DialogProtocol {
     }
 
     func showErrorBox(title: String, content: String) -> Void {
+        
         self.showMessageBox(nil, options: ["message": title, "detail": content, "type": "error"], callback: nil)
+    
     }
 
 }

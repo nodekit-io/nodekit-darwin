@@ -21,22 +21,36 @@ import WebKit
 
 extension NKScriptContextFactory {
     func createContextWKWebView(options: [String: AnyObject] = Dictionary<String, AnyObject>(), delegate cb: NKScriptContextDelegate) {
-    //    dispatch_async(NKScriptChannel.defaultQueue) {
+   
+        //    dispatch_async(NKScriptChannel.defaultQueue) {
 
-            let config = WKWebViewConfiguration()
-            let webPrefs = WKPreferences()
-            webPrefs.javaScriptEnabled = true
-            webPrefs.javaScriptCanOpenWindowsAutomatically = true
-            config.preferences = webPrefs
-            let webView = WKWebView(frame: CGRect.zero, configuration: config)
-            let id = NKScriptContextFactory.sequenceNumber
-             webView.NKgetScriptContext(id, options: options, delegate: cb)
-
-            var item = Dictionary<String, AnyObject>()
-            item["WKWebView"] = webView
-            NKScriptContextFactory._contexts[id] = item
+        let config = WKWebViewConfiguration()
         
-            webView.loadHTMLString("<HTML><BODY>NodeKit WKWebView: VM \(id)</BODY></HTML>", baseURL: NSURL(string: "about: blank"))
+        let webPrefs = WKPreferences()
+        
+        webPrefs.javaScriptEnabled = true
+        
+        webPrefs.javaScriptCanOpenWindowsAutomatically = true
+        
+        config.preferences = webPrefs
+        
+        let webView = WKWebView(frame: CGRect.zero, configuration: config)
+        
+        let id = NKScriptContextFactory.sequenceNumber
+        
+        webView.NKgetScriptContext(id, options: options, delegate: cb)
+
+        
+        var item = Dictionary<String, AnyObject>()
+        
+        item["WKWebView"] = webView
+        
+        NKScriptContextFactory._contexts[id] = item
+        
+        
+        webView.loadHTMLString("<HTML><BODY>NodeKit WKWebView: VM \(id)</BODY></HTML>", baseURL: NSURL(string: "about: blank"))
+        
   //      }
+        
     }
 }

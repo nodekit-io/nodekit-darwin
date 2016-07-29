@@ -22,78 +22,123 @@
 */
 
 import Darwin
+
 import Dispatch
+
 import Foundation
+
 import CoreFoundation
 
 @objc protocol NKC_SwiftSocketProtocol: class {
-  optional func socket(socket: NKC_SwiftSocket, didAcceptNewSocket newSocket: NKC_SwiftSocket)
-  optional  func socket(socket: NKC_SwiftSocket, didConnectToHost host: String!, port: Int32)
-  optional func socket(socket: NKC_SwiftSocket, didReceiveData data: NSData!, withTag tag: Int)
-  func socket(socket: NKC_SwiftSocket, didReceiveData data: NSData!, sender host: String?, port: Int32)
-  optional func socket(socket: NKC_SwiftSocket, didDisconnectWithError err: NSError)
+
+    optional func socket(socket: NKC_SwiftSocket, didAcceptNewSocket newSocket: NKC_SwiftSocket)
+  
+    optional  func socket(socket: NKC_SwiftSocket, didConnectToHost host: String!, port: Int32)
+  
+    optional func socket(socket: NKC_SwiftSocket, didReceiveData data: NSData!, withTag tag: Int)
+  
+    func socket(socket: NKC_SwiftSocket, didReceiveData data: NSData!, sender host: String?, port: Int32)
+  
+    optional func socket(socket: NKC_SwiftSocket, didDisconnectWithError err: NSError)
+
 }
 
 class NKC_SwiftSocket: NSObject {
     
     var fd      : Int32
+
     var isValid: Bool { return fd >= 0 }
 
     var address : NKC_AddrInfo
     
     private(set)    lazy var peerAddress: NKC_AddrInfo? = {
         [unowned self] in
+        
         return self._getPeerAddress()
+        
         }()
+    
     private(set)    lazy var connectedHost: String? = {
         [unowned self] in
+        
         return self.peerAddress?.hostname
+        
         }()
+    
     private(set)    lazy var connectedPort: Int32? = {
         [unowned self] in
-         return self.peerAddress?.port
+    
+        return self.peerAddress?.port
+        
         }()
+    
     private(set)    lazy var localHost: String? = {
         [unowned self] in
+    
         return self.address.hostname
+        
         }()
+    
     private(set)    lazy var localPort: Int32? = {
         [unowned self] in
+    
         return self.address.port
+        
         }()
     
     private var closed  : Bool = true
+    
     private var shouldReuseAddress: Bool = false
     
     var queue: dispatch_queue_t?  = nil
+    
     var sendCount: Int = 0
+    
     var closeRequested: Bool = false
+    
     var didCloseRead: Bool = false
+    
     var nkDelegate: NKC_SwiftSocketProtocol? = nil
+    
     var nkDelegateQueue: dispatch_queue_t?  = nil
     
     var readSource: dispatch_source_t? = nil
+    
     var listenSource: dispatch_source_t? = nil
     
     var readTag: Int? = nil
+    
     var readBufferPtr  = UnsafeMutablePointer<CChar>.alloc(4096 + 2)
+    
     var readBufferSize : Int = 4096 {
+    
         didSet {
+        
             if readBufferSize != oldValue {
+            
                 readBufferPtr.dealloc(oldValue + 2)
+                
                 readBufferPtr = UnsafeMutablePointer<CChar>.alloc(readBufferSize + 2)
+            
             }
+        
         }
+    
     }
     
     /// Constructs an instance from a pre-exsisting file descriptor and address.
     init(socket: Int32, address addr: addrinfo,
         shouldReuseAddress: Bool = false) {
-            fd = socket
-            address = NKC_AddrInfo(copy: addr)
-            closed = true
-            self.shouldReuseAddress = shouldReuseAddress
-      }
+    
+        fd = socket
+        
+        address = NKC_AddrInfo(copy: addr)
+        
+        closed = true
+        
+        self.shouldReuseAddress = shouldReuseAddress
+      
+    }
     
     /// Constructs a socket from the given requirements.
     init(
@@ -101,32 +146,44 @@ class NKC_SwiftSocket: NSObject {
         type: NKC_SwiftSocketType,
         proto: NKC_CommunicationProtocol
          ) {
-            fd = Darwin.socket(
+    
+        fd = Darwin.socket(
                 domain.systemValue,
                 type.systemValue,
                 proto.systemValue
             )
-            address = NKC_AddrInfo()
-            address.addrinfo.ai_family = domain.systemValue
-            address.addrinfo.ai_socktype = type.systemValue
-            address.addrinfo.ai_protocol = proto.systemValue
-            closed = true
+        
+        address = NKC_AddrInfo()
+        
+        address.addrinfo.ai_family = domain.systemValue
+        
+        address.addrinfo.ai_socktype = type.systemValue
+        
+        address.addrinfo.ai_protocol = proto.systemValue
+        
+        closed = true
+    
     }
     
     /// Copys `address` and initalises the socket from the `fd` given.
     private init(copy address: NKC_AddrInfo, fd: Int32) {
+    
         self.address = address
+        
         self.closed = true
+        
         self.fd = fd
     }
     
     func setDelegate(delegate: NKC_SwiftSocketProtocol, delegateQueue: dispatch_queue_t) {
+        
         self.nkDelegate = delegate
+        
         self.nkDelegateQueue = delegateQueue
     }
     
     /// Re-initalises the socket to a 'new' state
-   private func initaliseSocket() throws {
+    private func initaliseSocket() throws {
         if !closed {
             try close()
         }
@@ -141,7 +198,7 @@ class NKC_SwiftSocket: NSObject {
         closed = false
         try setShouldReuseAddress(shouldReuseAddress)
     }
-
+    
     
     /// Shuts down the socket, signaling that either all reading has finished,
     /// all writing has finished, or both reading and writing have finished.
@@ -207,8 +264,8 @@ class NKC_SwiftSocket: NSObject {
         }
         try address.setPort(port)
         guard Darwin.bind(fd,
-            address.addrinfo.ai_addr,
-            address.addrinfo.ai_addrlen
+                          address.addrinfo.ai_addr,
+                          address.addrinfo.ai_addrlen
             ) == 0 else {
                 throw NKC_SwiftSocketError.BindFailed(errno)
         }
@@ -304,49 +361,49 @@ class NKC_SwiftSocket: NSObject {
                 throw NKC_SwiftSocketError.DispatchFailed(errno)
         }
         self.listenSource = listenSource;
-
+        
         listenSource.onEvent {  _, _  in
             repeat {
-            
-            let sockStorage = UnsafeMutablePointer<sockaddr_storage>.alloc(
-            sizeof(sockaddr_storage)
-            )
-            
-            let sockAddr = UnsafeMutablePointer<Darwin.sockaddr>(sockStorage)
-            var length = socklen_t(sizeof(sockaddr_storage))
-            
-            let success = Darwin.accept(self.fd, sockAddr, &length)
-            
-            if success != -1 {
-                var addrinfo = Darwin.addrinfo()
-                addrinfo.ai_socktype   = self.address.addrinfo.ai_socktype
-                addrinfo.ai_protocol   = self.address.addrinfo.ai_protocol
-                addrinfo.ai_family     = self.address.addrinfo.ai_family
-                addrinfo.ai_flags      = self.address.addrinfo.ai_flags
-                addrinfo.ai_canonname = nil
-                addrinfo.ai_addr = sockAddr
                 
-                let addr = NKC_AddrInfo(claim: addrinfo)
-
-                let newSocket = NKC_SwiftSocket(copy: addr, fd: success)
+                let sockStorage = UnsafeMutablePointer<sockaddr_storage>.alloc(
+                    sizeof(sockaddr_storage)
+                )
                 
-                if let delegate = self.nkDelegate
-                {
-                    dispatch_async(self.nkDelegateQueue!) {
-                        delegate.socket?(self, didAcceptNewSocket: newSocket)
+                let sockAddr = UnsafeMutablePointer<Darwin.sockaddr>(sockStorage)
+                var length = socklen_t(sizeof(sockaddr_storage))
+                
+                let success = Darwin.accept(self.fd, sockAddr, &length)
+                
+                if success != -1 {
+                    var addrinfo = Darwin.addrinfo()
+                    addrinfo.ai_socktype   = self.address.addrinfo.ai_socktype
+                    addrinfo.ai_protocol   = self.address.addrinfo.ai_protocol
+                    addrinfo.ai_family     = self.address.addrinfo.ai_family
+                    addrinfo.ai_flags      = self.address.addrinfo.ai_flags
+                    addrinfo.ai_canonname = nil
+                    addrinfo.ai_addr = sockAddr
+                    
+                    let addr = NKC_AddrInfo(claim: addrinfo)
+                    
+                    let newSocket = NKC_SwiftSocket(copy: addr, fd: success)
+                    
+                    if let delegate = self.nkDelegate
+                    {
+                        dispatch_async(self.nkDelegateQueue!) {
+                            delegate.socket?(self, didAcceptNewSocket: newSocket)
+                        }
                     }
                 }
-            }
-            else if errno == EWOULDBLOCK {
-                break;
-            }
-            else {
-            if (!self.closeRequested) {
-                    log("!Failed to accept() socket: \(self) \(errno)")
+                else if errno == EWOULDBLOCK {
+                    break;
                 }
-                break;
-            }
-        
+                else {
+                    if (!self.closeRequested) {
+                        log("!Failed to accept() socket: \(self) \(errno)")
+                    }
+                    break;
+                }
+                
             } while (true);
         }
         
@@ -356,15 +413,15 @@ class NKC_SwiftSocket: NSObject {
             fd,
             backlog
             ) == 0 else {
-            dispatch_source_cancel(listenSource)
-            throw NKC_SwiftSocketError.ListenFailed(errno)
+                dispatch_source_cancel(listenSource)
+                throw NKC_SwiftSocketError.ListenFailed(errno)
         }
         
     }
     
     /// Connects the socket to the given hostname and port number.
     func connect(host hostname: String, port: Int32) throws {
-    
+        
         guard port >= 0 else {
             throw NKC_SwiftSocketError.ParameterError(
                 "Invalid port number - port cannot be negative"
@@ -400,11 +457,11 @@ class NKC_SwiftSocket: NSObject {
                     continue
             }
             
-             self.address = self._getLocalAddress()!
+            self.address = self._getLocalAddress()!
             if let delegate = self.nkDelegate
             {
                 dispatch_async(nkDelegateQueue!) {
-                        delegate.socket?(self, didConnectToHost: host.hostname!, port: port )
+                    delegate.socket?(self, didConnectToHost: host.hostname!, port: port )
                 }
             }
             return;
@@ -413,7 +470,7 @@ class NKC_SwiftSocket: NSObject {
     }
     
     /// Connects the socket to the given address and port number.
-     func connect(address address: NKC_AddrInfo, port: Int32) throws {
+    func connect(address address: NKC_AddrInfo, port: Int32) throws {
         guard port >= 0 else {
             throw NKC_SwiftSocketError.ParameterError(
                 "Invalid port number - port cannot be negative"
@@ -471,7 +528,7 @@ class NKC_SwiftSocket: NSObject {
             self.sendCount = self.sendCount - 1
             
             if self.sendCount == 0 && self.closeRequested {
-                  _ = try? self.close()
+                _ = try? self.close()
                 self.closeRequested = false
             }
         }
@@ -506,7 +563,7 @@ class NKC_SwiftSocket: NSObject {
         }
         
         if queue == nil {
-             queue = dispatch_get_main_queue()
+            queue = dispatch_get_main_queue()
         }
         
         guard let asyncData = dispatch_data_create(buffer,bufsize, queue,nil) else {
@@ -516,62 +573,62 @@ class NKC_SwiftSocket: NSObject {
         _write(asyncData)
         return true
     }
-
+    
     private func _write(data: UnsafePointer<Void>, length: Int, flags: Int32 = 0,
-        maxSize: Int = 1024) throws -> Int {
-            var data = data
-            var bytesLeft = length
-            var bytesSent = 0
-            
-            loop: while (length > bytesSent) {
-                let len = bytesLeft < maxSize ? bytesLeft : maxSize
-                let success = Darwin.sendto(
-                    fd,
-                    data,
-                    len,
-                    flags,
-                    nil, // When nil, the address parameter is autofilled,
-                    // if it exsists
-                    0
-                )
-                guard success != -1 else {
-                    throw NKC_SwiftSocketError.SendToFailed(errno)
-                }
-                data = data.advancedBy(success)
-                bytesSent += success
-                bytesLeft -= success
+                        maxSize: Int = 1024) throws -> Int {
+        var data = data
+        var bytesLeft = length
+        var bytesSent = 0
+        
+        loop: while (length > bytesSent) {
+            let len = bytesLeft < maxSize ? bytesLeft : maxSize
+            let success = Darwin.sendto(
+                fd,
+                data,
+                len,
+                flags,
+                nil, // When nil, the address parameter is autofilled,
+                // if it exsists
+                0
+            )
+            guard success != -1 else {
+                throw NKC_SwiftSocketError.SendToFailed(errno)
             }
-            return bytesSent
+            data = data.advancedBy(success)
+            bytesSent += success
+            bytesLeft -= success
+        }
+        return bytesSent
     }
     
-   private func _write(address: NKC_AddrInfo, data: UnsafePointer<Void>,
-        length: Int, flags: Int32 = 0, maxSize: Int = 1024) throws -> Int {
-            var data = data
-            var bytesleft = length
-            var bytesSent = 0
-            
-            loop: while (length > bytesSent) {
-                let len = bytesleft < maxSize ? bytesleft : maxSize
-                let success = Darwin.sendto(
-                    fd,
-                    data,
-                    len,
-                    flags,
-                    address.addrinfo.ai_addr,
-                    UInt32(address.addrinfo.ai_addr.memory.sa_len)
-                )
-                guard success != -1 else {
-                    throw NKC_SwiftSocketError.SendToFailed(errno)
-                }
-                data = data.advancedBy(success)
-                bytesSent += success
-                bytesleft -= success
+    private func _write(address: NKC_AddrInfo, data: UnsafePointer<Void>,
+                        length: Int, flags: Int32 = 0, maxSize: Int = 1024) throws -> Int {
+        var data = data
+        var bytesleft = length
+        var bytesSent = 0
+        
+        loop: while (length > bytesSent) {
+            let len = bytesleft < maxSize ? bytesleft : maxSize
+            let success = Darwin.sendto(
+                fd,
+                data,
+                len,
+                flags,
+                address.addrinfo.ai_addr,
+                UInt32(address.addrinfo.ai_addr.memory.sa_len)
+            )
+            guard success != -1 else {
+                throw NKC_SwiftSocketError.SendToFailed(errno)
             }
-            return bytesSent
+            data = data.advancedBy(success)
+            bytesSent += success
+            bytesleft -= success
+        }
+        return bytesSent
     }
     
-     /// Sends `data` to the remote peer.
-     func write(data: NSData, flags: Int32 = 0, maxSize: Int = 1024) throws -> Int {
+    /// Sends `data` to the remote peer.
+    func write(data: NSData, flags: Int32 = 0, maxSize: Int = 1024) throws -> Int {
         return try self._write(data.bytes, length: data.length, flags: flags, maxSize: maxSize)
     }
     
@@ -597,8 +654,8 @@ class NKC_SwiftSocket: NSObject {
             try host.setPort(port)
             
             guard let success = try? self._write(host, data: data.bytes, length: data.length, flags: flags, maxSize: maxSize) else {
-                 errors.append(errno)
-                 continue
+                errors.append(errno)
+                continue
             }
             
             return success;
@@ -606,8 +663,8 @@ class NKC_SwiftSocket: NSObject {
         }
         return 0
     }
-
-
+    
+    
     func beginReceiving(tag tag: Int?) throws -> Void {
         if (readTag != nil)
         {
@@ -628,9 +685,9 @@ class NKC_SwiftSocket: NSObject {
     
     
     private func _read(flags: Int32 = 0) ->  Bool {
-
+        
         let bptr = UnsafePointer<CChar>(readBufferPtr)
-    
+        
         let bufsize = readBufferSize
         
         var addrLen = socklen_t(sizeof(sockaddr))
@@ -667,16 +724,16 @@ class NKC_SwiftSocket: NSObject {
         guard readCount >= 0 else {
             readBufferPtr[0] = 0
             
-           if errno == EWOULDBLOCK {
-               return true;
+            if errno == EWOULDBLOCK {
+                return true;
             }
             else {
                 dispatch_async(nkDelegateQueue!) {
                     self.nkDelegate?.socket?(self, didDisconnectWithError: NSError(domain: "Socket Error", code: Int(errno), userInfo: nil))
                 }
-              return false;
+                return false;
             }
-        } 
+        }
         
         readBufferPtr[readCount] = 0
         let data = NSData(bytes: bptr, length: readCount)
@@ -709,7 +766,7 @@ class NKC_SwiftSocket: NSObject {
         }
         
         if queue == nil {
-             queue = dispatch_get_main_queue()
+            queue = dispatch_get_main_queue()
         }
         
         readSource = dispatch_source_create(
@@ -725,9 +782,9 @@ class NKC_SwiftSocket: NSObject {
         readSource.onEvent { [unowned self]
             _, readCount in
             
-           if self.nkDelegate != nil
+            if self.nkDelegate != nil
             {
-              let success = self._read()
+                let success = self._read()
                 if !success {
                     dispatch_source_cancel(readSource)
                     return;
@@ -737,11 +794,11 @@ class NKC_SwiftSocket: NSObject {
         
         dispatch_resume(readSource)
     }
-
- 
+    
+    
     /// Sets whether the system is allowed to reuse the address if it's
     /// already in use.
-   func setShouldReuseAddress(value: Bool) throws {
+    func setShouldReuseAddress(value: Bool) throws {
         var number: CInt = value ? 1 : 0
         shouldReuseAddress = value
         guard Darwin.setsockopt(
@@ -757,30 +814,30 @@ class NKC_SwiftSocket: NSObject {
     
     /// Sets the specified socket option.
     func setSocketOption(layer: Int32 = SOL_SOCKET, option: Int32,
-        value: UnsafePointer<Void>, valueLen: socklen_t) throws {
-            guard Darwin.setsockopt(
-                fd,
-                layer,
-                option,
-                value,
-                valueLen
-                ) == 0 else {
-                    throw NKC_SwiftSocketError.SetSocketOptionFailed(errno)
-            }
+                         value: UnsafePointer<Void>, valueLen: socklen_t) throws {
+        guard Darwin.setsockopt(
+            fd,
+            layer,
+            option,
+            value,
+            valueLen
+            ) == 0 else {
+                throw NKC_SwiftSocketError.SetSocketOptionFailed(errno)
+        }
     }
     
     /// Gets the specified socket option.
-   func getSocketOption(layer: Int32 = SOL_SOCKET, option: Int32,
-        value: UnsafeMutablePointer<Void>, inout valueLen: socklen_t) throws {
-            guard Darwin.getsockopt(
-                fd,
-                layer,
-                option,
-                value,
-                &valueLen
-                ) == 0 else {
-                    throw NKC_SwiftSocketError.SetSocketOptionFailed(errno)
-            }
+    func getSocketOption(layer: Int32 = SOL_SOCKET, option: Int32,
+                         value: UnsafeMutablePointer<Void>, inout valueLen: socklen_t) throws {
+        guard Darwin.getsockopt(
+            fd,
+            layer,
+            option,
+            value,
+            &valueLen
+            ) == 0 else {
+                throw NKC_SwiftSocketError.SetSocketOptionFailed(errno)
+        }
     }
     
     func setSocketOption(layer: Int32 = SOL_SOCKET, option: Int32, setting: Int) throws -> Void {
@@ -821,7 +878,7 @@ class NKC_SwiftSocket: NSObject {
         let interface = in_addr(s_addr: inet_addr(ifaceAddr))
         var mcq = ip_mreq(imr_multiaddr: group, imr_interface: interface)
         try self.setSocketOption(IPPROTO_IP, option: IP_DROP_MEMBERSHIP, value: &mcq, valueLen: socklen_t(strideof(ip_mreq)))
-
+        
     }
     
     func setKeepAlive(flag: Bool) throws -> Void {
@@ -867,7 +924,7 @@ class NKC_SwiftSocket: NSObject {
         addrinfo.ai_flags      = address.addrinfo.ai_flags
         addrinfo.ai_canonname = nil
         addrinfo.ai_addr = sockAddr
-       
+        
         let addr = NKC_AddrInfo(claim: addrinfo)
         return addr
     }
@@ -892,7 +949,7 @@ class NKC_SwiftSocket: NSObject {
         addrinfo.ai_addr = sockAddr
         
         let addr = NKC_AddrInfo(claim: addrinfo)
-    
+        
         return addr
     }
 }
@@ -1128,12 +1185,12 @@ class NKC_AddrInfo {
         }
         return nil
     }
-
+    
     private(set)    lazy var port: Int32! = {
-    [unowned self] in
+        [unowned self] in
         return try? self._getPort() ?? 0
-     }()
-
+        }()
+    
     @available(*, unavailable, renamed="hostname")
     var canonname: String? {
         fatalError("unavailable function call")
@@ -1247,48 +1304,48 @@ extension String {
 /// Obtains a list of IP addresses and port number, given the requirements
 /// `hostname`, `serviceName` and `hints`.
 func getaddrinfo(host hostname: String?, service serviceName: String?,
-    hints: UnsafePointer<addrinfo>) throws -> [NKC_AddrInfo] {
-        
-        guard !(hostname == nil && serviceName == nil) else {
-            throw NetworkUtilitiesError.ParameterError(
-                "Host name and server name cannot be nil at the same time!"
-            )
-        }
-        
-        var res = addrinfo()
-        var res_ptr: UnsafeMutablePointer<addrinfo> = unsafeAddressOfCObj(&res)
-        let hostname_val: (ptr: UnsafeMutablePointer, len: Int) =
-        hostname?.getCString ?? (nil, 0)
-        let servname_val: (ptr: UnsafeMutablePointer, len: Int) =
-        serviceName?.getCString ?? (nil, 0)
-        
-        defer {
-            if hostname_val.len > 0 {
-                hostname_val.ptr.dealloc(hostname_val.len)
-            }
-            if servname_val.len > 0 {
-                hostname_val.ptr.dealloc(hostname_val.len)
-            }
-        }
-        
-        let error = Darwin.getaddrinfo(
-            hostname_val.ptr,
-            servname_val.ptr,
-            hints, &res_ptr
+                      hints: UnsafePointer<addrinfo>) throws -> [NKC_AddrInfo] {
+    
+    guard !(hostname == nil && serviceName == nil) else {
+        throw NetworkUtilitiesError.ParameterError(
+            "Host name and server name cannot be nil at the same time!"
         )
-        guard error == 0 else {
-            throw NetworkUtilitiesError.GetAddressInfoFailed(error)
+    }
+    
+    var res = addrinfo()
+    var res_ptr: UnsafeMutablePointer<addrinfo> = unsafeAddressOfCObj(&res)
+    let hostname_val: (ptr: UnsafeMutablePointer, len: Int) =
+        hostname?.getCString ?? (nil, 0)
+    let servname_val: (ptr: UnsafeMutablePointer, len: Int) =
+        serviceName?.getCString ?? (nil, 0)
+    
+    defer {
+        if hostname_val.len > 0 {
+            hostname_val.ptr.dealloc(hostname_val.len)
         }
-        
-        var addresses: [NKC_AddrInfo] = []
-        var ptr = res_ptr
-        while ptr != nil {
-            addresses.append(NKC_AddrInfo(copy: ptr.memory))
-            ptr = ptr.memory.ai_next
+        if servname_val.len > 0 {
+            hostname_val.ptr.dealloc(hostname_val.len)
         }
-        
-        freeaddrinfo(res_ptr)
-        return addresses
+    }
+    
+    let error = Darwin.getaddrinfo(
+        hostname_val.ptr,
+        servname_val.ptr,
+        hints, &res_ptr
+    )
+    guard error == 0 else {
+        throw NetworkUtilitiesError.GetAddressInfoFailed(error)
+    }
+    
+    var addresses: [NKC_AddrInfo] = []
+    var ptr = res_ptr
+    while ptr != nil {
+        addresses.append(NKC_AddrInfo(copy: ptr.memory))
+        ptr = ptr.memory.ai_next
+    }
+    
+    freeaddrinfo(res_ptr)
+    return addresses
 }
 
 func getnameinfo(addr: UnsafeMutablePointer<Darwin.sockaddr>, flags: Int32 = 0) throws
@@ -1821,8 +1878,8 @@ internal func _fcntl(fd fd: CInt, cmd: CInt, value: CInt) -> CInt {
 
 
 /* ***********************************************************************
-* DISPATCH UTILITIES                                                     *
-* ********************************************************************* */
+ * DISPATCH UTILITIES                                                     *
+ * ********************************************************************* */
 extension dispatch_source_t {
     func onEvent(cb: (dispatch_source_t, CUnsignedLong) -> Void) {
         dispatch_source_set_event_handler(self) {

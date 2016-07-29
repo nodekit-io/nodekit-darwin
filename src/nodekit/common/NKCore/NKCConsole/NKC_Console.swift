@@ -19,28 +19,41 @@
  import Foundation
 
  typealias NKStringViewer = (msg: String, title: String) -> Void
+ 
  typealias NKUrlNavigator = (uri: String, title: String) -> Void
 
  class NKC_Console: NSObject, NKScriptExport {
 
     static var stringViewer: NKStringViewer? = nil
+ 
     static var urlNavigator: NKUrlNavigator? = nil
 
     class func attachTo(context: NKScriptContext) {
+    
         context.NKloadPlugin(NKC_Console(), namespace: "io.nodekit.platform.console", options: [String:AnyObject]())
+    
     }
 
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {
+    
         switch (forKey) {
+        
         case ".global":
+        
             return NKStorage.getPluginWithStub(stub, "lib/platform/console.js", NKNodeKit.self)
+       
         default:
+        
             return stub
+        
         }
+    
     }
 
     func log(msg: AnyObject) -> Void {
+    
         nklog(msg as? String ?? "INVALID LOG")
+    
     }
 
     func error(msg: String) -> Void {

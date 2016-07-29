@@ -22,65 +22,99 @@ import Foundation
 class NKE_IpcRenderer: NSObject, NKE_IpcProtocol {
 
     internal weak var _window: NKE_BrowserWindow? = nil
+   
     internal var _id: Int = 0
+    
     private var globalEvents: NKEventEmitter = NKEventEmitter.global
 
     override init() {
+    
         super.init()
+    
     }
 
     
     init(options: AnyObject) {
+    
         super.init()
+    
     }
     
     required init(id: Int) {
+    
         super.init()
 
         _id = id
+        
         guard let window = NKE_BrowserWindow.fromId(_id) as? NKE_BrowserWindow else {return;}
+        
         _window = window
 
          window._events.on("nk.IPCtoRenderer") { (item: NKE_IPC_Event) -> Void in
+        
             self.NKscriptObject?.invokeMethod("emit", withArguments: ["nk.IPCtoRenderer", item.sender, item.channel, item.replyId, item.arg], completionHandler: nil)
+        
         }
 
          window._events.on("nk.IPCReplytoRenderer") { (item: NKE_IPC_Event) -> Void in
+         
             self.NKscriptObject?.invokeMethod("emit", withArguments: ["nk.IPCReplytoRenderer", item.sender, item.channel, item.replyId, item.arg[0]], completionHandler: nil)
+        
         }
+    
     }
 
     // Messages to main are sent to the global events queue
+    
     func ipcSend(channel: String, replyId: String, arg: [AnyObject]) -> Void {
+        
         let payload = NKE_IPC_Event(sender: _id, channel: channel, replyId: replyId, arg: arg)
+        
         globalEvents.emit("nk.IPCtoMain", payload)
+    
     }
 
     // Replies to main are sent directly to the webContents window that sent the original message
+
     func ipcReply(dest: Int, channel: String, replyId: String, result: AnyObject) -> Void {
         guard let window = _window else {return;}
-     //   let payload = NKE_IPC_Event(sender: _id, channel: channel, replyId: replyId, arg: [result])
+   
         window._events.emit("nk.IPCReplytoMain", (sender: _id, channel: channel, replyId: replyId, arg: [result]))
+    
     }
+
 }
 
 extension NKE_IpcRenderer: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
+    
         let principal = NKE_IpcRenderer(id: context.NKid)
+        
         context.NKloadPlugin(principal, namespace: "io.nodekit.electro.ipcRenderer", options: [String:AnyObject]())
+    
     }
 
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {
+    
         switch (forKey) {
+        
         case ".global":
+        
             return NKStorage.getPluginWithStub(stub, "lib-electro/ipc-renderer.js", NKElectro.self)
+        
         default:
+        
             return stub
+        
         }
+    
     }
 
     class func scriptNameForSelector(selector: Selector) -> String? {
+    
         return selector == #selector(NKE_IpcRenderer.init(options:)) ? "" : nil
+
     }
+
 }

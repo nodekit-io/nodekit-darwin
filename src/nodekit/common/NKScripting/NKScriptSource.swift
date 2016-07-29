@@ -23,28 +23,45 @@ import Foundation
 public class NKScriptSource: NSObject {
 
     public let source: String
+
     public let cleanup: String?
+    
     public let filename: String
+    
     public let namespace: String?
 
     init(source: String, asFilename: String, namespace: String? = nil, cleanup: String? = nil) {
+    
         self.filename = asFilename
 
         if (cleanup != nil) {
+        
             self.cleanup = cleanup
+            
             self.namespace = namespace
+       
         } else if (namespace != nil) {
+
             self.cleanup = "delete \(namespace!)"
+            
             self.namespace = namespace!
+      
         } else {
+        
             self.namespace = nil
+            
             self.cleanup = nil
+        
         }
 
         if (filename == "") {
+        
             self.source = source
+       
         } else {
+        
             self.source = source + "\n//# sourceURL=" + filename
+        
         }
 
     }

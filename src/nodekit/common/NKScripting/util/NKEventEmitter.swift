@@ -33,7 +33,9 @@ import Foundation
 private var seq: Int = 1
 
 protocol NKEventSubscription {
+ 
     func remove()
+
 }
 
 class NKEventSubscriptionGeneric<T>: NKEventSubscription {
@@ -43,20 +45,31 @@ class NKEventSubscriptionGeneric<T>: NKEventSubscription {
     let handler: NKHandler
 
     private let emitter: NKEventEmitter
+
     private let eventType: String
+    
     private let id: Int
 
     init(emitter: NKEventEmitter, eventType: String,  handler: NKHandler) {
+    
         id = seq
+        
         seq += 1
+        
         self.eventType = eventType
+        
         self.emitter = emitter
+        
         self.handler = handler
+    
     }
 
     func remove() {
+    
         emitter.subscriptions[eventType]?.removeValueForKey(id)
+    
     }
+
 }
 
 class NKEventEmitter {
@@ -65,51 +78,81 @@ class NKEventEmitter {
     internal static var global: NKEventEmitter = NKSignalEmitter()
 
     private var currentSubscription: NKEventSubscription?
+
     private var subscriptions: [String: [Int:NKEventSubscription]] = [:]
 
     func on<T>(eventType: String, handler: (T) -> Void) -> NKEventSubscription {
+    
         var eventSubscriptions: [Int:NKEventSubscription]
 
         if let values = subscriptions[eventType] {
+        
             eventSubscriptions = values
+       
         } else {
+        
             eventSubscriptions = [:]
+        
         }
 
         let subscription = NKEventSubscriptionGeneric<T>(
+        
             emitter: self,
+            
             eventType: eventType,
+            
             handler: handler
+        
         )
 
         eventSubscriptions[subscription.id] = subscription
+        
         subscriptions[eventType] = eventSubscriptions
+       
         return subscription
     }
 
     func once<T>(event: String, handler: (T) -> Void) {
         on(event) { (data: T) -> Void in
+        
             self.currentSubscription?.remove()
+            
             handler(data)
+        
         }
+    
     }
 
     func removeAllListeners(eventType: String?) {
+    
         if let eventType = eventType {
+        
             subscriptions.removeValueForKey(eventType)
+      
         } else {
+        
             subscriptions.removeAll()
+       
         }
+    
     }
 
     func emit<T>(event: String, _ data: T) {
+    
         if let subscriptions = subscriptions[event] {
+        
             for (_, subscription) in subscriptions {
+            
                 currentSubscription = subscription
+                
                 (subscription as! NKEventSubscriptionGeneric<T>).handler(data)
+            
             }
+        
         }
+    
     }
+
 }
 
 private class NKSignalEmitter: NKEventEmitter {
@@ -117,39 +160,71 @@ private class NKSignalEmitter: NKEventEmitter {
     private var earlyTriggers: [String: Any] = [:]
     
     override func once<T>(event: String, handler: (T) -> Void) {
+
         let registerBlock = { () -> Void in
+        
             if let data = self.earlyTriggers[event] {
+            
                 self.earlyTriggers.removeValueForKey(event)
+                
                 handler(data as! T)
+                
                 return
+            
             }
+            
             self.on(event) { (data: T) -> Void in
+            
                 self.currentSubscription?.remove()
+                
                 handler(data)
+            
             }
+        
         }
         
         if (NSThread.isMainThread()) {
+        
             registerBlock()
+       
         } else {
+        
             dispatch_async(dispatch_get_main_queue(), registerBlock)
+        
         }
+    
     }
     
     override func emit<T>(event: String, _ data: T) {
+    
         let triggerBlock = { () -> Void in
+        
             if let subscriptions = self.subscriptions[event] {
+            
                 for (_, subscription) in subscriptions {
-                     (subscription as! NKEventSubscriptionGeneric<T>).handler(data)
+                
+                    (subscription as! NKEventSubscriptionGeneric<T>).handler(data)
+                
                 }
+           
             } else {
+            
                 self.earlyTriggers[event] = data
+            
             }
+        
         }
+        
         if (NSThread.isMainThread()) {
+        
             triggerBlock()
+        
         } else {
+        
             dispatch_async(dispatch_get_main_queue(), triggerBlock)
+        
         }
+    
     }
+
 }

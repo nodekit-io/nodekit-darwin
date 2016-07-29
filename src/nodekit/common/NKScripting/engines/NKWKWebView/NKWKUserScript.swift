@@ -22,14 +22,21 @@ import Foundation
 import WebKit
 
 class NKWKUserScript {
+  
     weak var webView: WKWebView?
+    
     var wkscript: WKUserScript?
+    
     let cleanup: String?
+    
     let filename: String
 
     init(context: WKWebView, script: NKScriptSource) {
+    
         self.webView = context
+        
         self.cleanup = script.cleanup
+        
         self.filename = script.filename ?? ""
 
         self.wkscript = WKUserScript(source: script.source,
@@ -40,11 +47,15 @@ class NKWKUserScript {
     }
 
     deinit {
+        
         eject()
+   
     }
-
+    
     private func inject() {
+    
         guard let webView = webView else { return }
+        
         guard let wkscript = wkscript else {return }
 
         // add to userContentController
@@ -52,35 +63,57 @@ class NKWKUserScript {
 
         // inject into current context
         if webView.URL != nil {
+        
             webView.evaluateJavaScript(wkscript.source) {
+            
                 if let error = $1 {
+                
                     log("!E\(webView.NKid) Failed to inject script. \(error) on file \(self.filename) ")
+               
                 } else {
-                   log("+E\(webView.NKid) Injected and executed \(self.filename) ")
+                
+                    log("+E\(webView.NKid) Injected and executed \(self.filename) ")
+                
                 }
+           
             }
+       
         } else {
+        
             log("+E\(webView.NKid) Injected \(self.filename) ")
+       
         }
+        
     }
     private func eject() {
+        
         guard let webView = webView else { return }
 
         // remove from userContentController
         let controller = webView.configuration.userContentController
+        
         let userScripts = controller.userScripts
+        
         controller.removeAllUserScripts()
+        
         userScripts.forEach {
+        
             if $0 != self.wkscript { controller.addUserScript($0) }
+        
         }
-
+    
         if webView.URL != nil, let cleanup = cleanup {
+        
             // clean up in current context
+            
             webView.evaluateJavaScript(cleanup, completionHandler: nil)
+       
         }
 
         log("+E\(webView.NKid) Removed script \(self.filename) ")
 
         self.wkscript = nil
+   
     }
+
 }

@@ -20,24 +20,41 @@ import Darwin
 import Foundation
 
 class NKC_Crypto: NSObject, NKScriptExport {
+    
     class func attachTo(context: NKScriptContext) {
+        
         context.NKloadPlugin(NKC_Crypto(), namespace: "io.nodekit.platform.crypto", options: [String:AnyObject]())
+        
     }
 
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {
+        
         switch (forKey) {
+        
         case ".global":
+        
             return NKStorage.getPluginWithStub(stub, "lib/platform/crypto.js", NKNodeKit.self)
+       
         default:
+        
             return stub
+        
         }
+    
     }
 
     func getRandomBytesSync(blockSize: Int) -> [UInt] {
+    
         var randomIV: [UInt] = [UInt]()
+        
         for _ in 0..<blockSize {
+        
             randomIV.append(UInt(UInt8(truncatingBitPattern: arc4random_uniform(256))))
+        
         }
+       
         return randomIV
+    
     }
- }
+ 
+}

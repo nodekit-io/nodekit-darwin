@@ -22,17 +22,25 @@ import Foundation
 private class NKDateFormatter {
 
     static var dateFormatter: NSDateFormatter = {
+        
         let dateFormatter = NSDateFormatter()
+        
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
         dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+        
         return dateFormatter
+   
     }()
 
 }
 
-
 extension NSDate {
+
     func toJSONDate() -> NSString {
+    
         return NKDateFormatter.dateFormatter.stringFromDate(self)
+    
     }
+
 }

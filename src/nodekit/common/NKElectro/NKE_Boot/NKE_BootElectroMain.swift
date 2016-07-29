@@ -30,13 +30,21 @@ class NKElectro: NSObject {
         context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.electro/lib-electro/_nke_main.js", namespace: "io.nodekit.electro.main"))
 
         NKE_App.attachTo(context)
+      
         NKE_BrowserWindow.attachTo(context)
+        
         NKE_WebContentsBase.attachTo(context)
+        
         NKE_Dialog.attachTo(context)
+        
         NKE_IpcMain.attachTo(context)
+        
         NKE_Menu.attachTo(context)
+        
         NKE_Protocol.attachTo(context)
+        
         NKE_Tray.attachTo(context)
+    
     }
 
 }

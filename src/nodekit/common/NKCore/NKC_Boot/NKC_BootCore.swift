@@ -24,15 +24,23 @@ private class NKC_BootCoreBootStrap : NSObject {}
 class NKC_BootCore: NSObject {
 
     class func addCorePlatform(context: NKScriptContext) {
+    
         // PROCESS SHOULD BE FIRST CORE PLATFORM PLUGIN
+        
         NKC_Process.attachTo(context)
         
         // LOAD REMAINING CORE PLATFORM PLUGINS
+        
         NKC_FileSystem.attachTo(context)
+        
         NKC_Console.attachTo(context)
+        
         NKC_Crypto.attachTo(context)
+        
         NKC_SocketTCP.attachTo(context)
+        
         NKC_SocketUDP.attachTo(context)
+        
         NKC_Timer.attachTo(context)
         
     }
@@ -40,10 +48,14 @@ class NKC_BootCore: NSObject {
     class func bootCore(context: NKScriptContext) {
     
         guard let script = NKStorage.getResource("lib/_nodekit_bootstrapper.js", NKNodeKit.self) else {
+        
             die("Failed to read bootstrapper script")
+        
         }
 
         context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.core/lib/_nodekit_bootstrapper.js", namespace: "io.nodekit.bootstrapper"))
         
+    
     }
+
 }

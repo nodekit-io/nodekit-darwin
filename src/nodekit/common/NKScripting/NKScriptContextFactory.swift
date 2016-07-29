@@ -19,9 +19,13 @@
 import Foundation
 
 public enum NKEngineType: Int {
+ 
     case JavaScriptCore  = 0
+    
     case Nitro = 1
+    
     case UIWebView = 2
+
 }
 
 public class NKScriptContextFactory {
@@ -29,24 +33,41 @@ public class NKScriptContextFactory {
     internal static var _contexts: Dictionary<Int, AnyObject> = Dictionary<Int, AnyObject>()
 
     internal class var sequenceNumber: Int {
+
         struct sequence {
+        
             static var number: Int = 0
+        
         }
+       
         let temp = sequence.number
+       
         sequence.number += 1
+       
         return temp
+    
     }
 
     public func createContext(options: [String: AnyObject] = Dictionary<String, AnyObject>(), delegate cb: NKScriptContextDelegate) {
-       let engine = NKEngineType(rawValue: (options["Engine"] as? Int)!) ?? NKEngineType.JavaScriptCore
+    
+        let engine = NKEngineType(rawValue: (options["Engine"] as? Int)!) ?? NKEngineType.JavaScriptCore
 
         switch engine {
+        
         case .JavaScriptCore:
-           self.createContextJavaScriptCore(options, delegate: cb)
-         case .Nitro:
+        
+            self.createContextJavaScriptCore(options, delegate: cb)
+         
+        case .Nitro:
+        
             self.createContextWKWebView(options, delegate: cb)
+        
         case .UIWebView:
+        
             self.createContextUIWebView(options, delegate: cb)
+        
         }
+    
     }
+
 }

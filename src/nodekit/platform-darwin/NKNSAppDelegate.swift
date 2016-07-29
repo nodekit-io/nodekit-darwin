@@ -21,18 +21,23 @@ import Cocoa
 class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
     
     internal static var options: Dictionary<String, AnyObject>?
+    
     internal static var delegate: NKScriptContextDelegate?
 
     private var splashWindow: NKE_BrowserWindow?
+    
     private let nodekit: NKNodeKit
     
     let app: NSApplication
 
     init(app: NSApplication) {
+    
         self.app = app
+        
         self.nodekit = NKNodeKit()
         
         let testMode = (NKNSAppDelegate.options?["nk.Test"] as? Bool) ?? false
+        
         let noSplash = (NKNSAppDelegate.options?["nk.NoSplash"] as? Bool) ?? false
         
         if (!testMode && !noSplash)
@@ -48,46 +53,68 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
             ]
             
             splashWindow = NKE_BrowserWindow(options: splash)
+        
         }
+    
     }
     
     // OS X Delegate Methods
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+    
         var options = NKNSAppDelegate.options ?? Dictionary<String, AnyObject>()
+        
         nodekit.start(&options, delegate: self)
+        
         NKEventEmitter.global.emit("nk.ApplicationDidFinishLaunching", ())
-     }
+     
+    }
 
     func applicationWillTerminate(aNotification: NSNotification) {
+    
         NKEventEmitter.global.emit("nk.ApplicationWillTerminate", ())
+        
         log("+Application Exit")
+    
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+    
         return false
+    
     }
     
     // NodeKit Delegate Methods
 
      func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
+    
         NKEventEmitter.global.once("nk.jsApplicationReady") { (data: AnyObject) -> Void in
             
             if (self.splashWindow != nil)
             {
                 
                 let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+        
                 dispatch_after(delayTime, dispatch_get_main_queue()) {
+                
                     self.splashWindow?.close()
+                    
                     self.splashWindow = nil
+                
                 }
+            
             }
+        
         }
 
         NKNSAppDelegate.delegate?.NKScriptEngineDidLoad(context)
+    
     }
 
      func NKScriptEngineReady(context: NKScriptContext) -> Void {
+       
         NKNSAppDelegate.delegate?.NKScriptEngineReady(context)
+    
     }
+    
 }

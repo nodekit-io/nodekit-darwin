@@ -25,72 +25,105 @@ class NKE_WebContentsUI: NKE_WebContentsBase {
     internal weak var webView: UIWebView? = nil
 
      override init() {
+        
         super.init()
+    
     }
 
     required init(window: NKE_BrowserWindow) {
+    
         super.init()
 
          _window = window
+        
         _id = window.id
 
-        // Event:  'did-fail-load'
-        // Event:  'did-finish-load'
-
         _window._events.on("did-finish-load") { (id: Int) in
-          self.NKscriptObject?.invokeMethod("emit", withArguments: ["did-finish-load"], completionHandler: nil)
+        
+            self.NKscriptObject?.invokeMethod("emit", withArguments: ["did-finish-load"], completionHandler: nil)
+        
         }
 
         _window._events.on("did-fail-loading") { (id: Int, error: String) in
-          self.NKscriptObject?.invokeMethod("emit", withArguments: ["did-fail-loading", error], completionHandler: nil)
+        
+            self.NKscriptObject?.invokeMethod("emit", withArguments: ["did-fail-loading", error], completionHandler: nil)
+        
         }
 
         webView = _window._webView as? UIWebView
 
         _initIPC()
-       }
+       
+    }
+
 }
 
 extension NKE_WebContentsUI: NKE_WebContentsProtocol {
 
-
     // Messages to renderer are sent to the window events queue for that renderer
     func ipcSend(channel: String, replyId: String, arg: [AnyObject]) -> Void {
+
         let payload = NKE_IPC_Event(sender: 0, channel: channel, replyId: replyId, arg: arg)
-         _window._events.emit("nk.IPCtoRenderer", payload)
+        
+        _window._events.emit("nk.IPCtoRenderer", payload)
+    
     }
 
     // Replies to renderer to the window events queue for that renderer
     func ipcReply(dest: Int, channel: String, replyId: String, result: AnyObject) -> Void {
         guard let window = _window else {return;}
+    
         let payload = NKE_IPC_Event(sender: 0, channel: channel, replyId: replyId, arg: [result])
+        
         window._events.emit("nk.IPCReplytoRenderer", payload)
+    
     }
 
     func loadURL(url: String, options: [String: AnyObject]) -> Void {
+    
         guard let webView = self.webView else {return;}
+        
         let request = _getURLRequest(url, options: options)
+        
         webView.loadRequest(request)
+    
     }
 
     func getURL() -> String { return self.webView?.stringByEvaluatingJavaScriptFromString("window.location") ?? "" }
+    
     func getTitle() -> String { return self.webView?.stringByEvaluatingJavaScriptFromString("document.title") ?? ""  }
+    
     func isLoading()  -> Bool { return self.webView?.loading ?? false }
 
     func stop() -> Void { self.webView?.stopLoading() }
+    
     func reload() -> Void { self.webView?.reload() }
+    
     func reloadIgnoringCache() -> Void { self.webView?.reload() }
+    
     func canGoBack() -> Bool { return self.webView?.canGoBack ?? false }
+    
     func canGoForward() -> Bool { return self.webView?.canGoForward ?? false }
+    
     func goBack() -> Void {self.webView?.goBack() }
+    
     func goForward() -> Void { self.webView?.goForward() }
 
     func executeJavaScript(code: String, userGesture: String) -> Void {
+    
         guard let context = _window._context else {return;}
+    
         context.NKevaluateJavaScript(code, completionHandler: nil)
+    
     }
+    
     func setUserAgent(userAgent: String) -> Void { NKE_WebContentsBase.NotImplemented() }
-    func getUserAgent()  -> String { return self.webView?.stringByEvaluatingJavaScriptFromString("navigator.userAgent") ?? ""  }
+    
+    func getUserAgent()  -> String {
+        
+        return self.webView?.stringByEvaluatingJavaScriptFromString("navigator.userAgent") ?? ""
+        
+    }
 
     /*  NOT IMPLEMENTED:
     func undo() -> Void { NKE_WebContentsBase.NotImplemented() }
@@ -156,4 +189,5 @@ extension NKE_WebContentsUI: NKE_WebContentsProtocol {
     // Event:  'devtools-closed'
     // Event:  'devtools-focused'
     // Event:  'devtools-opened'
+    
 }

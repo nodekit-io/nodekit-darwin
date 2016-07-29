@@ -21,9 +21,11 @@ import UIKit
 class NKUIAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelegate {
 
     var window: UIWindow?
+   
     var _nodekit: NKNodeKit?
     
     internal static var options: Dictionary<String, AnyObject>?
+    
     internal static var delegate: NKScriptContextDelegate?
 
     private var splashWindow: NKE_BrowserWindow?
@@ -31,14 +33,19 @@ class NKUIAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelega
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    
         window?.rootViewController = UIViewController()
 
         window?.makeKeyAndVisible()
 
        _nodekit = NKNodeKit()
-       _nodekit!.start(NKUIAppDelegate.options ?? Dictionary<String, AnyObject>(), delegate: self)
+       
+        _nodekit!.start(NKUIAppDelegate.options ?? Dictionary<String, AnyObject>(), delegate: self)
+       
         NKEventEmitter.global.emit("nk.ApplicationDidFinishLaunching", ())
+        
         return true
+    
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -60,20 +67,27 @@ class NKUIAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelega
     }
 
     func applicationWillTerminate(application: UIApplication) {
+        
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+      
         NKEventEmitter.global.emit("nk.ApplicationWillTerminate", ())
+        
         log("+Application Exit")
+    
     }
 
    // NodeKit Delegate Methods
     
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
+    
         NKUIAppDelegate.delegate?.NKScriptEngineDidLoad(context)
+    
     }
     
     func NKScriptEngineReady(context: NKScriptContext) -> Void {
-         NKUIAppDelegate.delegate?.NKScriptEngineReady(context)
+    
+        NKUIAppDelegate.delegate?.NKScriptEngineReady(context)
+    
     }
-
 
 }

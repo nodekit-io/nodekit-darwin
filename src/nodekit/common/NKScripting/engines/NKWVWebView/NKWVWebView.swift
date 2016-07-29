@@ -24,26 +24,44 @@ extension WebView: NKScriptContextHost {
 
     public func NKgetScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(),
         delegate cb: NKScriptContextDelegate) -> Void {
-            log("+NodeKit WebView-JavaScriptCore JavaScript Engine E\(id)")
-            objc_setAssociatedObject(self, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    
+        log("+NodeKit WebView-JavaScriptCore JavaScript Engine E\(id)")
+        
+        objc_setAssociatedObject(self, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
+        var item = Dictionary<String, AnyObject>()
+        
+        item["WebView"] = self
+        
+        NKScriptContextFactory._contexts[id] = item
             
-            var item = Dictionary<String, AnyObject>()
-            item["WebView"] = self
-            NKScriptContextFactory._contexts[id] = item
-            
-            self.frameLoadDelegate =  NKWVWebViewDelegate(id: id, webView: self, delegate: cb)
+        
+        self.frameLoadDelegate =  NKWVWebViewDelegate(id: id, webView: self, delegate: cb)
+    
     }
+
 }
 
 extension WebView {
+   
     var currentJSContext: JSContext? {
+    
         get {
+        
             let key = unsafeAddressOf(JSContext)
+            
             return objc_getAssociatedObject(self, key) as? JSContext
+       
         }
+        
         set(context) {
+        
             let key = unsafeAddressOf(JSContext)
+            
             objc_setAssociatedObject(self, key, context, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
         }
+    
     }
+
 }

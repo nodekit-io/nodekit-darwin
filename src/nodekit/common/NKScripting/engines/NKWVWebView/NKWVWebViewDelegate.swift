@@ -17,68 +17,106 @@
 */
 
 import Foundation
+
 import WebKit
 
 public class NKWVWebViewDelegate: NSObject, WebFrameLoadDelegate {
 
     weak var delegate: NKScriptContextDelegate?
+
     weak var webView: WebView?
+    
     var context: JSContext?
+    
     var id: Int
 
     init(id: Int, webView: WebView, delegate cb: NKScriptContextDelegate) {
+    
         self.delegate = cb
+        
         self.webView = webView
+        
         self.context = nil
+        
         self.id = id
+        
         super.init()
+        
         objc_setAssociatedObject(webView, unsafeAddressOf(self), self, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    
     }
 
     public func webView(sender: WebView!, didCreateJavaScriptContext context: JSContext!, forFrame: WebFrame!) {
-         let didCreateContext = {() -> Void in
+        
+        let didCreateContext = {() -> Void in
+        
             guard let webView = self.webView else {return;}
+            
             if (forFrame !== webView.mainFrame) {return}
+            
             guard let callback = self.delegate else {return;}
+            
             let id = self.id
+            
             self.context = context
+            
             webView.currentJSContext = context
+            
             objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 
             callback.NKScriptEngineDidLoad(context)
         }
 
         if (NSThread.isMainThread()) {
+            
             didCreateContext()
+       
         } else {
+        
             dispatch_async(dispatch_get_main_queue(), didCreateContext)
+        
         }
 
     }
 
     public func webView(sender: WebView!,
         didFinishLoadForFrame frame: WebFrame!) {
-            if (self.delegate == nil) {return;}
+        
+        if (self.delegate == nil) {return;}
 
             let didFinishLoad = {() -> Void in
+        
                 guard let webView = self.webView else {return;}
+                
                 if (frame !== webView.mainFrame) {return}
+                
                 guard let callback = self.delegate else {return;}
 
                 self.webView!.frameLoadDelegate = nil
+                
                 objc_setAssociatedObject(webView, unsafeAddressOf(self), nil, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                
                 self.delegate = nil
+                
                 self.webView = nil
+                
                 guard let context = self.context else { return; }
+                
                 self.context = nil
+                
                 callback.NKScriptEngineReady(context)
-            }
-
-            if (NSThread.isMainThread()) {
-                didFinishLoad()
-            } else {
-                dispatch_async(dispatch_get_main_queue(), didFinishLoad)
-            }
+            
+        }
+        
+        if (NSThread.isMainThread()) {
+        
+            didFinishLoad()
+            
+        } else {
+        
+            dispatch_async(dispatch_get_main_queue(), didFinishLoad)
+            
+        }
 
     }
 
