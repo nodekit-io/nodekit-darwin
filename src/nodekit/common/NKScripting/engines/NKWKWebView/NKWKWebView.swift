@@ -36,9 +36,27 @@ extension WKWebView: NKScriptContext, NKScriptContextHost {
         self.UIDelegate = NKWKWebViewUIDelegate(webView: self)
 
         objc_setAssociatedObject(self, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
+        self.NKPrepareEnvironment()
             
         cb.NKScriptEngineDidLoad(self)
     }
+    
+    private func NKPrepareEnvironment() -> Void {
+        
+        let context = self;
+        
+        let handler: WKScriptMessageHandler = WKWebViewLogger.current
+        
+        context.configuration.userContentController.addScriptMessageHandler(handler, name: "NKScriptingBridgeLog")
+        
+        let appjs = NKStorage.getResource("lib-scripting/init_nitro.js", NKScriptChannel.self)
+        
+        let script = "function loadinit(){\n" + appjs! + "\n}\n" + "loadinit();" + "\n"
+        
+        context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.scripting/lib-scripting/init_nitro.js", namespace: "io.nodekit.scripting.init"))
+    }
+
 
     public func NKloadPlugin(object: AnyObject, namespace: String, options: Dictionary<String, AnyObject> = Dictionary<String, AnyObject>() ) -> Void {
 
@@ -202,4 +220,18 @@ extension WKWebView: NKScriptContentController {
     
     }
 
+}
+
+public class WKWebViewLogger: NSObject, WKScriptMessageHandler {
+    
+    static var current = WKWebViewLogger()
+    
+    public func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
+    {
+        
+        guard unsafeBitCast(message.body, COpaquePointer.self) != nil else { return }
+        
+         log(message.body as! String)
+    }
+    
 }

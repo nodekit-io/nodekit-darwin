@@ -27,7 +27,10 @@ process.waitFor = function(signal) {
     window.prompt("nk.Signal", signal);
 }
 
-this.console = this.console || function () { };
-console.log = console.log || NKScriptingBridge.log;
+this.NKScriptingBridge = this.NKScriptingBridge || function () { };
 
-console.log("+Nitro (WKWebView) Engine Initialized");
+NKScriptingBridge.log = window.webkit.messageHandlers.NKScriptingBridgeLog.postMessage.bind(window.webkit.messageHandlers.NKScriptingBridgeLog);
+
+this.console = this.console || function () { };
+
+console.log = NKScriptingBridge.log;

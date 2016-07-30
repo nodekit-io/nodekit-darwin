@@ -35,5 +35,5 @@ class myNKDelegate: NSObject, NKScriptContextDelegate {
 NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WebKitDeveloperExtras")
 NSUserDefaults.standardUserDefaults().synchronize()
 
-NKNodeKit.start(["nk.NoSplash": true], delegate: myNKDelegate() )
+NKNodeKit.start(["nk.NoSplash": true,  "Engine" : NKEngineType.Nitro.rawValue], delegate: myNKDelegate() )
 

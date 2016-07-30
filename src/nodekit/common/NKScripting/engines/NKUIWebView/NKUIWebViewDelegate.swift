@@ -58,6 +58,9 @@ internal class NKUIWebViewDelegate: NSObject, UIWebViewDelegate {
         
         objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), self.id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
+        
+        context.NKPrepareEnvironment()
+        
         callback.NKScriptEngineDidLoad(context)
     }
 

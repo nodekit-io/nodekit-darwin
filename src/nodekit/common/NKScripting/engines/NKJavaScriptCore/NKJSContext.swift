@@ -33,8 +33,7 @@ extension JSContext: NKScriptContextHost {
         objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
         
-        
-        PrepareEnvironment(context)
+        context.NKPrepareEnvironment()
   
         cb.NKScriptEngineDidLoad(context)
         
@@ -42,7 +41,9 @@ extension JSContext: NKScriptContextHost {
     
     }
     
-    private func PrepareEnvironment(context: NKScriptContext) -> Void {
+    internal func NKPrepareEnvironment() -> Void {
+        
+        let context = self;
         
         let logjs: @convention(block) (String) -> () = { body in
             
@@ -50,10 +51,10 @@ extension JSContext: NKScriptContextHost {
             
         }
         
-        let scriptingBridge = JSValue(newObjectInContext: context as! JSContext)
+        let scriptingBridge = JSValue(newObjectInContext: context)
         
         scriptingBridge.setObject(unsafeBitCast(logjs, AnyObject.self), forKeyedSubscript: "log")
-        (context as! JSContext).setObject(unsafeBitCast(scriptingBridge, AnyObject.self), forKeyedSubscript: "NKScriptingBridge")
+        context.setObject(unsafeBitCast(scriptingBridge, AnyObject.self), forKeyedSubscript: "NKScriptingBridge")
         
         let appjs = NKStorage.getResource("lib-scripting/init_jsc.js", NKScriptChannel.self)
         

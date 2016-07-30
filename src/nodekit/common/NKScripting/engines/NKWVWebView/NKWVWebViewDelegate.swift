@@ -63,7 +63,9 @@ public class NKWVWebViewDelegate: NSObject, WebFrameLoadDelegate {
             webView.currentJSContext = context
             
             objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
+          
+            context.NKPrepareEnvironment()
+            
             callback.NKScriptEngineDidLoad(context)
         }
 
@@ -101,7 +103,7 @@ public class NKWVWebViewDelegate: NSObject, WebFrameLoadDelegate {
                 self.webView = nil
                 
                 guard let context = self.context else { return; }
-                
+               
                 self.context = nil
                 
                 callback.NKScriptEngineReady(context)

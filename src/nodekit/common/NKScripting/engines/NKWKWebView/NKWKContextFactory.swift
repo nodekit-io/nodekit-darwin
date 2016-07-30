@@ -39,7 +39,6 @@ extension NKScriptContextFactory {
         let id = NKScriptContextFactory.sequenceNumber
         
         webView.NKgetScriptContext(id, options: options, delegate: cb)
-
         
         var item = Dictionary<String, AnyObject>()
         
