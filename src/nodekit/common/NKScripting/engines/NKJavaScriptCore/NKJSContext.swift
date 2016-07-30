@@ -31,11 +31,35 @@ extension JSContext: NKScriptContextHost {
         log("+NodeKit JavaScriptCore JavaScript Engine E\(id)")
         
         objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
+        
+        
+        PrepareEnvironment(context)
   
         cb.NKScriptEngineDidLoad(context)
         
         cb.NKScriptEngineReady(context)
+    
+    }
+    
+    private func PrepareEnvironment(context: NKScriptContext) -> Void {
         
+        let logjs: @convention(block) (String) -> () = { body in
+            
+            log(body)
+            
+        }
+        
+        let scriptingBridge = JSValue(newObjectInContext: context as! JSContext)
+        
+        scriptingBridge.setObject(unsafeBitCast(logjs, AnyObject.self), forKeyedSubscript: "log")
+        (context as! JSContext).setObject(unsafeBitCast(scriptingBridge, AnyObject.self), forKeyedSubscript: "NKScriptingBridge")
+        
+        let appjs = NKStorage.getResource("lib-scripting/init_jsc.js", NKScriptChannel.self)
+        
+        let script = "function loadinit(){\n" + appjs! + "\n}\n" + "loadinit();" + "\n"
+        
+        context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.scripting/lib-scripting/init_jsc", namespace: "io.nodekit.scripting.init"))
     }
 }
 
@@ -117,7 +141,6 @@ extension JSContext: NKScriptContext {
         NSError?) -> Void)?) {
      
         let result = self.evaluateScript(javaScriptString, withSourceURL: withSourceURL)
-        
         completionHandler?(result, nil)
     }
 

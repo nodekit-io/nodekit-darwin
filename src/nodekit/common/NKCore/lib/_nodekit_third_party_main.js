@@ -21,6 +21,7 @@ var path = require('path');
 util.isBuffer = Buffer.isBuffer;
 global.process.sources = [];
 var EventEmitter = require('events').EventEmitter;
+console.log = io.nodekit.platform.console.log;
 
 console.warn = console.log;
 
@@ -97,7 +98,6 @@ if (Error.captureStackTrace === undefined) {
  * NODEKIT INITIALIZATION
  * Load Application package.json file, register request/response server, and load debug application
  */
-
 console.log("Starting PACKAGE.JSON");
 // INVOKE MAIN APP
 process.package =  module._load('app/package.json', null, false);

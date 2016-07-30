@@ -28,6 +28,6 @@ process.waitFor = function(signal) {
 }
 
 this.console = this.console || function () { };
-this.console.log = NKScriptingBridge.log;
+console.log = console.log || NKScriptingBridge.log;
 
-this.console.log("+++++JavaScriptCore Engine Initialized");
+console.log("+Nitro (WKWebView) Engine Initialized");

@@ -99,12 +99,12 @@ import Foundation
         
         NKC_BootCore.addCorePlatform(context)
         
-        NKC_BootCore.bootCore(context)
-        
         // NOTIFIY DELEGATE THAT SCRIPT ENGINE IS LOADED
         
         self.scriptContextDelegate?.NKScriptEngineDidLoad(context)
-    
+        
+        NKC_BootCore.bootCore(context)
+        
     }
     
     public func NKScriptEngineReady(context: NKScriptContext) -> Void {

@@ -92,10 +92,10 @@ extension NKE_IpcMain: NKScriptExport {
     
     }
 
-    class func scriptNameForSelector(selector: Selector) -> String? {
+ /*   class func scriptNameForSelector(selector: Selector) -> String? {
     
         return selector == #selector(NKE_IpcMain.init(options:)) ? "" : nil
     
-    }
+    } */
 
 }

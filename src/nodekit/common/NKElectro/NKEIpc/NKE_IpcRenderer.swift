@@ -111,10 +111,4 @@ extension NKE_IpcRenderer: NKScriptExport {
     
     }
 
-    class func scriptNameForSelector(selector: Selector) -> String? {
-    
-        return selector == #selector(NKE_IpcRenderer.init(options:)) ? "" : nil
-
-    }
-
 }
