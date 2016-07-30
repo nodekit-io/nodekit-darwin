@@ -21,19 +21,28 @@ import Foundation
 /* Uncomment the following import if using in a standalone project with NodeKit as a framework */
 // import NodeKit
 
-
 class myNKDelegate: NSObject, NKScriptContextDelegate {
+    
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
+        
         SamplePlugin.attachTo(context)
+        // NodeKit.attachTo(context)
+        
+        context.NKinjectJavaScript(NKScriptSource(source: "process.bootstrap('app/index.js');", asFilename: "boot"))
      }
     
     func NKScriptEngineReady(context: NKScriptContext) -> Void {
-      
+    
+         NKEventEmitter.global.emit("nk.jsApplicationReady", "" as AnyObject)
     }
 }
 
 NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WebKitDeveloperExtras")
+
 NSUserDefaults.standardUserDefaults().synchronize()
 
-NKNodeKit.start(["nk.NoSplash": true,  "Engine" : NKEngineType.Nitro.rawValue], delegate: myNKDelegate() )
-
+NodeKitHost.start([
+    "nk.NoSplash": true,
+    "nk.NoTaskBar": true,
+    "Engine" : NKEngineType.JavaScriptCore.rawValue
+    ], delegate: myNKDelegate() )

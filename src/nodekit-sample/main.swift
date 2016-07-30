@@ -24,7 +24,8 @@ import Foundation
 
 class myNKDelegate: NSObject, NKScriptContextDelegate {
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
-        SamplePlugin.attachTo(context)
+    //    SamplePlugin.attachTo(context)
+        NodeKit.attachTo(context)
       //  NKT_TestRunner.attachTo(context)
 
      }
@@ -54,8 +55,7 @@ NSUserDefaults.standardUserDefaults().synchronize()
     }
 } */
 
-NKNodeKit.start([String: AnyObject](), delegate: myNKDelegate() )
-
+NodeKitHost.start([String: AnyObject](), delegate: myNKDelegate() )
 
 
 

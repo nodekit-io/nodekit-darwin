@@ -33,7 +33,7 @@ class NKT_XCTestCase: XCTestCase {
             "nk.Test": true
         ]
         
-        NKNodeKit.start(options, delegate: myDelegate())
+        NodeKitHost.start(options, delegate: myDelegate())
         
         NKEventEmitter.global.once("nkt.Ready") { (count: Int) -> Void in
             finished = true
