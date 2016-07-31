@@ -41,7 +41,7 @@ NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WebKitDeveloperExtr
 
 NSUserDefaults.standardUserDefaults().synchronize()
 
-NodeKitHost.start([
+NKElectroHost.start([
     "nk.NoSplash": true,
     "nk.NoTaskBar": true,
     "Engine" : NKEngineType.JavaScriptCore.rawValue

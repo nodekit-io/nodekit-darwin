@@ -18,7 +18,7 @@
 
 import Cocoa
 
-class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
+class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
     
     internal static var options: Dictionary<String, AnyObject>?
     
@@ -26,7 +26,7 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
 
     private var splashWindow: NKE_BrowserWindow?
     
-    private let nodekit: NodeKitHost
+    private let nodekit: NKElectroHost
     
     let app: NSApplication
 
@@ -34,16 +34,16 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
     
         self.app = app
         
-        self.nodekit = NodeKitHost()
+        self.nodekit = NKElectroHost()
         
-        let testMode = (NKNSAppDelegate.options?["nk.Test"] as? Bool) ?? false
+        let testMode = (NKEAppDelegate.options?["nk.Test"] as? Bool) ?? false
         
-        let noSplash = (NKNSAppDelegate.options?["nk.NoSplash"] as? Bool) ?? false
+        let noSplash = (NKEAppDelegate.options?["nk.NoSplash"] as? Bool) ?? false
         
         if (!testMode && !noSplash)
         {
             
-            let splash: [String: AnyObject] = (NKNSAppDelegate.options?["nk.splashWindow"] as? [String: AnyObject]) ??  [
+            let splash: [String: AnyObject] = (NKEAppDelegate.options?["nk.splashWindow"] as? [String: AnyObject]) ??  [
                 "nk.browserType": "UIWebView",
                 "title": "",
                 "preloadURL": "internal://localhost/splash/views/StartupSplash.html",
@@ -62,7 +62,7 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
     
-        var options = NKNSAppDelegate.options ?? Dictionary<String, AnyObject>()
+        var options = NKEAppDelegate.options ?? Dictionary<String, AnyObject>()
         
         nodekit.start(&options, delegate: self)
         
@@ -107,13 +107,13 @@ class NKNSAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate 
         
         }
 
-        NKNSAppDelegate.delegate?.NKScriptEngineDidLoad(context)
+        NKEAppDelegate.delegate?.NKScriptEngineDidLoad(context)
     
     }
 
      func NKScriptEngineReady(context: NKScriptContext) -> Void {
        
-        NKNSAppDelegate.delegate?.NKScriptEngineReady(context)
+        NKEAppDelegate.delegate?.NKScriptEngineReady(context)
     
     }
     

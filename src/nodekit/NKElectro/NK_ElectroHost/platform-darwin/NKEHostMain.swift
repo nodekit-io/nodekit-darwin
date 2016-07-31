@@ -18,17 +18,17 @@
 
 import Cocoa
 
-class NKMainDesktop {
+class NKEHostMain {
     
       class func start(options: Dictionary<String, AnyObject>, delegate nkScriptDelegate: NKScriptContextDelegate?) {
      
         let app      = NSApplication.sharedApplication()
         
-        NKNSAppDelegate.options = options;
+        NKEAppDelegate.options = options;
         
-        NKNSAppDelegate.delegate = nkScriptDelegate;
+        NKEAppDelegate.delegate = nkScriptDelegate;
         
-        let nsDelegate = NKNSAppDelegate(app: app)
+        let nsDelegate = NKEAppDelegate(app: app)
         
         app.delegate = nsDelegate
         

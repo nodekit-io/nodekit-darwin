@@ -18,11 +18,11 @@
 
 import UIKit
 
-class NKUIAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelegate {
+class NKEAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelegate {
 
     var window: UIWindow?
    
-    var _nodekit: NodeKitHost?
+    var _nodekit: NKElectroHost?
     
     internal static var options: Dictionary<String, AnyObject>?
     
@@ -38,7 +38,7 @@ class NKUIAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelega
 
         window?.makeKeyAndVisible()
 
-       _nodekit = NodeKitHost()
+       _nodekit = NKElectroHost()
        
         _nodekit!.start(NKUIAppDelegate.options ?? Dictionary<String, AnyObject>(), delegate: self)
        
@@ -80,13 +80,13 @@ class NKUIAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelega
     
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
     
-        NKUIAppDelegate.delegate?.NKScriptEngineDidLoad(context)
+        NKEAppDelegate.delegate?.NKScriptEngineDidLoad(context)
     
     }
     
     func NKScriptEngineReady(context: NKScriptContext) -> Void {
     
-        NKUIAppDelegate.delegate?.NKScriptEngineReady(context)
+        NKEAppDelegate.delegate?.NKScriptEngineReady(context)
     
     }
 

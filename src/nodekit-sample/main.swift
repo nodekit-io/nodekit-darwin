@@ -55,7 +55,7 @@ NSUserDefaults.standardUserDefaults().synchronize()
     }
 } */
 
-NodeKitHost.start([String: AnyObject](), delegate: myNKDelegate() )
+NKElectroHost.start([String: AnyObject](), delegate: myNKDelegate() )
 
 
 

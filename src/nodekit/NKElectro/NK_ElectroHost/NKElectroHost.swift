@@ -18,22 +18,12 @@
 
 import Foundation
 
-@objc public class NodeKitHost: NSObject, NKScriptContextDelegate {
+@objc public class NKElectroHost: NSObject, NKScriptContextDelegate {
     
     // Common Public Methods
     
     public class func start() {
-
-        #if os(iOS)
-        
-            NKMainMobile.start(Dictionary<String, AnyObject>(), delegate: nil)
-        
-        #elseif os(OSX)
-        
-            NKMainDesktop.start(Dictionary<String, AnyObject>(), delegate: nil)
-       
-        #endif
-    
+            NKEHostMain.start(Dictionary<String, AnyObject>(), delegate: nil)
     }
     
     public class func start(options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate? = nil) {
@@ -50,17 +40,8 @@ import Foundation
         
         } else {
         
-           
-            #if os(iOS)
-            
-                NKMainMobile.start(options, delegate: delegate)
-        
-            #elseif os(OSX)
-            
-                NKMainDesktop.start(options, delegate: delegate)
-      
-            #endif
-        
+           NKEHostMain.start(options, delegate: delegate)
+     
         }
     
     }
@@ -117,7 +98,7 @@ import Foundation
 
 class NKMainNoUI {
     
-    private static let nodekit: NodeKitHost = NodeKitHost()
+    private static let nodekit: NKElectroHost = NKElectroHost()
     
     class func start(options: Dictionary<String, AnyObject>, delegate nkScriptDelegate: NKScriptContextDelegate?) {
     

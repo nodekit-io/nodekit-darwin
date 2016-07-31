@@ -50,7 +50,7 @@ extension NKE_BrowserWindow {
 
                 if (urlpath == nil) {
                 
-                    urlpath = NSBundle(forClass: NodeKitHost.self).pathForResource("StartupSplash", ofType: "html", inDirectory: "splash/views/")
+                    urlpath = NSBundle(forClass: NKElectroHost.self).pathForResource("StartupSplash", ofType: "html", inDirectory: "splash/views/")
                 }
 
                 url = NSURL.fileURLWithPath(urlpath!)

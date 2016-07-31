@@ -2,6 +2,7 @@
 * nodekit.io
 *
 * Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
+* Portions Copyright (c) 2013 GitHub, Inc. under MIT License
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,20 +17,19 @@
 * limitations under the License.
 */
 
-import UIKit
+import Foundation
 
-public class NKMainMobile {
+extension NKElectro {
 
-    public class func start (options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate?) {
+    static func bootToRenderer(context: NKScriptContext) {
         
-        NKUIAppDelegate.options = options;
-    
-        NKUIAppDelegate.delegate = delegate;
+        let appjs = NKStorage.getResource("lib-electro/_nke_renderer", NKElectro.self)
+        
+        let script = "function loadbootstrap(){\n" + appjs! + "\n}\n" + "loadbootstrap();" + "\n"
+        
+        context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.electro/lib-electro/_nke_renderer.js", namespace: "io.nodekit.electro.renderer"))
 
-        UIApplicationMain(Process.argc, Process.unsafeArgv, NSStringFromClass(UIApplication),
-                          
-            NSStringFromClass(NKUIAppDelegate))
+        NKE_IpcRenderer.attachTo(context)
 
-        }
-    
+    }
 }
