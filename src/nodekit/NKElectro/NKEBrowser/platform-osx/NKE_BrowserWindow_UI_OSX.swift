@@ -18,8 +18,6 @@
 
 import Foundation
 
-import NKScripting
-
 import WebKit
 
 extension NKE_BrowserWindow: WebUIDelegate {

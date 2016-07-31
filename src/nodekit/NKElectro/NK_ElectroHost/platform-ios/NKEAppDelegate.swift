@@ -18,8 +18,6 @@
 
 import UIKit
 
-import NKScripting
-
 class NKEAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelegate {
 
     var window: UIWindow?

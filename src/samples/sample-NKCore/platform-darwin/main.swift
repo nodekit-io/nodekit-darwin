@@ -2,7 +2,6 @@
  * nodekit.io
  *
  * Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
- * Portions Copyright (c) 2013 GitHub, Inc. under MIT License
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +16,17 @@
  * limitations under the License.
  */
 
-import Foundation
+import Cocoa
 
-protocol NKE_DialogProtocol: NKScriptExport {
+let app      = NSApplication.sharedApplication()
+let delegate = SampleAppDelegate()
+app.delegate = delegate
+app.setActivationPolicy(.Accessory)
+atexit_b { app.setActivationPolicy(.Prohibited); return }
 
-    func showOpenDialog(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?) -> Void
-   
-    func showSaveDialog(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?)-> Void
-    
-    func showMessageBox(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?) -> Void
-    
-    func showErrorBox(title: String, content: String) -> Void
 
-}
+NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WebKitDeveloperExtras")
+
+NSUserDefaults.standardUserDefaults().synchronize()
+
+app.run()

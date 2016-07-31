@@ -19,8 +19,6 @@
 
 import Foundation
 
-import NKScripting
-
 class NKE_IpcRenderer: NSObject, NKE_IpcProtocol {
 
     internal weak var _window: NKE_BrowserWindow? = nil

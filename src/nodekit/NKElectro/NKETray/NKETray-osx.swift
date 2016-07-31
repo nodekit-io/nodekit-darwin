@@ -18,8 +18,7 @@
  */
 
 import Foundation
-
-import NKScripting
+import Cocoa
 
 class NKE_Tray: NSObject {
     

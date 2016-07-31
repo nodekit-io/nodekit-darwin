@@ -18,8 +18,6 @@
 
 import Foundation
 
-import NKScripting
-
 class NKE_ProtocolFileDecode: NSObject {
 
     var resourcePath: NSString?   // The path to the bundle resource
@@ -42,7 +40,7 @@ class NKE_ProtocolFileDecode: NSObject {
 
         let _mainBundle: NSBundle = NKStorage.mainBundle
         
-        let _nodeKitBundle: NSBundle = NSBundle(forClass: NKStorage.self)
+        let _nodeKitBundle: NSBundle = NSBundle(forClass: NKElectro.self)
 
         let _appPath: NSString = (_mainBundle.bundlePath as NSString).stringByDeletingLastPathComponent
         

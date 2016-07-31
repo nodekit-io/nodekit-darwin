@@ -21,8 +21,6 @@ import Foundation
 
 import WebKit
 
-import NKScripting
-
 // MUST INHERIT
 class NKE_WebContentsBase: NSObject {
 

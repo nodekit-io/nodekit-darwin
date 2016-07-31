@@ -19,16 +19,18 @@
 
 import Foundation
 
-class NodeKit: NSObject {
+public class NodeKit: NSObject {
     
-    class func attachTo(context: NKScriptContext) {
+    public class func attachTo(context: NKScriptContext) {
         NodeKit.addCorePlatform(context);
         NodeKit.bootCore(context);
     }
 
 
-    class func addCorePlatform(context: NKScriptContext) {
-    
+    public class func addCorePlatform(context: NKScriptContext) {
+       
+        NKStorage.includeBundle(NSBundle(forClass: NodeKit.self))
+        
         // PROCESS SHOULD BE FIRST CORE PLATFORM PLUGIN
         
         NKC_Process.attachTo(context)
@@ -49,11 +51,11 @@ class NodeKit: NSObject {
         
     }
     
-    class func bootCore(context: NKScriptContext) {
+    public class func bootCore(context: NKScriptContext) {
     
         guard let script = NKStorage.getResource("lib/_nodekit_bootstrapper.js", NodeKit.self) else {
         
-            die("Failed to read bootstrapper script")
+            NKLogging.die("Failed to read bootstrapper script")
         
         }
 

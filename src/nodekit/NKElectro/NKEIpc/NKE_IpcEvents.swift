@@ -19,8 +19,6 @@
 
 import Foundation
 
-import NKScripting
-
 internal struct NKE_IPC_Event {
     
     var sender: Int

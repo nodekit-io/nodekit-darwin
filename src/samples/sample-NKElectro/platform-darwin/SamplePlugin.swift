@@ -19,8 +19,8 @@
 import Foundation
 import Cocoa
 import WebKit
-import NKScripting
 import NKElectro
+import NKScripting
 
 protocol SamplePluginProtocol: NKScriptExport {
     func logconsole(text: AnyObject?) -> Void

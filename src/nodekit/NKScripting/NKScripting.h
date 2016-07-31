@@ -18,7 +18,12 @@
  * limitations under the License.
  */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+
+#ifndef NKScripting
+#define NKScripting
+#endif
+
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -1,6 +1,7 @@
-/**
+/*
+ * nodekit.io
+ *
  * Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
- * Portions Copyright 2015 IBM Corp. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +16,21 @@
  * limitations under the License.
  */
 
-var conversation_id, client_id;
+import Foundation
+import NKScripting
+import NKCore
 
-$(document).ready(function () {
-    var chatApp = new NKChatUI();
-});
+class SampleScriptDelegate: NSObject, NKScriptContextDelegate {
+    
+    func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
+        
+        SamplePlugin.attachTo(context)
+        NodeKit.attachTo(context)
+        
+    }
+    
+    func NKScriptEngineReady(context: NKScriptContext) -> Void {
+        
+    }
+}
+

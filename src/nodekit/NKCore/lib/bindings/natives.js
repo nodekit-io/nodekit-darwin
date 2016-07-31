@@ -92,18 +92,30 @@ var source = {};
 
 /* CUSTOM NODEKIT ADDITIONS*/
 [
-    'electro_protocol', 'platform'
+ 'platform'
  ].forEach(function (name) {
            source[name] = getSource('lib/builtin-nodekit/' + name );
            });
 
-[
- 'electro'
- ].forEach(function (name) {
-           source[name] = getSource(name );
-           });
+/* CUSTOM NODEKIT ELECTRO ADDITIONS*/
+if (io.nodekit.electro) {
+    
+    [
+     'electro'
+     ].forEach(function (name) {
+               source[name] = getSource(name );
+               });
+    [
+     
+     'electro_protocol'
+     ].forEach(function (name) {
+               source[name] = getSource('lib/builtin-nodekit/' + name );
+               });
+    
+    source['electron'] = source['electro'];
+    
+}
 
-source['electron'] = source['electro'];
 
 /* CUSTOM NODE.JS API ADDITIONS*/
   source["_third_party_main"] = getSource('lib/_nodekit_third_party_main.js');

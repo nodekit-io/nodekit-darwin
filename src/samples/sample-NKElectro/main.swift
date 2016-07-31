@@ -17,8 +17,8 @@
 */
 
 import Foundation
-import NKScripting
 import NKElectro
+import NKScripting
 
 /* Uncomment the following import if using in a standalone project with NodeKit as a framework */
 // import NodeKit

@@ -19,8 +19,6 @@
 
 import Foundation
 
-import NKScripting
-
 protocol NKE_IpcProtocol: NKScriptExport {
     
     func ipcSend(channel: String, replyId: String, arg: [AnyObject]) -> Void

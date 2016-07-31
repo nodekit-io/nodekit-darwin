@@ -17,16 +17,14 @@
 */
 
 import Foundation
-
-/* Uncomment the following import if using in a standalone project with NodeKit as a framework */
-// import NodeKit
+import NKScripting
+import NKCore
+import NKElectro
 
 class myNKDelegate: NSObject, NKScriptContextDelegate {
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
-    //    SamplePlugin.attachTo(context)
+        SamplePlugin.attachTo(context)
         NodeKit.attachTo(context)
-      //  NKT_TestRunner.attachTo(context)
-
      }
     
     func NKScriptEngineReady(context: NKScriptContext) -> Void {

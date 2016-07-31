@@ -52,12 +52,12 @@
 
     func log(msg: AnyObject) -> Void {
     
-        nklog(msg as? String ?? "INVALID LOG")
+        NKLogging.log(msg as? String ?? "INVALID LOG")
     
     }
 
     func error(msg: String) -> Void {
-        nklog(msg)
+        NKLogging.log(msg)
     }
 
 }

@@ -19,9 +19,6 @@
 
 import Foundation
 
-import NKScripting
-
-
 class NKE_IpcMain: NSObject, NKE_IpcProtocol {
   
     private var globalEvents: NKEventEmitter = NKEventEmitter.global

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E48172BF1C99B65C00DD09AF"
-               BuildableName = "NodeKit.framework"
-               BlueprintName = "nodekit-Mac"
+               BlueprintIdentifier = "E4EBA59F1D4E537900687BD5"
+               BuildableName = "NKScripting.framework"
+               BlueprintName = "NKScripting-Mac"
                ReferencedContainer = "container:nodekit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E48172C91C99B65D00DD09AF"
-               BuildableName = "nodekit-MacTests.xctest"
-               BlueprintName = "nodekit-MacTests"
-               ReferencedContainer = "container:nodekit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E48172BF1C99B65C00DD09AF"
-            BuildableName = "NodeKit.framework"
-            BlueprintName = "nodekit-Mac"
-            ReferencedContainer = "container:nodekit.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -64,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E48172BF1C99B65C00DD09AF"
-            BuildableName = "NodeKit.framework"
-            BlueprintName = "nodekit-Mac"
+            BlueprintIdentifier = "E4EBA59F1D4E537900687BD5"
+            BuildableName = "NKScripting.framework"
+            BlueprintName = "NKScripting-Mac"
             ReferencedContainer = "container:nodekit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E48172BF1C99B65C00DD09AF"
-            BuildableName = "NodeKit.framework"
-            BlueprintName = "nodekit-Mac"
+            BlueprintIdentifier = "E4EBA59F1D4E537900687BD5"
+            BuildableName = "NKScripting.framework"
+            BlueprintName = "NKScripting-Mac"
             ReferencedContainer = "container:nodekit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -1,8 +1,5 @@
-/*
- * nodekit.io
- *
+/**
  * Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
- * Portions Copyright (c) 2013 GitHub, Inc. under MIT License
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +14,4 @@
  * limitations under the License.
  */
 
-import Foundation
-
-// Tray not applicable for iOS
-
-class NKE_Tray: NSObject {
-    
-}
-
-extension NKE_Tray: NKScriptExport {
-    
-    static func attachTo(context: NKScriptContext) {
-     
-    }
-
-}
+io.nodekit.test.logconsole("STARTING SAMPLE NODEKIT APPLICATION");

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E48172DC1C99B69900DD09AF"
-               BuildableName = "NodeKit.framework"
-               BlueprintName = "nodekit-iOS"
+               BlueprintIdentifier = "E4EBA5EA1D4E563E00687BD5"
+               BuildableName = "NKElectro.framework"
+               BlueprintName = "NKElectro-Mac"
                ReferencedContainer = "container:nodekit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E48172E51C99B69A00DD09AF"
-               BuildableName = "nodekit-iOSTests.xctest"
-               BlueprintName = "nodekit-iOSTests"
-               ReferencedContainer = "container:nodekit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E48172DC1C99B69900DD09AF"
-            BuildableName = "NodeKit.framework"
-            BlueprintName = "nodekit-iOS"
-            ReferencedContainer = "container:nodekit.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -64,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E48172DC1C99B69900DD09AF"
-            BuildableName = "NodeKit.framework"
-            BlueprintName = "nodekit-iOS"
+            BlueprintIdentifier = "E4EBA5EA1D4E563E00687BD5"
+            BuildableName = "NKElectro.framework"
+            BlueprintName = "NKElectro-Mac"
             ReferencedContainer = "container:nodekit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -82,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E48172DC1C99B69900DD09AF"
-            BuildableName = "NodeKit.framework"
-            BlueprintName = "nodekit-iOS"
+            BlueprintIdentifier = "E4EBA5EA1D4E563E00687BD5"
+            BuildableName = "NKElectro.framework"
+            BlueprintName = "NKElectro-Mac"
             ReferencedContainer = "container:nodekit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

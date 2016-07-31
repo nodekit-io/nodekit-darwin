@@ -30,25 +30,25 @@ import Foundation
 import CoreFoundation
 
 @objc protocol NKC_SwiftSocketProtocol: class {
-
+    
     optional func socket(socket: NKC_SwiftSocket, didAcceptNewSocket newSocket: NKC_SwiftSocket)
-  
+    
     optional  func socket(socket: NKC_SwiftSocket, didConnectToHost host: String!, port: Int32)
-  
+    
     optional func socket(socket: NKC_SwiftSocket, didReceiveData data: NSData!, withTag tag: Int)
-  
+    
     func socket(socket: NKC_SwiftSocket, didReceiveData data: NSData!, sender host: String?, port: Int32)
-  
+    
     optional func socket(socket: NKC_SwiftSocket, didDisconnectWithError err: NSError)
-
+    
 }
 
 class NKC_SwiftSocket: NSObject {
     
     var fd      : Int32
-
+    
     var isValid: Bool { return fd >= 0 }
-
+    
     var address : NKC_AddrInfo
     
     private(set)    lazy var peerAddress: NKC_AddrInfo? = {
@@ -67,21 +67,21 @@ class NKC_SwiftSocket: NSObject {
     
     private(set)    lazy var connectedPort: Int32? = {
         [unowned self] in
-    
+        
         return self.peerAddress?.port
         
         }()
     
     private(set)    lazy var localHost: String? = {
         [unowned self] in
-    
+        
         return self.address.hostname
         
         }()
     
     private(set)    lazy var localPort: Int32? = {
         [unowned self] in
-    
+        
         return self.address.port
         
         }()
@@ -111,25 +111,25 @@ class NKC_SwiftSocket: NSObject {
     var readBufferPtr  = UnsafeMutablePointer<CChar>.alloc(4096 + 2)
     
     var readBufferSize : Int = 4096 {
-    
-        didSet {
         
-            if readBufferSize != oldValue {
+        didSet {
             
+            if readBufferSize != oldValue {
+                
                 readBufferPtr.dealloc(oldValue + 2)
                 
                 readBufferPtr = UnsafeMutablePointer<CChar>.alloc(readBufferSize + 2)
-            
+                
             }
-        
+            
         }
-    
+        
     }
     
     /// Constructs an instance from a pre-exsisting file descriptor and address.
     init(socket: Int32, address addr: addrinfo,
-        shouldReuseAddress: Bool = false) {
-    
+         shouldReuseAddress: Bool = false) {
+        
         fd = socket
         
         address = NKC_AddrInfo(copy: addr)
@@ -137,7 +137,7 @@ class NKC_SwiftSocket: NSObject {
         closed = true
         
         self.shouldReuseAddress = shouldReuseAddress
-      
+        
     }
     
     /// Constructs a socket from the given requirements.
@@ -145,13 +145,13 @@ class NKC_SwiftSocket: NSObject {
         domain: NKC_DomainAddressFamily,
         type: NKC_SwiftSocketType,
         proto: NKC_CommunicationProtocol
-         ) {
-    
+        ) {
+        
         fd = Darwin.socket(
-                domain.systemValue,
-                type.systemValue,
-                proto.systemValue
-            )
+            domain.systemValue,
+            type.systemValue,
+            proto.systemValue
+        )
         
         address = NKC_AddrInfo()
         
@@ -162,12 +162,12 @@ class NKC_SwiftSocket: NSObject {
         address.addrinfo.ai_protocol = proto.systemValue
         
         closed = true
-    
+        
     }
     
     /// Copys `address` and initalises the socket from the `fd` given.
     private init(copy address: NKC_AddrInfo, fd: Int32) {
-    
+        
         self.address = address
         
         self.closed = true

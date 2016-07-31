@@ -21,8 +21,6 @@ import Foundation
 
 import WebKit
 
-import NKScripting
-
 class NKE_WebContentsWK: NKE_WebContentsBase {
 
     internal weak var webView: WKWebView? = nil

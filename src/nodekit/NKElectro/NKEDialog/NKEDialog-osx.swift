@@ -21,8 +21,6 @@ import Foundation
 
 import Cocoa
 
-import NKScripting
-
 extension NKE_Dialog: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {

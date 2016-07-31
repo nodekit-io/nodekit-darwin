@@ -2,7 +2,8 @@
  * nodekit.io
  *
  * Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
- * Portions Copyright (c) 2013 GitHub, Inc. under MIT License
+ * Portions Copyright 2015 XWebView
+ * Portions Copyright (c) 2014 Intel Corporation.  All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +18,9 @@
  * limitations under the License.
  */
 
-import Foundation
+#ifndef NKElectro
+#define NKElectro
 
-protocol NKE_DialogProtocol: NKScriptExport {
+#import <NKScripting/NKScripting.h>
 
-    func showOpenDialog(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?) -> Void
-   
-    func showSaveDialog(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?)-> Void
-    
-    func showMessageBox(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?) -> Void
-    
-    func showErrorBox(title: String, content: String) -> Void
-
-}
+#endif

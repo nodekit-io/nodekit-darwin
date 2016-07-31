@@ -19,6 +19,7 @@
 import Foundation
 import Cocoa
 import WebKit
+import NKScripting
 
 protocol SamplePluginProtocol: NKScriptExport {
     func logconsole(text: AnyObject?) -> Void
@@ -32,7 +33,7 @@ class SamplePlugin: NSObject, SamplePluginProtocol {
     }
 
     func logconsole(text: AnyObject?) -> Void {
-        log(text as? String! ?? "")
+        NKLogging.log(text as? String! ?? "")
     }
 
     func alertSync(text: AnyObject?) -> String {

@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+
 //MODULE DEPENDENCIES
 
 var events = require('events');
@@ -53,45 +54,45 @@ BrowserServer.prototype.listen = function (port, host) {
 
 BrowserServer.prototype.invoke = function (request) {
     var id = request["id"];
-
+    
     var context = Object.create(function HttpContext() { });
     context.socket = new EventEmitter();
     var req = new IncomingMessage(context.socket);
     context.req = req;
     context.res = new OutgoingMessage(context.socket);;
-
+    
     req.method = request["method"] || 'GET'
     req.url = request["url"]
     req.headers = request["headers"] || []
     req.headers["Content-Length"] = request["length"]
-
+    
     if (req.method == 'POST') {
         req.body.setData(request["body"])
         req.headers["Content-Length"] = request["length"]
     }
-
+    
     context.res.on('finish', function () {
-        var res = context.res;
-        var data = res.getBody();
-        res.headers["access-control-allow-origin"] = "*";
-        protocol.callbackEnd(id, { 'data': data, 'headers': res.headers, 'statusCode': res.statusCode })
-
-        for (var _key in context) {
-            if (context.hasOwnProperty(_key))
-                delete context[_key];
-        };
-        context = null;
-        data = null;
-        res = null;
-
-    });
+                   var res = context.res;
+                   var data = res.getBody();
+                   res.headers["access-control-allow-origin"] = "*";
+                   protocol.callbackEnd(id, { 'data': data, 'headers': res.headers, 'statusCode': res.statusCode })
+                   
+                   for (var _key in context) {
+                   if (context.hasOwnProperty(_key))
+                   delete context[_key];
+                   };
+                   context = null;
+                   data = null;
+                   res = null;
+                   
+                   });
     try {
         this.emit("request", context.req, context.res);
-
+        
     } catch (e) {
         console.error(e);
     }
-
+    
 }
 
 exports.createServer = function (scheme, requestListener) {
@@ -233,31 +234,31 @@ function IncomingMessage(socket) {
     this.url = '';
     this.method = null;
     this.body = new RequestStream()
-
-
+    
+    
     this.httpVersionMajor = 1;
     this.httpVersionMinor = 1;
     this.httpVersion = this.httpVersionMajor + "." + this.httpVersionMinor;
 }
 
 Object.defineProperty(IncomingMessage.prototype, "rawHeaders", {
-    get: function () {
-        var ret = [];
-        for (var key in this.headers) {
-            ret.push(key);
-            ret.push(this.headers);
-        };
-        return ret;
-    }
-});
+                      get: function () {
+                      var ret = [];
+                      for (var key in this.headers) {
+                      ret.push(key);
+                      ret.push(this.headers);
+                      };
+                      return ret;
+                      }
+                      });
 
 Object.defineProperty(IncomingMessage.prototype, "trailers", {
-    get: function () { return {}; }
-});
+                      get: function () { return {}; }
+                      });
 
 Object.defineProperty(IncomingMessage.prototype, "rawTrailers", {
-    get: function () { return []; }
-});
+                      get: function () { return []; }
+                      });
 
 IncomingMessage.prototype.getHeader = function HttpBrowserRequestGetHeader(key) {
     return private_getIgnoreCase(this.headers, key);
@@ -303,7 +304,7 @@ OutgoingMessage.prototype.addTrailers = function addTrailers(trailers) {
 
 OutgoingMessage.prototype.writeHead = function HttpBrowserResponseWriteHead(statusCode, headers) {
     this.statusCode = statusCode;
-
+    
     var keys = Object.keys(headers);
     for (var i = 0; i < keys.length; i++) {
         var k = keys[i];

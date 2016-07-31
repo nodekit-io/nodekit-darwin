@@ -18,8 +18,6 @@
 
 import Foundation
 
-import NKScripting
-
 @objc public class NKElectroHost: NSObject, NKScriptContextDelegate {
     
     // Common Public Methods

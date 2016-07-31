@@ -16,7 +16,7 @@
 * limitations under the License.
 */
  
- import Foundation
+import Foundation
 
 class NKC_Timer: NSObject, NKScriptExport {
 

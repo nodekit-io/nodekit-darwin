@@ -77,7 +77,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
         return temp
     }
 
-    internal static var defaultQueue: dispatch_queue_t = {
+    public static var defaultQueue: dispatch_queue_t = {
         
         let label = "io.nodekit.scripting.default-queue"
         

@@ -152,7 +152,7 @@ class NKScriptTypeInfo: CollectionType {
     
     private static let exclusion: Set<Selector> = {
     
-        var methods = instanceMethods(forProtocol: NKScriptExport.self)
+        var methods = NKInstanceMethods(forProtocol: NKScriptExport.self)
         
         methods.remove(#selector(NKScriptExport.invokeDefaultMethodWithArguments(_:)))
         
@@ -444,7 +444,7 @@ extension NKScriptTypeInfo {
 
 }
 
-internal func instanceMethods(forProtocol aProtocol: Protocol) -> Set<Selector> {
+public func NKInstanceMethods(forProtocol aProtocol: Protocol) -> Set<Selector> {
 
     var selectors = Set<Selector>()
     

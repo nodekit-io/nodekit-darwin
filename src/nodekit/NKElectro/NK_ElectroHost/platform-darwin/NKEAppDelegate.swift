@@ -18,8 +18,6 @@
 
 import Cocoa
 
-import NKScripting
-
 class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
     
     internal static var options: Dictionary<String, AnyObject>?

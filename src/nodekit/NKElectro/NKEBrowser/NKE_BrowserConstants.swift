@@ -19,8 +19,6 @@
 
 import Foundation
 
-import NKScripting
-
 public enum NKEBrowserType: String {
   
     case WKWebView = "WKWebView"

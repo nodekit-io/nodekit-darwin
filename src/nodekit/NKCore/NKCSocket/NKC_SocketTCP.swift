@@ -53,7 +53,7 @@
     }
 
     private static let exclusion: Set<Selector> = {
-        var methods = instanceMethods(forProtocol: NKC_SwiftSocketProtocol.self)
+        var methods = NKInstanceMethods(forProtocol: NKC_SwiftSocketProtocol.self)
           //    methods.remove(Selector("invokeDefaultMethodWithArguments:"))
         return methods.union([
             //       Selector(".cxx_construct"),

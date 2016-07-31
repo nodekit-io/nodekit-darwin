@@ -19,6 +19,7 @@
 import Foundation
 import Cocoa
 import WebKit
+import NKScripting
 
 protocol SamplePluginProtocol: NKScriptExport {
     func logconsole(text: AnyObject?) -> Void
@@ -32,7 +33,7 @@ class SamplePlugin: NSObject, SamplePluginProtocol {
     }
 
     func logconsole(text: AnyObject?) -> Void {
-        log(text as? String! ?? "")
+        print(text as? String! ?? "")
     }
 
     func alertSync(text: AnyObject?) -> String {
@@ -51,27 +52,3 @@ class SamplePlugin: NSObject, SamplePluginProtocol {
         myPopup.runModal()
     }
 }
-
-/*
-
-extension WKWebView: WKUIDelegate {
-    private func _alert(title title: String?, message: String?) {
-        let myPopup: NSAlert = NSAlert()
-        myPopup.messageText = message ?? "NodeKit"
-        myPopup.informativeText = title!
-        myPopup.alertStyle = NSAlertStyle.WarningAlertStyle
-        myPopup.addButtonWithTitle("OK")
-        myPopup.runModal()
-    }
-
-    public func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
-
-        _alert(title: self.title, message: message)
-    }
-
-    public func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String?) -> Void) {
-
-        completionHandler("hello from native;  you sent: " + prompt)
-
-    }
-} */

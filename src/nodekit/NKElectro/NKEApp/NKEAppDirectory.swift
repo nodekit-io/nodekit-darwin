@@ -19,8 +19,6 @@
 
 import Foundation
 
-import NKScripting
-
 struct NKEAppDirectory {
 
     static func getPath(name: String) -> String {
