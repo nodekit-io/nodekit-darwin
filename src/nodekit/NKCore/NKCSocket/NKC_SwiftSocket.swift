@@ -399,7 +399,7 @@ class NKC_SwiftSocket: NSObject {
                 }
                 else {
                     if (!self.closeRequested) {
-                        log("!Failed to accept() socket: \(self) \(errno)")
+                        NKLogging.log("!Failed to accept() socket: \(self) \(errno)")
                     }
                     break;
                 }
@@ -1152,7 +1152,7 @@ public extension NKC_Error {
                 let posix = POSIXError(rawValue: associated.value as? Int32 ?? 500)?.label ?? ""
                 return (associated.label!, associated.value, posix)
             }
-            log("WARNING: NKC_Error option of \(self) does not have an associated value")
+            NKLogging.log("WARNING: NKC_Error option of \(self) does not have an associated value")
             return ("\(self)", 500, "")
         }
     }

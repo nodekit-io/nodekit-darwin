@@ -21,6 +21,8 @@ import Foundation
 
 import WebKit
 
+import NKScripting
+
 // MUST INHERIT
 class NKE_WebContentsBase: NSObject {
 
@@ -109,7 +111,7 @@ extension NKE_WebContentsBase: NKScriptExport {
 
     internal class func NotImplemented(functionName: String = #function) -> Void {
     
-        log("!WebContents.\(functionName) is not implemented")
+        NKLogging.log("!WebContents.\(functionName) is not implemented")
     
     }
 

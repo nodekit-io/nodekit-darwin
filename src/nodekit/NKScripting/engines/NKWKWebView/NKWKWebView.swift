@@ -29,7 +29,7 @@ extension WKWebView: NKScriptContext, NKScriptContextHost {
     public func NKgetScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(),
         delegate cb: NKScriptContextDelegate) -> Void {
      
-        log("+NodeKit Nitro JavaScript Engine E\(id)")
+        NKLogging.log("+NodeKit Nitro JavaScript Engine E\(id)")
 
         self.navigationDelegate = NKWKWebViewDelegate(id: id, webView: self, delegate: cb)
         
@@ -234,7 +234,7 @@ public class WKWebViewLogger: NSObject, WKScriptMessageHandler {
         
         guard unsafeBitCast(message.body, COpaquePointer.self) != nil else { return }
         
-         log(message.body as! String)
+         NKLogging.log(message.body as! String)
     }
     
 }

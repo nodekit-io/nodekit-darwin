@@ -68,11 +68,11 @@ class NKWKUserScript {
             
                 if let error = $1 {
                 
-                    log("!E\(webView.NKid) Failed to inject script. \(error) on file \(self.filename) ")
+                    NKLogging.log("!E\(webView.NKid) Failed to inject script. \(error) on file \(self.filename) ")
                
                 } else {
                 
-                    log("+E\(webView.NKid) Injected and executed \(self.filename) ")
+                    NKLogging.log("+E\(webView.NKid) Injected and executed \(self.filename) ")
                 
                 }
            
@@ -80,7 +80,7 @@ class NKWKUserScript {
        
         } else {
         
-            log("+E\(webView.NKid) Injected \(self.filename) ")
+            NKLogging.log("+E\(webView.NKid) Injected \(self.filename) ")
        
         }
         
@@ -110,7 +110,7 @@ class NKWKUserScript {
        
         }
 
-        log("+E\(webView.NKid) Removed script \(self.filename) ")
+        NKLogging.log("+E\(webView.NKid) Removed script \(self.filename) ")
 
         self.wkscript = nil
    

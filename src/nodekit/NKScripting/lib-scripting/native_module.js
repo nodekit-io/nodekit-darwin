@@ -222,7 +222,11 @@ function _getFullPath(pathwithfilename, module) {
 BootstrapModule._preCache = {};
 
 BootstrapModule.setPreCacheSources = function(preCacheSources) {
-    BootstrapModule._preCache = preCacheSources;
+    for (var key in preCacheSources) {
+        if (Object.prototype.hasOwnProperty.call(preCacheSources, key)) {
+            BootstrapModule._preCache[key] = preCacheSources[key];
+        }
+    }
 }
 
 BootstrapModule.loadPreCacheSource = function(id, source) {

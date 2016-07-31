@@ -252,7 +252,7 @@ private let _NSInvocation: AnyClass = NSClassFromString("NSInvocation")!
 private let _NSMethodSignature: AnyClass = NSClassFromString("NSMethodSignature")!
 
 public func invoke(target: AnyObject, selector: Selector, withArguments arguments: [Any!], onThread thread: NSThread? = nil, waitUntilDone wait: Bool = true) -> Any! {
-
+    
     let method =  class_getInstanceMethod(target.dynamicType, selector)
 
     if method == nil {
@@ -267,7 +267,7 @@ public func invoke(target: AnyObject, selector: Selector, withArguments argument
        
         withVaList([reason]) { NSLogv("%@", $0) }
      
-        //   NSException(name: NSInvalidArgumentException, reason: reason, userInfo: nil).raise()
+        NSException(name: NSInvalidArgumentException, reason: reason, userInfo: nil).raise()
     
     }
 

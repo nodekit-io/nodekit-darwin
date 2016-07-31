@@ -90,11 +90,17 @@ var source = {};
            source[name] = getSource('lib/builtin-additions/' + name );
            });
 
-/* CUSTOM NODE.JS API ADDITIONS*/
+/* CUSTOM NODEKIT ADDITIONS*/
 [
     'electro_protocol', 'platform'
  ].forEach(function (name) {
            source[name] = getSource('lib/builtin-nodekit/' + name );
+           });
+
+[
+ 'electro'
+ ].forEach(function (name) {
+           source[name] = getSource(name );
            });
 
 source['electron'] = source['electro'];

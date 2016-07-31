@@ -18,7 +18,10 @@
 */
 
 import Foundation
+
 import WebKit
+
+import NKScripting
 
 class NKE_WebContentsWK: NKE_WebContentsBase {
 

@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 protocol NKE_DialogProtocol: NKScriptExport {
 
     func showOpenDialog(browserWindow: NKE_BrowserWindow?, options: Dictionary<String, AnyObject>?, callback: NKScriptValue?) -> Void

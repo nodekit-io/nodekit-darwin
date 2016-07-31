@@ -18,6 +18,8 @@
 
 import UIKit
 
+import NKScripting
+
 public class NKEHostMain {
 
     public class func start (options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate?) {

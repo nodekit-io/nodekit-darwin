@@ -22,6 +22,8 @@ import WebKit
 
 import UIKit
 
+import NKScripting
+
 extension NKE_BrowserWindow {
 
     internal func UIScriptEnvironmentReady() -> Void {

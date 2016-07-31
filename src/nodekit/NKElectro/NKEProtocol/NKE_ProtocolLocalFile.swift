@@ -18,6 +18,8 @@
 
 import Foundation
 
+import NKScripting
+
 class NKE_ProtocolLocalFile: NSURLProtocol {
 
     override class func canInitWithRequest(request: NSURLRequest) -> Bool {
@@ -61,7 +63,7 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
         
         }
         
-        log("+URL: \(request.URL!.absoluteString)")
+        NKLogging.log("+URL: \(request.URL!.absoluteString)")
 
         let urlDecode = NKE_ProtocolFileDecode(url: request.URL!)
 
@@ -79,7 +81,7 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
 
         } else {
             
-            log("!Missing File \(request.URL!)")
+            NKLogging.log("!Missing File \(request.URL!)")
             
             client.URLProtocol(self, didFailWithError: NSError(domain: NSURLErrorDomain, code: NSURLErrorFileDoesNotExist, userInfo:  nil))
         

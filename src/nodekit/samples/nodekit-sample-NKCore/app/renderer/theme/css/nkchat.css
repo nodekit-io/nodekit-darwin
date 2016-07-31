@@ -1,0 +1,85 @@
+  .profile-user-img {
+      background-color: #eee;
+  }
+  .nkchat-window {
+      position: relative;
+  }
+  .nkchat-window--message-input {
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
+  }
+  .nkchat-box {
+      position: relative;
+      height: 340px;
+  }
+  .nkchat-box--pane {
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      height: 100%;
+  }
+  .nkchat-box--item {
+      transition: 0.4s;
+      opacity: 1;
+      visibility: visible;
+      display: table;
+      width: 100%;
+  }
+  .nkchat-box--message-title {
+      font-size: 0.8em;
+  }
+  .nkchat-box--message-text {
+      font-size: 1em;
+  }
+  .nkchat-box--item_ASSISTANT > * {
+      float: left;
+  }
+  .nkchat-box--item_PEER > * {
+      float: left;
+  }
+  .nkchat-box--item_YOU > * {
+      float: right;
+  }
+  .nkchat-box--item_HIDDEN {
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-40px);
+  }
+  .nkchat-box--container {
+      display: table-row;
+  }
+  .nkchat-box--avatar {
+      display: table-cell;
+      vertical-align: middle;
+      height: 5rem;
+      width: 5rem;
+  }
+  .nkchat-box--avatar-img {
+      width: 100%;
+      height: auto;
+      border-radius: 50%;
+  }
+  .nkchat-box--message {
+      display: table-cell;
+      vertical-align: middle;
+      width: calc(100% - 80px);
+      min-height: 5rem;
+      margin-top: 0rem;
+      padding: 1rem;
+  }
+  .nkchat-box--item_YOU .nkchat-box--message {
+      text-align: right;
+  }
+  .nkchat-box--message-vertical {
+      vertical-align: middle;
+      width: 100%;
+  }
+  .nkchat-box--item_YOU .nkchat-box--message-text {
+      padding: 0.65rem 0rem;
+  }
+  .highlight {
+      font-weight: bold;
+      font-size: 2rem;
+  }

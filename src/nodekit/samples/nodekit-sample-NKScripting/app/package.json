@@ -1,0 +1,21 @@
+{
+  "name": "nodekit-sample-scripting",
+  "main": "./index.js",
+  "version": "0.5.0",
+  "description": "A sample application for NodeKit NKScripting fabric",
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iopa-io/nodekit-sample-scripting"
+  },
+  "author": "OffGrid Networks",
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "node index.js",
+     "test": "mocha --reporter spec test"
+  },
+  "dependencies": {
+       }
+}

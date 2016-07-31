@@ -18,6 +18,8 @@
 
 import Cocoa
 
+import NKScripting
+
 class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
     
     internal static var options: Dictionary<String, AnyObject>?
@@ -74,7 +76,7 @@ class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
     
         NKEventEmitter.global.emit("nk.ApplicationWillTerminate", ())
         
-        log("+Application Exit")
+        NKLogging.log("+Application Exit")
     
     }
 

@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 class NKE_Tray: NSObject {
     
     internal var _events: NKEventEmitter = NKEventEmitter()
@@ -73,13 +75,13 @@ class NKE_Tray: NSObject {
     
     private static func NotImplemented(functionName: String = #function) -> Void {
     
-        log("!tray.\(functionName) is not implemented")
+        NKLogging.log("!tray.\(functionName) is not implemented")
     
     }
     
     private func NotImplemented(functionName: String = #function) -> Void {
     
-        log("!tray.\(functionName) is not implemented")
+        NKLogging.log("!tray.\(functionName) is not implemented")
     
     }
     

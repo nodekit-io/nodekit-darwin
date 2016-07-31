@@ -18,6 +18,8 @@
 
 import UIKit
 
+import NKScripting
+
 class NKEAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelegate {
 
     var window: UIWindow?
@@ -72,7 +74,7 @@ class NKEAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelegat
       
         NKEventEmitter.global.emit("nk.ApplicationWillTerminate", ())
         
-        log("+Application Exit")
+        NKLogging.log("+Application Exit")
     
     }
 

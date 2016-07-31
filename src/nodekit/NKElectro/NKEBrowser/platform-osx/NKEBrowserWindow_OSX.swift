@@ -21,6 +21,8 @@ import Foundation
 
 import Cocoa
 
+import NKScripting
+
 extension NKE_BrowserWindow {
 
     internal func createWindow(options: Dictionary<String, AnyObject>) -> AnyObject {

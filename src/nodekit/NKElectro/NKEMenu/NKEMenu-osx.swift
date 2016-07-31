@@ -23,6 +23,8 @@ import Foundation
 
 import Cocoa
 
+import NKScripting
+
 extension NKE_Menu: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
@@ -63,7 +65,7 @@ class NKE_Menu: NSObject, NKEMenuProtocol {
 
     private static func NotImplemented(functionName: String = #function) -> Void {
     
-        log("!menu.\(functionName) is not implemented")
+        NKLogging.log("!menu.\(functionName) is not implemented")
     
     }
 }

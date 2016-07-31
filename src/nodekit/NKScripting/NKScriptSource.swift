@@ -30,7 +30,7 @@ public class NKScriptSource: NSObject {
     
     public let namespace: String?
 
-    init(source: String, asFilename: String, namespace: String? = nil, cleanup: String? = nil) {
+    public init(source: String, asFilename: String, namespace: String? = nil, cleanup: String? = nil) {
     
         self.filename = asFilename
 

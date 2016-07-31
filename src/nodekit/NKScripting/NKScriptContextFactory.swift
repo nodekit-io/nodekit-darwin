@@ -28,11 +28,11 @@ public enum NKEngineType: Int {
 
 }
 
-public class NKScriptContextFactory {
+public class NKScriptContextFactory: NSObject {
 
     internal static var _contexts: Dictionary<Int, AnyObject> = Dictionary<Int, AnyObject>()
 
-    internal class var sequenceNumber: Int {
+    public class var sequenceNumber: Int {
 
         struct sequence {
         

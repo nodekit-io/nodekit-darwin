@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 class NKE_BrowserWindow: NSObject {
 
     internal var _events: NKEventEmitter = NKEventEmitter()
@@ -69,7 +71,7 @@ class NKE_BrowserWindow: NSObject {
         
         case .WKWebView:
         
-            log("+creating Nitro Renderer")
+            NKLogging.log("+creating Nitro Renderer")
             
             self._id = self.createWKWebView(options)
             
@@ -81,7 +83,7 @@ class NKE_BrowserWindow: NSObject {
         
         case .UIWebView:
         
-            log("+creating JavaScriptCore Renderer")
+            NKLogging.log("+creating JavaScriptCore Renderer")
             
             self._id = self.createUIWebView(options)
             
@@ -131,13 +133,13 @@ class NKE_BrowserWindow: NSObject {
 
     private static func NotImplemented(functionName: String = #function) -> Void {
     
-        log("!browserWindow.\(functionName) is not implemented")
+        NKLogging.log("!browserWindow.\(functionName) is not implemented")
     
     }
 
     private func NotImplemented(functionName: String = #function) -> Void {
     
-        log("!browserWindow.\(functionName) is not implemented")
+        NKLogging.log("!browserWindow.\(functionName) is not implemented")
     
     }
 
@@ -190,7 +192,7 @@ extension NKE_BrowserWindow: NKScriptContextDelegate {
 
     internal func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
     
-        log("+E\(context.NKid) Renderer Loaded")
+        NKLogging.log("+E\(context.NKid) Renderer Loaded")
 
         if (!(self._options["nk.InstallElectro"] as! Bool)) { return;}
         
@@ -216,7 +218,7 @@ extension NKE_BrowserWindow: NKScriptContextDelegate {
         
         }
        
-        log("+E\(id) Renderer Ready")
+        NKLogging.log("+E\(id) Renderer Ready")
         
     }
 

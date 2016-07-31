@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 // Tray not applicable for iOS
 
 class NKE_Tray: NSObject {

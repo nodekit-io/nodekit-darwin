@@ -28,7 +28,7 @@ extension JSContext: NKScriptContextHost {
         
         let context = self
 
-        log("+NodeKit JavaScriptCore JavaScript Engine E\(id)")
+        NKLogging.log("+NodeKit JavaScriptCore JavaScript Engine E\(id)")
         
         objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
@@ -47,7 +47,7 @@ extension JSContext: NKScriptContextHost {
         
         let logjs: @convention(block) (String) -> () = { body in
             
-            log(body)
+            NKLogging.log(body)
             
         }
         
@@ -80,7 +80,7 @@ extension JSContext: NKScriptContext {
         
             self.setObjectForNamespace(object, namespace: namespace)
             
-            log("+Plugin object \(object) is bound to \(namespace) with JSExport channel")
+            NKLogging.log("+Plugin object \(object) is bound to \(namespace) with JSExport channel")
             
             objc_setAssociatedObject(self, unsafeAddressOf(object), object, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             

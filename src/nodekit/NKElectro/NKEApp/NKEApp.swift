@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 extension NKE_App: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
@@ -145,13 +147,13 @@ class NKE_App: NSObject, NKEAppProtocol {
 
     private static func NotImplemented(functionName: String = #function) -> Void {
         
-        log("!app.\(functionName) is not implemented")
+        NKLogging.log("!app.\(functionName) is not implemented")
     
     }
 
     private func NotImplemented(functionName: String = #function) -> Void {
     
-        log("!app.\(functionName) is not implemented")
+        NKLogging.log("!app.\(functionName) is not implemented")
     
     }
 

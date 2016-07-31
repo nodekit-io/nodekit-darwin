@@ -21,6 +21,8 @@ import Foundation
 
 import UIKit
 
+import NKScripting
+
 // NKElectro MENU Placeholder code only:  on roadmap but lower priority as not supported on mobile
 
 extension NKE_Menu: NKScriptExport {
@@ -63,7 +65,7 @@ class NKE_Menu: NSObject, NKEMenuProtocol {
 
     private static func NotImplemented(functionName: String = #function) -> Void {
     
-        log("!menu.\(functionName) is not implemented")
+        NKLogging.log("!menu.\(functionName) is not implemented")
     
     }
 

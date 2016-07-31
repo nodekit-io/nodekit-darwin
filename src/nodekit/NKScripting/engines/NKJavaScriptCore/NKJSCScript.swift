@@ -55,7 +55,7 @@ class NKJSCScript {
 
        (context as! JSContext).NKevaluateJavaScript(source, withSourceURL: NSURL(string: "file:///" + filename)!, completionHandler: nil)
         
-        log("+E\(context.NKid) Injected \(filename) ")
+        NKLogging.log("+E\(context.NKid) Injected \(filename) ")
 
     }
 

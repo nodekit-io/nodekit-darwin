@@ -19,9 +19,13 @@
 
 import Foundation
 
+import NKScripting
+
 class NKElectro: NSObject {
 
     static func addElectro(context: NKScriptContext) {
+        
+        NKStorage.includeBundle(NSBundle(forClass: NKElectro.self))
         
         let appjs = NKStorage.getResource("lib-electro/_nke_main.js", NKElectro.self)
         

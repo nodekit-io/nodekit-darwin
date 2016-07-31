@@ -1,0 +1,22 @@
+{
+  "name": "iopa-sample-chat",
+  "main": "./server/index.js",
+  "version": "0.5.0",
+  "description": "A working chat application for the IOPA and NodeKit fabrics",
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodekit/iopa-sample-chat.git"
+  },
+  "author": "OffGrid Networks",
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "node server/index.js",
+     "test": "mocha --reporter spec test"
+  },
+  "dependencies": {
+      "iopa-core": "^1.3.2"
+  }
+}

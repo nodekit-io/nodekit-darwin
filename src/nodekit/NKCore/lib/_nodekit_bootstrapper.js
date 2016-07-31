@@ -32,7 +32,7 @@ process.bootstrap.NativeModule.setPreCacheSources(process.binding('natives'));
 console.log = native.console.log;
 
 // run vanilla node.js startup
-process.bootstrap('lib/node.js');
+process.bootstrap.NativeModule.bootstrap('lib/node.js');
 
 global.setImmediate = function(fn){ process.nextTick(fn.bind.apply(fn, arguments)) }
 
@@ -46,5 +46,5 @@ try
 }
 catch (e)
 {
-    console.error(e, "tickCallBack in nodekit_bootstrapper");
+    console.error( "tickCallBack in nodekit_bootstrapper" + e.toString());
 }

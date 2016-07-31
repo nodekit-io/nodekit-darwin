@@ -36,6 +36,25 @@ public typealias asl_object_t = COpaquePointer
 
 public class NKLogging: NKScriptExport {
     
+    
+    private static var logger = NKLogging(facility: "io.nodekit.core.consolelog")
+    
+    public class func log(message: String, level: NKLogging.Level? = nil) {
+        
+        logger.log(message, level: level)
+        
+        print(message)
+        
+    }
+    
+    @noreturn public class func die(@autoclosure message: ()->String, file: StaticString = #file, line: UInt = #line) {
+        
+        logger.log(message(), level: .Alert)
+        
+        fatalError(message, file: file, line: line)
+        
+    }
+    
     public enum Level: Int32 {
         
         case Emergency = 0
@@ -212,26 +231,4 @@ public class NKLogging: NKScriptExport {
 
 }
 
-private let logger = NKLogging(facility: "io.nodekit.core.consolelog")
 
-func log(message: String, level: NKLogging.Level? = nil) {
-
-    logger.log(message, level: level)
-    
-    print(message)
-
-}
-
-func nklog(message: String, level: NKLogging.Level? = nil) {
-
-    log(message, level: level)
-
-}
-
-@noreturn func die(@autoclosure message: ()->String, file: StaticString = #file, line: UInt = #line) {
-
-    logger.log(message(), level: .Alert)
-    
-    fatalError(message, file: file, line: line)
-
-}

@@ -18,6 +18,8 @@
 
 import Foundation
 
+import NKScripting
+
 class NKE_Protocol: NSObject, NKScriptExport {
   
     static var registeredSchemes: Dictionary<String, NKScriptValue> = Dictionary<String, NKScriptValue>()
@@ -258,7 +260,7 @@ class NKE_ProtocolCustom: NSURLProtocol {
             
             self.isCancelled = true
             
-            log("+Custom Url Protocol Request Cancelled")
+            NKLogging.log("+Custom Url Protocol Request Cancelled")
         
         }
     
@@ -315,7 +317,7 @@ class NKE_ProtocolCustom: NSURLProtocol {
 
         } else {
             
-            log("!Missing File \(path)")
+            NKLogging.log("!Missing File \(path)")
             
             self.client!.URLProtocol(self, didFailWithError: NSError(domain: NSURLErrorDomain, code: NSURLErrorFileDoesNotExist, userInfo:  nil))
      
@@ -363,7 +365,7 @@ class NKE_ProtocolCustom: NSURLProtocol {
             
             let url: NSURL = NSURL(string: location)!
 
-            log("+Redirection location to \(url.absoluteString)")
+            NKLogging.log("+Redirection location to \(url.absoluteString)")
 
             let response = NSHTTPURLResponse(URL: url, statusCode: statusCode, HTTPVersion: version, headerFields: headers)!
 

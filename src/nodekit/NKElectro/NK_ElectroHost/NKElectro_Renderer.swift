@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 extension NKElectro {
 
     static func bootToRenderer(context: NKScriptContext) {

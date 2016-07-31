@@ -1,0 +1,71 @@
+{
+  "name": "iopa-core",
+  "version": "1.3.2",
+  "main": "dest/iopa-core.js",
+  "description": "IOPA API-first, Internet of Things (IoT) stack for Node.js, official implementation",
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "maintainers": [
+    {
+      "name": "iopa",
+      "email": "build@iopa.io"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iopa-io/iopa-core.git"
+  },
+  "files": [
+    "dest"
+  ],
+  "author": {
+    "name": "IOPA"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "webpack -p",
+    "test": "mocha --reporter spec test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "iopa": "^1.3.64",
+    "iopa-connect": "^1.3.12",
+    "iopa-router": "^0.9.1",
+    "iopa-static": "^1.3.2",
+    "iopa-template-handlebars": "^0.9.2",
+    "iopa-templates": "^0.9.1",
+    "iopa-test": "^1.3.18",
+    "json-loader": "^0.5.4",
+    "mocha": "^2.3.2",
+    "mocha-junit-reporter": "^1.6.1",
+    "should": "^7.1.0",
+    "source-map-support": "^0.4.0",
+    "webpack": "^1.12.14"
+  },
+  "gitHead": "f7df09b9631740beed86312589603619b68421b7",
+  "bugs": {
+    "url": "https://github.com/iopa-io/iopa-core/issues"
+  },
+  "homepage": "https://github.com/iopa-io/iopa-core#readme",
+  "_id": "iopa-core@1.3.2",
+  "_shasum": "c187e03904933c5d8e05072a310bade93e47b9ea",
+  "_from": "iopa-core@>=1.3.2 <2.0.0",
+  "_npmVersion": "2.14.9",
+  "_nodeVersion": "0.12.12",
+  "_npmUser": {
+    "name": "iopa",
+    "email": "build@iopa.io"
+  },
+  "dist": {
+    "shasum": "c187e03904933c5d8e05072a310bade93e47b9ea",
+    "tarball": "http://registry.npmjs.org/iopa-core/-/iopa-core-1.3.2.tgz"
+  },
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/iopa-core-1.3.2.tgz_1457797796864_0.24774954956956208"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/iopa-core/-/iopa-core-1.3.2.tgz",
+  "readme": "ERROR: No README data found!"
+}

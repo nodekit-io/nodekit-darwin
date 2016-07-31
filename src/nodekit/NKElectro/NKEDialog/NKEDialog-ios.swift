@@ -21,6 +21,8 @@ import Foundation
 
 import UIKit
 
+import NKScripting
+
 extension NKE_Dialog: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
@@ -38,7 +40,7 @@ class NKE_Dialog: NSObject, NKE_DialogProtocol {
 
     private static func NotImplemented(functionName: String = #function) -> Void {
     
-        log("!dialog.\(functionName) is not available for iOS")
+        NKLogging.log("!dialog.\(functionName) is not available for iOS")
     
     }
 

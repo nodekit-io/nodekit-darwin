@@ -18,7 +18,10 @@
 */
 
 import Foundation
+
 import Cocoa
+
+import NKScripting
 
 extension NKE_Dialog: NKScriptExport {
 

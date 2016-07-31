@@ -72,7 +72,7 @@ public class NKScriptValueNative: NKScriptValue {
         
         guard member != nil, case .Initializer(let selector, let arity) = member! else {
         
-            log("!Plugin class \(cls) is not a constructor")
+            NKLogging.log("!Plugin class \(cls) is not a constructor")
             
             return nil
         
@@ -100,7 +100,7 @@ public class NKScriptValueNative: NKScriptValue {
       
         guard let instance = NKScriptInvocation.construct(cls, initializer: selector, withArguments: args) else {
         
-            log("!Failed to create instance for plugin class \(cls)")
+            NKLogging.log("!Failed to create instance for plugin class \(cls)")
             
             return nil
         

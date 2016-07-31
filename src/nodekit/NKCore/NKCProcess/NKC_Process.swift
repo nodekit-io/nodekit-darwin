@@ -178,7 +178,7 @@
         
             if (!fileManager.fileExistsAtPath(embeddedPackage)) {
             
-                log("!Missing package.json in main bundle Resources/app for \(resourcePath)")
+                NKLogging.log("!Missing package.json in main bundle Resources/app for \(resourcePath)")
                 
                 return
             }
@@ -187,7 +187,7 @@
             
             resPaths = resourcePath.stringByAppendingString(":").stringByAppendingString(webPath).stringByAppendingString(":").stringByAppendingString(appModulePath).stringByAppendingString(":").stringByAppendingString(nodekitPath)
             
-            log(resPaths);
+            NKLogging.log(resPaths);
             
         }
         

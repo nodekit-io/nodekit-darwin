@@ -80,16 +80,26 @@ public class NKStorage: NSObject {
         
         guard let appjs = NKStorage.getResource(module, t) else {
             
-            die("Failed to read script")
+            NKLogging.die("Failed to read script")
             
         }
         
         return "function loadplugin(){\n" + appjs + "\n}\n" + stub + "\n" + "loadplugin();" + "\n"
     }
     
+    public class func includeBundle(bundle: NSBundle) -> Void {
+        
+       if !bundles.contains({ $0 === bundle })
+       {
+          bundles.append(bundle)
+        }
+    }
+    
     // PRIVATE METHODS
     
     private static var unzipper_ : NKArchiveReader? = nil
+    
+    private static var bundles : [NSBundle] = [ NSBundle(forClass: NKStorage.self) ]
     
     private class func getNKARResource_(module: String, _ t: AnyClass? = nil) -> String? {
             
@@ -141,13 +151,17 @@ public class NKStorage: NSObject {
         
         if (path == nil) {
             
-            let _nodeKitBundle: NSBundle = NSBundle(forClass: NKStorage.self)
-        
-            path = _nodeKitBundle.pathForResource(fileName, ofType: fileExtension, inDirectory: directory)
+            for _nodeKitBundle in bundles {
+                
+                path = _nodeKitBundle.pathForResource(fileName, ofType: fileExtension, inDirectory: directory)
+                
+                if !(path == nil) { break; }
+
+            }
             
             if (path == nil) {
                 
-                log("!Error - source file not found: \(directory + "/" + fileName + "." + fileExtension)")
+                NKLogging.log("!Error - source file not found: \(directory + "/" + fileName + "." + fileExtension)")
         
                 return nil
             

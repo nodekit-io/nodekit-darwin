@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 struct NKEAppDirectory {
 
     static func getPath(name: String) -> String {
@@ -81,7 +83,7 @@ struct NKEAppDirectory {
            
             } catch let error as NSError {
             
-                log("!Error getting Package: \(error.localizedDescription)")
+                NKLogging.log("!Error getting Package: \(error.localizedDescription)")
                 
                 return nil
             
@@ -91,9 +93,9 @@ struct NKEAppDirectory {
          
             if (!fileManager.fileExistsAtPath(embeddedPackage)) {
             
-                log("!Missing package.json in main bundle /Resources/app")
+                NKLogging.log("!Missing package.json in main bundle /Resources/app")
                 
-                log("!-->  \(resourcePath)")
+                NKLogging.log("!-->  \(resourcePath)")
                 
                 return nil
            
@@ -107,7 +109,7 @@ struct NKEAppDirectory {
 
             } catch let error as NSError {
                 
-                log("!Error getting Package as JSON: \(error.localizedDescription)")
+                NKLogging.log("!Error getting Package as JSON: \(error.localizedDescription)")
                 
                 return nil
             }

@@ -164,7 +164,7 @@ class NKC_FileSystem: NSObject, NKScriptExport {
         
         } catch _ {
         
-            log("!ERROR reading file")
+            NKLogging.log("!ERROR reading file")
 
             return ""
         }
@@ -207,7 +207,7 @@ class NKC_FileSystem: NSObject, NKScriptExport {
         
         } catch _ {
         
-            log("!ERROR reading file")
+            NKLogging.log("!ERROR reading file")
             
             return ""
         }
@@ -307,7 +307,7 @@ class NKC_FileSystem: NSObject, NKScriptExport {
 
             if (path == nil) {
             
-                log("!Error - source file not found: \(directory + "/" + fileName + "." + fileExtension)")
+                NKLogging.log("!Error - source file not found: \(directory + "/" + fileName + "." + fileExtension)")
             
                 return ""
             

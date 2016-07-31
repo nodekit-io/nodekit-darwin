@@ -123,7 +123,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
     
         guard let id = identifier else {return}
         
-        log("+channel deinit" + id)
+        NKLogging.log("+channel deinit" + id)
     
     }
 
@@ -141,19 +141,19 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
         
         guard let source = NKStorage.getResource("lib-scripting/nkscripting.js", NKScriptChannel.self) else {
      
-            die("Failed to read provision script: nkscripting")
+             NKLogging.die("Failed to read provision script: nkscripting")
         
         }
 
         context!.NKinjectJavaScript(NKScriptSource(source: source, asFilename: "io.nodekit.scripting/NKScripting/nkscripting.js", namespace: "NKScripting"))
         
         guard let source2 = NKStorage.getResource("lib-scripting/promise.js", NKScriptChannel.self) else {
-            die("Failed to read provision script: promise")
+            NKLogging.die("Failed to read provision script: promise")
         }
 
         context!.NKinjectJavaScript(NKScriptSource(source: source2, asFilename: "io.nodekit.scripting/NKScripting/promise.js", namespace: "Promise"))
      
-        log("+E\(context!.NKid) JavaScript Engine is ready for loading plugins")
+        NKLogging.log("+E\(context!.NKid) JavaScript Engine is ready for loading plugins")
     
     }
 
@@ -234,7 +234,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
                     
                     } else {
                     
-                        log("!Invalid instance id: \(target)")
+                        NKLogging.log("!Invalid instance id: \(target)")
                     
                     }
                     
@@ -256,7 +256,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
                
                 } else {
                 
-                    log("!Invalid member name: \(opcode)")
+                    NKLogging.log("!Invalid member name: \(opcode)")
                 
                 }
            
@@ -282,7 +282,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
         
             // discard unknown message
             
-            log("!Unknown message: \(message.body)")
+            NKLogging.log("!Unknown message: \(message.body)")
        
         }
       
@@ -320,7 +320,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
                     
                     } else {
                     
-                        log("!Invalid instance id: \(target)")
+                        NKLogging.log("!Invalid instance id: \(target)")
                         
                         result = true
                    
@@ -346,7 +346,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
                
                 } else {
                 
-                    log("!Invalid member name: \(opcode)")
+                    NKLogging.log("!Invalid member name: \(opcode)")
                     
                     result = false
                 
@@ -376,7 +376,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
         
             // discard unknown message
             
-            log("!Unknown message: \(message.body)")
+            NKLogging.log("!Unknown message: \(message.body)")
            
             result = false
        

@@ -32,15 +32,15 @@ import Foundation
 // Static variables (class variables not allowed for generics)
 private var seq: Int = 1
 
-protocol NKEventSubscription {
+public protocol NKEventSubscription {
  
     func remove()
 
 }
 
-class NKEventSubscriptionGeneric<T>: NKEventSubscription {
+public class NKEventSubscriptionGeneric<T>: NKEventSubscription {
 
-   typealias NKHandler = (T) -> Void
+   public typealias NKHandler = (T) -> Void
 
     let handler: NKHandler
 
@@ -50,7 +50,7 @@ class NKEventSubscriptionGeneric<T>: NKEventSubscription {
     
     private let id: Int
 
-    init(emitter: NKEventEmitter, eventType: String,  handler: NKHandler) {
+    public init(emitter: NKEventEmitter, eventType: String,  handler: NKHandler) {
     
         id = seq
         
@@ -64,7 +64,7 @@ class NKEventSubscriptionGeneric<T>: NKEventSubscription {
     
     }
 
-    func remove() {
+    public func remove() {
     
         emitter.subscriptions[eventType]?.removeValueForKey(id)
     
@@ -72,16 +72,16 @@ class NKEventSubscriptionGeneric<T>: NKEventSubscription {
 
 }
 
-class NKEventEmitter {
+public class NKEventEmitter: NSObject {
 
     // global EventEmitter that is actually a signal emitter (retains early triggers without subscriptions until once is called)
-    internal static var global: NKEventEmitter = NKSignalEmitter()
+    public static var global: NKEventEmitter = NKSignalEmitter()
 
     private var currentSubscription: NKEventSubscription?
 
     private var subscriptions: [String: [Int:NKEventSubscription]] = [:]
 
-    func on<T>(eventType: String, handler: (T) -> Void) -> NKEventSubscription {
+    public func on<T>(eventType: String, handler: (T) -> Void) -> NKEventSubscription {
     
         var eventSubscriptions: [Int:NKEventSubscription]
 
@@ -112,7 +112,7 @@ class NKEventEmitter {
         return subscription
     }
 
-    func once<T>(event: String, handler: (T) -> Void) {
+    public func once<T>(event: String, handler: (T) -> Void) {
         on(event) { (data: T) -> Void in
         
             self.currentSubscription?.remove()
@@ -123,7 +123,7 @@ class NKEventEmitter {
     
     }
 
-    func removeAllListeners(eventType: String?) {
+    public func removeAllListeners(eventType: String?) {
     
         if let eventType = eventType {
         
@@ -137,7 +137,7 @@ class NKEventEmitter {
     
     }
 
-    func emit<T>(event: String, _ data: T) {
+    public func emit<T>(event: String, _ data: T) {
     
         if let subscriptions = subscriptions[event] {
         

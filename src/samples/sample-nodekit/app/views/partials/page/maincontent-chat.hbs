@@ -1,0 +1,101 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1><i class="fa fa-hashtag"></i> <span id="nkchat-current-room">Public</span> <small>{{@appname}} Chat</small></h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">Chat</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <section class="col-md-3 visible-md visible-lg">
+                <!-- Profile Image -->
+                <div class="box box-primary">
+                    <div class="box-body box-profile">
+                        <img class="profile-user-img img-responsive img-circle nkchat-current-avatar" src="img/avatar-peer02.svg" alt="User profile picture">
+
+                        <h3 class="profile-username text-center nkchat-current-user">Sample User</h3>
+
+                        <p class="text-muted text-center"><i class="fa fa-hashtag"></i> <span id="nkchat-current-room-2">Public</span></p>
+
+                        <ul id="nkchat-user-list" class="list-group list-group-unbordered">
+                            <li class="list-group-item"><b>Noddy</b>
+                                <span class="pull-right"><img style="height: 25px; width: auto" src="img/avatar-peer04.svg" alt="User profile picture"></span>
+                            </li>
+                        </ul>
+
+                        <a href="#" class="btn btn-primary btn-block"><b>Leave</b></a>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </section>
+            <!-- Left col -->
+            <section class="col-md-9">
+                <!-- Chat box -->
+                <div class="box box-success">
+                    <div class="box-header">
+                        <i class="fa fa-comments-o"></i>
+
+                        <h3 class="box-title">Chat</h3>
+
+                    </div>
+
+                    <div class="nkchat-window">
+                        <div class="nkchat-box">
+                            <div class="box-body chat nkchat-box--pane" id="nkchat-box">
+                                <div style="height: 500px"></div>
+                                <div class="item nkchat-box--item_PEER nkchat-box--item nkchat-box--item_HIDDEN">
+                                    <div class="nkchat-box--container">
+                                        <div class="img-container nkchat-box--avatar nkchat-box--avatar_PEER">
+                                            <img src="img/avatar-peer01.svg" class="nkchat-box--avatar-img">
+                                        </div>
+                                        <div class="nkchat-box--message">
+                                            <div class="nkchat-box--message-vertical">
+                                                <p class="message nkchat-box--message-text base--p"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nkchat-box--item_YOU nkchat-box--item nkchat-box--item_HIDDEN">
+                                    <div class="nkchat-box--container">
+                                        <div class="nkchat-box--message">
+                                            <div class="nkchat-box--message-vertical">
+                                                <p class="nkchat-box--message-text base--p"></p>
+                                            </div>
+                                        </div>
+                                        <div class="img-container nkchat-box--avatar nkchat-box--avatar_YOU">
+                                            <img src="img/avatar-you.svg" class="nkchat-box--avatar-img">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="height: 15px; visibility: hidden;"></div>
+                                <div class="loader">
+                                    <div class="loader--fallback"><img src="img/loading.gif" width="50" alt=""></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.chat -->
+                    <div class="box-footer">
+                        <div class="input-group">
+                            <input class="form-control nkchat-window--message-input" placeholder="Type message...">
+                            <div class="input-group-btn">
+                                <button type="button" id="nkchat-window--message-button" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box (chat box) -->
+            </section>
+            <!-- /.Left col -->
+        </div>
+        <!-- /.row (main row) -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
