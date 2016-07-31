@@ -18,6 +18,8 @@
 
 import Foundation
 
+import NKScripting
+
 class NKE_ProtocolFileDecode: NSObject {
 
     var resourcePath: NSString?   // The path to the bundle resource

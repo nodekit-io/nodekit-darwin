@@ -24,7 +24,6 @@ class SampleScriptDelegate: NSObject, NKScriptContextDelegate {
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
         
         SamplePlugin.attachTo(context)
-        // NodeKit.attachTo(context)
         
         context.NKinjectJavaScript(NKScriptSource(source: "process.bootstrap('app/index.js');", asFilename: "boot"))
     }

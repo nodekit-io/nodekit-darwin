@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 import WebKit
 
 // MUST INHERIT

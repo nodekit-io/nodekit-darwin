@@ -20,6 +20,8 @@ import Foundation
 
 import WebKit
 
+import NKScripting
+
 extension NKE_BrowserWindow {
 
     internal func WKScriptEnvironmentReady() -> Void {

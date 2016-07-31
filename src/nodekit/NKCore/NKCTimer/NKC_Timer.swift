@@ -17,6 +17,8 @@
 */
  
 import Foundation
+ 
+ import NKScripting
 
 class NKC_Timer: NSObject, NKScriptExport {
 

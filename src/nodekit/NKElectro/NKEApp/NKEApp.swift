@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 extension NKE_App: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {

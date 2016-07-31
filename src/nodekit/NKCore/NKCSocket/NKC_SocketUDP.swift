@@ -18,6 +18,8 @@
  
  import Foundation
  
+ import NKScripting
+
  class NKC_SocketUDP: NSObject, NKScriptExport {
     
     class func attachTo(context: NKScriptContext) {

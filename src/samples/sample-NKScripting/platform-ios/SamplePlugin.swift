@@ -18,6 +18,7 @@
 
 import Foundation
 import UIKit
+import NKScripting
 
 protocol SamplePluginProtocol: NKScriptExport {
     func logconsole(text: AnyObject?) -> Void
@@ -30,7 +31,7 @@ class SamplePlugin: NSObject, SamplePluginProtocol {
     }
     
     func logconsole(text: AnyObject?) -> Void {
-        log(text as? String! ?? "")
+        NKLogging.log(text as? String! ?? "")
     }
 
     func alertSync(text: AnyObject?) -> String {
@@ -54,7 +55,7 @@ class SamplePlugin: NSObject, SamplePluginProtocol {
 
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
 
-        for var i = 0; i < buttons.count; i++ {
+        for i in 0 ..< buttons.count {
             let buttonTitle: String = buttons[i] ?? ""
 
             let buttonAction = UIAlertAction(title: buttonTitle, style: (buttonTitle == "Cancel" ? .Cancel : .Default), handler: nil)

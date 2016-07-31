@@ -17,6 +17,8 @@
  */
  
  import Foundation
+ 
+ import NKScripting
 
  /*
  * Creates _tcp javascript value that inherits from EventEmitter

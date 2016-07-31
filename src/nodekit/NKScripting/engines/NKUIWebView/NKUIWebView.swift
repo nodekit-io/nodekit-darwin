@@ -31,7 +31,7 @@ extension UIWebView: NKScriptContextHost {
     public func NKgetScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(),
         delegate cb: NKScriptContextDelegate) -> Void {
 
-        log("+NodeKit UIWebView-JavaScriptCore JavaScript Engine E\(id)")
+        NKLogging.log("+NodeKit UIWebView-JavaScriptCore JavaScript Engine E\(id)")
      
         objc_setAssociatedObject(self, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 

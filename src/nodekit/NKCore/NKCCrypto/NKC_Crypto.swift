@@ -20,6 +20,8 @@ import Darwin
 
 import Foundation
 
+import NKScripting
+
 class NKC_Crypto: NSObject, NKScriptExport {
     
     class func attachTo(context: NKScriptContext) {

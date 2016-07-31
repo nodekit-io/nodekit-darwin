@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 protocol NKEAppProtocol: NKScriptExport {
     
     func quit() -> Void

@@ -17,6 +17,8 @@
  */
  
  import Foundation
+ 
+ import NKScripting
 
  typealias NKStringViewer = (msg: String, title: String) -> Void
  

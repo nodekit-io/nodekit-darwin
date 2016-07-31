@@ -33,8 +33,6 @@ struct NKAR_Uncompressor {
     
     static func uncompressWithFileBytes(cdir: NKAR_CentralDirectory, fromBytes bytes: UnsafePointer<UInt8>) -> NSData? {
         
-        if #available(iOS 9.0, *) {
-          
             let len = Int(cdir.uncompressedSize)
             
             let out = UnsafeMutablePointer<UInt8>.alloc(len)
@@ -105,16 +103,12 @@ struct NKAR_Uncompressor {
             
             return NSData(bytesNoCopy: out, length: len, freeWhenDone: true)
             
-        } else {
-            return nil
-        }
+     
     }
     
     
     static func uncompressWithCentralDirectory(cdir: NKAR_CentralDirectory, fromBytes bytes: UnsafePointer<UInt8>) -> NSData? {
         
-        if #available(iOS 9.0, *) {
-            
             let offsetBytes = bytes.advancedBy(Int(cdir.dataOffset))
             
             let offsetMBytes = UnsafeMutablePointer<UInt8>(offsetBytes)
@@ -189,9 +183,6 @@ struct NKAR_Uncompressor {
             
             return NSData(bytesNoCopy: out, length: len, freeWhenDone: true)
             
-        } else {
-            return nil
-        }
     }
 
 }

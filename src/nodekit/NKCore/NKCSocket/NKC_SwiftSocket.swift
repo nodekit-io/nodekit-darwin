@@ -29,6 +29,8 @@ import Foundation
 
 import CoreFoundation
 
+import NKScripting
+
 @objc protocol NKC_SwiftSocketProtocol: class {
     
     optional func socket(socket: NKC_SwiftSocket, didAcceptNewSocket newSocket: NKC_SwiftSocket)

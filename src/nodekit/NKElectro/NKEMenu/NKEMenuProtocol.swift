@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 protocol NKEMenuProtocol: NKScriptExport {
 
     func setApplicationMenu(menu: [String: AnyObject]) -> Void

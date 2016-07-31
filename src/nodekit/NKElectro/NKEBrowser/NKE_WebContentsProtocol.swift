@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 protocol NKE_WebContentsProtocol: NKScriptExport, NKE_IpcProtocol {
 
     func loadURL(url: String, options: [String: AnyObject]) -> Void

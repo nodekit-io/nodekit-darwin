@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 class NKElectro: NSObject {
 
     static func addElectro(context: NKScriptContext) {

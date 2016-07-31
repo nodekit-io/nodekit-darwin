@@ -19,6 +19,8 @@
 
 import Foundation
 
+import NKScripting
+
 public class NodeKit: NSObject {
     
     public class func attachTo(context: NKScriptContext) {

@@ -23,6 +23,8 @@ import Foundation
 
 import Cocoa
 
+import NKScripting
+
 extension NKE_Menu: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {

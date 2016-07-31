@@ -109,9 +109,9 @@ extension NSObject {
             // thread-safe on main thread
 
             let array = NKUIWebView.__globalWebViews
-        
-            for var index = array.count - 1; index >= 0; --index {
             
+            for index in (0..<array.count).reverse() {
+                
                 let webView = array[index]
                 
                 let checksum = "__NKUIWebView\(webView.hash)"
