@@ -156,6 +156,14 @@
 		E4E6679D1D4EA5D900B525E9 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; };
 		E4E6679E1D4EA61700B525E9 /* SamplePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F73BA1D4E6BB900D96796 /* SamplePlugin.swift */; };
 		E4E6679F1D4EA68100B525E9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E45F73BD1D4E6BCA00D96796 /* app */; };
+		E4E667A01D4EA6DE00B525E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA58F1D4E51B000687BD5 /* Assets.xcassets */; };
+		E4E667A11D4EA6E300B525E9 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA5911D4E51B000687BD5 /* Launch Screen.storyboard */; };
+		E4E667A21D4EA6FD00B525E9 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; };
+		E4E667A31D4EA70000B525E9 /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E6671E1D4E9E3600B525E9 /* NKElectro.framework */; };
+		E4E667A41D4EA70300B525E9 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; };
+		E4E667A51D4EA70B00B525E9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA5881D4E51B000687BD5 /* main.swift */; };
+		E4E667A61D4EA70E00B525E9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA5971D4E520000687BD5 /* app */; };
+		E4E667A71D4EA73500B525E9 /* SamplePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA5921D4E51B000687BD5 /* SamplePlugin.swift */; };
 		E4EBA5991D4E524800687BD5 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA5961D4E51F400687BD5 /* app */; };
 		E4EBA5AA1D4E537900687BD5 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4EBA5A01D4E537900687BD5 /* NKScripting.framework */; };
 		E4EBA5B51D4E537900687BD5 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4EBA5A01D4E537900687BD5 /* NKScripting.framework */; };
@@ -689,6 +697,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4E667A31D4EA70000B525E9 /* NKElectro.framework in Frameworks */,
+				E4E667A41D4EA70300B525E9 /* NKCore.framework in Frameworks */,
+				E4E667A21D4EA6FD00B525E9 /* NKScripting.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1996,6 +2007,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4E667A61D4EA70E00B525E9 /* app in Resources */,
+				E4E667A11D4EA6E300B525E9 /* Launch Screen.storyboard in Resources */,
+				E4E667A01D4EA6DE00B525E9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2167,6 +2181,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4E667A71D4EA73500B525E9 /* SamplePlugin.swift in Sources */,
+				E4E667A51D4EA70B00B525E9 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2856,7 +2872,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-sample-iOS";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -2905,7 +2921,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-sample-iOS";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
