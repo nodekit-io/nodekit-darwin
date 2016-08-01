@@ -90,10 +90,7 @@
 		E496F8991D4E8CC500377794 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E496F8691D4E8AFD00377794 /* NKCore.framework */; };
 		E496F89A1D4E8CC500377794 /* NKCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E496F8691D4E8AFD00377794 /* NKCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4E667281D4E9E3600B525E9 /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E6671E1D4E9E3600B525E9 /* NKElectro.framework */; };
-		E4E667331D4E9E3600B525E9 /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E6671E1D4E9E3600B525E9 /* NKElectro.framework */; };
-		E4E667341D4E9E3600B525E9 /* NKElectro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4E6671E1D4E9E3600B525E9 /* NKElectro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4E6674B1D4E9E4700B525E9 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; };
-		E4E667561D4E9E4700B525E9 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; };
 		E4E6675E1D4E9F8600B525E9 /* lib-electro in Resources */ = {isa = PBXBuildFile; fileRef = E45F88EB1D4CDF360088D28F /* lib-electro */; };
 		E4E6675F1D4EA01600B525E9 /* NKElectro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA1161D4E281700687BD5 /* NKElectro.swift */; };
 		E4E667601D4EA01600B525E9 /* NKElectro_Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA1171D4E281700687BD5 /* NKElectro_Renderer.swift */; };
@@ -150,20 +147,28 @@
 		E4E667951D4EA51700B525E9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E45F73BD1D4E6BCA00D96796 /* app */; };
 		E4E667981D4EA54400B525E9 /* appdelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E667961D4EA53F00B525E9 /* appdelegate.swift */; };
 		E4E667991D4EA57A00B525E9 /* scriptdelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F73BC1D4E6BB900D96796 /* scriptdelegate.swift */; };
-		E4E6679A1D4EA5AE00B525E9 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; };
-		E4E6679B1D4EA5B600B525E9 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; };
 		E4E6679C1D4EA5C000B525E9 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; };
-		E4E6679D1D4EA5D900B525E9 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; };
 		E4E6679E1D4EA61700B525E9 /* SamplePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F73BA1D4E6BB900D96796 /* SamplePlugin.swift */; };
 		E4E6679F1D4EA68100B525E9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E45F73BD1D4E6BCA00D96796 /* app */; };
 		E4E667A01D4EA6DE00B525E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA58F1D4E51B000687BD5 /* Assets.xcassets */; };
 		E4E667A11D4EA6E300B525E9 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA5911D4E51B000687BD5 /* Launch Screen.storyboard */; };
-		E4E667A21D4EA6FD00B525E9 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; };
-		E4E667A31D4EA70000B525E9 /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E6671E1D4E9E3600B525E9 /* NKElectro.framework */; };
-		E4E667A41D4EA70300B525E9 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; };
 		E4E667A51D4EA70B00B525E9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA5881D4E51B000687BD5 /* main.swift */; };
 		E4E667A61D4EA70E00B525E9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA5971D4E520000687BD5 /* app */; };
 		E4E667A71D4EA73500B525E9 /* SamplePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA5921D4E51B000687BD5 /* SamplePlugin.swift */; };
+		E4E667B51D4F8B1800B525E9 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; };
+		E4E667B61D4F8B1800B525E9 /* NKScripting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4E667B91D4F8B1800B525E9 /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E6671E1D4E9E3600B525E9 /* NKElectro.framework */; };
+		E4E667BA1D4F8B1800B525E9 /* NKElectro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4E6671E1D4E9E3600B525E9 /* NKElectro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4E667BD1D4F8B1800B525E9 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; };
+		E4E667BE1D4F8B1800B525E9 /* NKCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4E667C21D4F8B5F00B525E9 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; };
+		E4E667C31D4F8B5F00B525E9 /* NKScripting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4E667C61D4F8B5F00B525E9 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; };
+		E4E667C71D4F8B5F00B525E9 /* NKCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4E667411D4E9E4700B525E9 /* NKCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4E667CB1D4F8B7000B525E9 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; };
+		E4E667CC1D4F8B7000B525E9 /* NKScripting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4129D531D4E988D006ABA3B /* NKScripting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4E667CF1D4F8B7000B525E9 /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E6671E1D4E9E3600B525E9 /* NKElectro.framework */; };
+		E4E667D01D4F8B7000B525E9 /* NKElectro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4E6671E1D4E9E3600B525E9 /* NKElectro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4EBA5991D4E524800687BD5 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA5961D4E51F400687BD5 /* app */; };
 		E4EBA5AA1D4E537900687BD5 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4EBA5A01D4E537900687BD5 /* NKScripting.framework */; };
 		E4EBA5B51D4E537900687BD5 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4EBA5A01D4E537900687BD5 /* NKScripting.framework */; };
@@ -354,13 +359,6 @@
 			remoteGlobalIDString = E4129CDA1D4E8E59006ABA3B;
 			remoteInfo = "sample-NKElectro-iOS";
 		};
-		E4E667311D4E9E3600B525E9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4E6671D1D4E9E3600B525E9;
-			remoteInfo = "NKElectro-iOS";
-		};
 		E4E6674C1D4E9E4700B525E9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
@@ -381,6 +379,55 @@
 			proxyType = 1;
 			remoteGlobalIDString = E4E667401D4E9E4700B525E9;
 			remoteInfo = "NKCore-iOS";
+		};
+		E4E667B71D4F8B1800B525E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4129D521D4E988D006ABA3B;
+			remoteInfo = "NKScripting-iOS";
+		};
+		E4E667BB1D4F8B1800B525E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4E6671D1D4E9E3600B525E9;
+			remoteInfo = "NKElectro-iOS";
+		};
+		E4E667BF1D4F8B1800B525E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4E667401D4E9E4700B525E9;
+			remoteInfo = "NKCore-iOS";
+		};
+		E4E667C41D4F8B5F00B525E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4129D521D4E988D006ABA3B;
+			remoteInfo = "NKScripting-iOS";
+		};
+		E4E667C81D4F8B5F00B525E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4E667401D4E9E4700B525E9;
+			remoteInfo = "NKCore-iOS";
+		};
+		E4E667CD1D4F8B7000B525E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4129D521D4E988D006ABA3B;
+			remoteInfo = "NKScripting-iOS";
+		};
+		E4E667D11D4F8B7000B525E9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4E6671D1D4E9E3600B525E9;
+			remoteInfo = "NKElectro-iOS";
 		};
 		E4EBA5AB1D4E537900687BD5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -451,13 +498,39 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E4E6673A1D4E9E3600B525E9 /* Embed Frameworks */ = {
+		E4E667C11D4F8B1800B525E9 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E4E667341D4E9E3600B525E9 /* NKElectro.framework in Embed Frameworks */,
+				E4E667BA1D4F8B1800B525E9 /* NKElectro.framework in Embed Frameworks */,
+				E4E667BE1D4F8B1800B525E9 /* NKCore.framework in Embed Frameworks */,
+				E4E667B61D4F8B1800B525E9 /* NKScripting.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4E667CA1D4F8B5F00B525E9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E4E667C71D4F8B5F00B525E9 /* NKCore.framework in Embed Frameworks */,
+				E4E667C31D4F8B5F00B525E9 /* NKScripting.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4E667D31D4F8B7000B525E9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E4E667D01D4F8B7000B525E9 /* NKElectro.framework in Embed Frameworks */,
+				E4E667CC1D4F8B7000B525E9 /* NKScripting.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -670,7 +743,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4E667561D4E9E4700B525E9 /* NKCore.framework in Frameworks */,
 				E4129D681D4E988D006ABA3B /* NKScripting.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -679,8 +751,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4E667331D4E9E3600B525E9 /* NKElectro.framework in Frameworks */,
-				E4E6679A1D4EA5AE00B525E9 /* NKScripting.framework in Frameworks */,
+				E4E667CF1D4F8B7000B525E9 /* NKElectro.framework in Frameworks */,
+				E4E667CB1D4F8B7000B525E9 /* NKScripting.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,8 +760,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4E6679D1D4EA5D900B525E9 /* NKCore.framework in Frameworks */,
-				E4E6679B1D4EA5B600B525E9 /* NKScripting.framework in Frameworks */,
+				E4E667C61D4F8B5F00B525E9 /* NKCore.framework in Frameworks */,
+				E4E667C21D4F8B5F00B525E9 /* NKScripting.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,9 +769,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4E667A31D4EA70000B525E9 /* NKElectro.framework in Frameworks */,
-				E4E667A41D4EA70300B525E9 /* NKCore.framework in Frameworks */,
-				E4E667A21D4EA6FD00B525E9 /* NKScripting.framework in Frameworks */,
+				E4E667B91D4F8B1800B525E9 /* NKElectro.framework in Frameworks */,
+				E4E667BD1D4F8B1800B525E9 /* NKCore.framework in Frameworks */,
+				E4E667B51D4F8B1800B525E9 /* NKScripting.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1500,12 +1572,13 @@
 				E4129CD71D4E8E59006ABA3B /* Sources */,
 				E4129CD81D4E8E59006ABA3B /* Frameworks */,
 				E4129CD91D4E8E59006ABA3B /* Resources */,
-				E4E6673A1D4E9E3600B525E9 /* Embed Frameworks */,
+				E4E667D31D4F8B7000B525E9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				E4E667321D4E9E3600B525E9 /* PBXTargetDependency */,
+				E4E667CE1D4F8B7000B525E9 /* PBXTargetDependency */,
+				E4E667D21D4F8B7000B525E9 /* PBXTargetDependency */,
 			);
 			name = "sample-NKElectro-iOS";
 			productName = "sample-NKElectro-iOS";
@@ -1519,10 +1592,13 @@
 				E4129CED1D4E8E69006ABA3B /* Sources */,
 				E4129CEE1D4E8E69006ABA3B /* Frameworks */,
 				E4129CEF1D4E8E69006ABA3B /* Resources */,
+				E4E667CA1D4F8B5F00B525E9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E4E667C51D4F8B5F00B525E9 /* PBXTargetDependency */,
+				E4E667C91D4F8B5F00B525E9 /* PBXTargetDependency */,
 			);
 			name = "sample-NKCore-iOS";
 			productName = "sample-NKCore-iOS";
@@ -1536,10 +1612,14 @@
 				E4129D031D4E8E7B006ABA3B /* Sources */,
 				E4129D041D4E8E7B006ABA3B /* Frameworks */,
 				E4129D051D4E8E7B006ABA3B /* Resources */,
+				E4E667C11D4F8B1800B525E9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E4E667B81D4F8B1800B525E9 /* PBXTargetDependency */,
+				E4E667BC1D4F8B1800B525E9 /* PBXTargetDependency */,
+				E4E667C01D4F8B1800B525E9 /* PBXTargetDependency */,
 			);
 			name = "sample-nodekit-iOS";
 			productName = "sample-nodekit-iOS";
@@ -1874,7 +1954,6 @@
 					};
 					E4129D521D4E988D006ABA3B = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 3XLSYS5AFW;
 					};
 					E4129D5B1D4E988D006ABA3B = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -1896,7 +1975,6 @@
 					};
 					E4E667401D4E9E4700B525E9 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 3XLSYS5AFW;
 					};
 					E4E667491D4E9E4700B525E9 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -2530,11 +2608,6 @@
 			target = E4129CDA1D4E8E59006ABA3B /* sample-NKElectro-iOS */;
 			targetProxy = E4E6672B1D4E9E3600B525E9 /* PBXContainerItemProxy */;
 		};
-		E4E667321D4E9E3600B525E9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4E6671D1D4E9E3600B525E9 /* NKElectro-iOS */;
-			targetProxy = E4E667311D4E9E3600B525E9 /* PBXContainerItemProxy */;
-		};
 		E4E6674D1D4E9E4700B525E9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E4E667401D4E9E4700B525E9 /* NKCore-iOS */;
@@ -2549,6 +2622,41 @@
 			isa = PBXTargetDependency;
 			target = E4E667401D4E9E4700B525E9 /* NKCore-iOS */;
 			targetProxy = E4E667541D4E9E4700B525E9 /* PBXContainerItemProxy */;
+		};
+		E4E667B81D4F8B1800B525E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4129D521D4E988D006ABA3B /* NKScripting-iOS */;
+			targetProxy = E4E667B71D4F8B1800B525E9 /* PBXContainerItemProxy */;
+		};
+		E4E667BC1D4F8B1800B525E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4E6671D1D4E9E3600B525E9 /* NKElectro-iOS */;
+			targetProxy = E4E667BB1D4F8B1800B525E9 /* PBXContainerItemProxy */;
+		};
+		E4E667C01D4F8B1800B525E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4E667401D4E9E4700B525E9 /* NKCore-iOS */;
+			targetProxy = E4E667BF1D4F8B1800B525E9 /* PBXContainerItemProxy */;
+		};
+		E4E667C51D4F8B5F00B525E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4129D521D4E988D006ABA3B /* NKScripting-iOS */;
+			targetProxy = E4E667C41D4F8B5F00B525E9 /* PBXContainerItemProxy */;
+		};
+		E4E667C91D4F8B5F00B525E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4E667401D4E9E4700B525E9 /* NKCore-iOS */;
+			targetProxy = E4E667C81D4F8B5F00B525E9 /* PBXContainerItemProxy */;
+		};
+		E4E667CE1D4F8B7000B525E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4129D521D4E988D006ABA3B /* NKScripting-iOS */;
+			targetProxy = E4E667CD1D4F8B7000B525E9 /* PBXContainerItemProxy */;
+		};
+		E4E667D21D4F8B7000B525E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4E6671D1D4E9E3600B525E9 /* NKElectro-iOS */;
+			targetProxy = E4E667D11D4F8B7000B525E9 /* PBXContainerItemProxy */;
 		};
 		E4EBA5AC1D4E537900687BD5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2699,6 +2807,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -2749,6 +2858,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -2794,9 +2904,11 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2843,9 +2955,11 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2887,9 +3001,11 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2936,9 +3052,11 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -3398,6 +3516,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -3456,6 +3575,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
