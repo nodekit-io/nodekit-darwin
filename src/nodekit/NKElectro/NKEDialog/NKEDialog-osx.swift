@@ -17,6 +17,8 @@
 * limitations under the License.
 */
 
+#if os(OSX)
+    
 import Foundation
 
 import Cocoa
@@ -305,3 +307,5 @@ class NKE_Dialog: NSObject, NKE_DialogProtocol {
     }
 
 }
+
+#endif

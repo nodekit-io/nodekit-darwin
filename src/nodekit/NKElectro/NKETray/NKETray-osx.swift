@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+#if os(OSX)
+    
 import Foundation
 
 import Cocoa
@@ -179,3 +181,5 @@ extension NKE_Tray: NKScriptExport {
     }
 
 }
+    
+#endif

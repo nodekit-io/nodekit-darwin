@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 
+#if os(iOS)
+    
 import Foundation
 
 import NKScripting
@@ -34,3 +36,5 @@ extension NKE_Tray: NKScriptExport {
     }
 
 }
+
+#endif

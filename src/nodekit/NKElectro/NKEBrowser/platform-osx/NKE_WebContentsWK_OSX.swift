@@ -17,6 +17,8 @@
 * limitations under the License.
 */
 
+#if os(OSX)
+    
 import Foundation
 
 import WebKit
@@ -197,3 +199,5 @@ extension NKE_WebContentsWK: NKE_WebContentsProtocol {
     // Event:  'will-navigate'
 
 }
+
+#endif

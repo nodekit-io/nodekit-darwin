@@ -17,6 +17,8 @@
 * limitations under the License.
 */
 
+#if os(iOS)
+    
 import Foundation
 
 import UIKit
@@ -70,3 +72,5 @@ class NKE_Menu: NSObject, NKEMenuProtocol {
     }
 
 }
+
+#endif

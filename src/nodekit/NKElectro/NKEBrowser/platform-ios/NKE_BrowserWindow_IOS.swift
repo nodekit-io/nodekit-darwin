@@ -17,6 +17,8 @@
 * limitations under the License.
 */
 
+#if os(iOS)
+    
 import Foundation
 
 import UIKit
@@ -214,3 +216,5 @@ public extension UIColor {
     }
 
 }
+
+#endif

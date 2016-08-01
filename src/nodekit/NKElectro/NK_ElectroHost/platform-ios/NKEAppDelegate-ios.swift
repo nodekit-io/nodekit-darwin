@@ -16,6 +16,8 @@
 * limitations under the License.
 */
 
+#if os(iOS)
+
 import UIKit
 
 import NKScripting
@@ -95,3 +97,5 @@ class NKEAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelegat
     }
 
 }
+
+#endif

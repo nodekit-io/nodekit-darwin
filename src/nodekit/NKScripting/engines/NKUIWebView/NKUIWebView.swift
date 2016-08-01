@@ -16,6 +16,8 @@
 * limitations under the License.
 */
 
+#if os(iOS)
+
 import UIKit
 import WebKit
 import JavaScriptCore
@@ -109,3 +111,5 @@ extension UIWebView {
         var callback: ((JSContext)-> Void)! = nil
     }
 }
+
+#endif

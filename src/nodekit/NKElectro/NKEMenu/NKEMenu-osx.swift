@@ -17,6 +17,8 @@
 * limitations under the License.
 */
 
+#if os(OSX)
+    
 // NKElectro MENU Placeholder code only:  on roadmap but lower priority as not supported on mobile
 
 import Foundation
@@ -69,3 +71,5 @@ class NKE_Menu: NSObject, NKEMenuProtocol {
     
     }
 }
+
+#endif

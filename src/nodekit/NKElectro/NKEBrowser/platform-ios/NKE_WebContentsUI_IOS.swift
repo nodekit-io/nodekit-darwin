@@ -17,6 +17,8 @@
 * limitations under the License.
 */
 
+#if os(iOS)
+    
 import Foundation
 
 import WebKit
@@ -194,3 +196,5 @@ extension NKE_WebContentsUI: NKE_WebContentsProtocol {
     // Event:  'devtools-opened'
     
 }
+
+#endif

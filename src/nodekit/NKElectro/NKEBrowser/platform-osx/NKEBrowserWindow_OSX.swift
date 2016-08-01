@@ -17,6 +17,8 @@
 * limitations under the License.
 */
 
+#if os(OSX)
+    
 import Foundation
 
 import Cocoa
@@ -386,4 +388,4 @@ class DummyControl : NSControl {
 
 }
 
-
+#endif

@@ -16,6 +16,8 @@
 * limitations under the License.
 */
 
+#if os(iOS)
+    
 import Foundation
 import UIKit
 import WebKit
@@ -142,3 +144,5 @@ extension NSObject {
         }
     }
 }
+    
+#endif

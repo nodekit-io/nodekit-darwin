@@ -16,6 +16,8 @@
 * limitations under the License.
 */
 
+#if os(OSX)
+    
 import Foundation
 
 import WebKit
@@ -141,3 +143,4 @@ extension NKE_BrowserWindow: WKNavigationDelegate {
 
 }
 
+#endif

@@ -16,6 +16,8 @@
 * limitations under the License.
 */
 
+#if os(iOS)
+    
 import UIKit
 
 import NKScripting
@@ -35,3 +37,5 @@ public class NKEHostMain {
         }
     
 }
+
+#endif

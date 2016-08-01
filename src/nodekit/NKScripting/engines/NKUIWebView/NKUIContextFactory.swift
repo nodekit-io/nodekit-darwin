@@ -16,6 +16,8 @@
 * limitations under the License.
 */
 
+#if os(iOS)
+    
 import Foundation
 import UIKit
 
@@ -47,3 +49,5 @@ extension NKScriptContextFactory {
 
     }
 }
+
+#endif

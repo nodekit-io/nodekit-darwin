@@ -16,6 +16,8 @@
 * limitations under the License.
 */
 
+#if os(OSX)
+    
 import WebKit
 
 extension WebView: NKScriptContextHost {
@@ -65,3 +67,5 @@ extension WebView {
     }
 
 }
+
+#endif
