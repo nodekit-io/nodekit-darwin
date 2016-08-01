@@ -68,7 +68,7 @@ class NKE_Dialog: NSObject, NKE_DialogProtocol {
  
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
 
-        for var i = 0; i < buttons.count; i++ {
+        for i in 0 ..< buttons.count {
  
             let buttonTitle: String = buttons[i] ?? ""
 
