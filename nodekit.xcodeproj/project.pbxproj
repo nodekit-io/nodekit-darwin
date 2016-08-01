@@ -692,6 +692,7 @@
 		E4E667411D4E9E4700B525E9 /* NKCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NKCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E6674A1D4E9E4700B525E9 /* NKCore-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NKCore-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4E667961D4EA53F00B525E9 /* appdelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = appdelegate.swift; sourceTree = "<group>"; };
+		E4E667EE1D4FB2CD00B525E9 /* NodeKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NodeKit.podspec; sourceTree = "<group>"; };
 		E4EBA0C51D4E251500687BD5 /* NKElectroHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKElectroHost.swift; sourceTree = "<group>"; };
 		E4EBA0C71D4E251500687BD5 /* NKEHostMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKEHostMain.swift; sourceTree = "<group>"; };
 		E4EBA0C81D4E251500687BD5 /* NKEAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKEAppDelegate.swift; sourceTree = "<group>"; };
@@ -1237,6 +1238,7 @@
 		E48172B41C99B61300DD09AF = {
 			isa = PBXGroup;
 			children = (
+				E4E667EE1D4FB2CD00B525E9 /* NodeKit.podspec */,
 				E481731B1C99B71B00DD09AF /* src */,
 				E48174971C99B72A00DD09AF /* test */,
 				E45F83631D4C0F980088D28F /* platformsupport */,
