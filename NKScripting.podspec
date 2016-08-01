@@ -12,14 +12,13 @@ s.ios.deployment_target = '9.3'
 s.osx.deployment_target = '10.11'
 
 s.source_files = "src/nodekit", "src/nodekit/**/*.{swift,h,m}"
-s.resource_bundles = {
-    'NodeKitResources' => [
+s.resources =  [
         'src/nodekit/NKCore/lib/**/*',
         'src/nodekit/NKElectro/lib-electro/**/*',
         'src/nodekit/NKElectro/NK_ElectroHost/www/default/**/*',
         'src/nodekit/NKElectro/NK_ElectroHost/splash/default/**/*',
-        'src/nodekit/NKScripting/lib/**/*'
+        'src/nodekit/NKScripting/lib-scripting/**/*'
     ]
-  }
+
 s.requires_arc = true
 end
