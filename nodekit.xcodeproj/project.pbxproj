@@ -1039,7 +1039,11 @@
 		E48172C11C99B65C00DD09AF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4EBA46F1D4E507A00687BD5 /* sample-NKScripting-Mac.app */,
+		     	E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */,
+				E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */,
+				E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */,
+				E4B5AFF21D4FC1BE005077D2 /* NKCoreTests.xctest */,
+		        E4EBA46F1D4E507A00687BD5 /* sample-NKScripting-Mac.app */,
 				E4129CC51D4E8E48006ABA3B /* sample-NKScripting-iOS.app */,
 				E4EBA4801D4E508400687BD5 /* sample-NKElectro-Mac.app */,
 				E4129CDB1D4E8E59006ABA3B /* sample-NKElectro-iOS.app */,
@@ -1047,11 +1051,7 @@
 				E4129CF11D4E8E69006ABA3B /* sample-NKCore-iOS.app */,
 				E4EBA4B31D4E515500687BD5 /* sample-nodekit-Mac.app */,
 				E4129D071D4E8E7B006ABA3B /* sample-nodekit-iOS.app */,
-				E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */,
-				E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */,
-				E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */,
-				E4B5AFF21D4FC1BE005077D2 /* NKCoreTests.xctest */,
-			);
+						);
 			name = Products;
 			sourceTree = "<group>";
 		};
