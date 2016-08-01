@@ -11,6 +11,6 @@ s.source       = { :git => "https://github.com/nodekit-io/nodekit-darwin.git" }
 s.ios.deployment_target = '9.3'
 s.osx.deployment_target = '10.11'
 
-s.source_files = 'src'
+s.source_files = "src/nodekit", "src/nodekit/**/*.{swift,h,m}"
 s.requires_arc = true
 end
