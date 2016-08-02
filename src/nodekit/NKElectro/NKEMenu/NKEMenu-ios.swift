@@ -23,7 +23,9 @@ import Foundation
 
 import UIKit
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 // NKElectro MENU Placeholder code only:  on roadmap but lower priority as not supported on mobile
 

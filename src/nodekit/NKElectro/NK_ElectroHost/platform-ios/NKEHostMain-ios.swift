@@ -20,7 +20,9 @@
     
 import UIKit
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 public class NKEHostMain {
 

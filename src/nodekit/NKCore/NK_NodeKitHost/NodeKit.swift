@@ -19,7 +19,9 @@
 
 import Foundation
 
+#if !COCOAPODS
 import NKScripting
+#endif
 
 public class NodeKit: NSObject {
     

@@ -22,7 +22,9 @@ import Foundation
 
 import WebKit
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 extension NKE_BrowserWindow: WebUIDelegate {
 

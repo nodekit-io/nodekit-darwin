@@ -24,7 +24,9 @@ import WebKit
 
 import Cocoa
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 extension NKE_BrowserWindow {
 

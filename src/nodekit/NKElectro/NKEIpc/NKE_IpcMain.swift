@@ -19,7 +19,9 @@
 
 import Foundation
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 class NKE_IpcMain: NSObject, NKE_IpcProtocol {
   

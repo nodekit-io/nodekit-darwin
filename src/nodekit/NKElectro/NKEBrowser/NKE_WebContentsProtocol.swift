@@ -19,7 +19,9 @@
 
 import Foundation
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 protocol NKE_WebContentsProtocol: NKScriptExport, NKE_IpcProtocol {
 

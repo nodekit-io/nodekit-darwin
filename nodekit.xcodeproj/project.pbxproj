@@ -159,7 +159,6 @@
 		E4BAA8C81D4FC4B80048B7DA /* NKT_TestRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E481761F1C9A444500DD09AF /* NKT_TestRunner.swift */; };
 		E4BAA8C91D4FC4BB0048B7DA /* app in Resources */ = {isa = PBXBuildFile; fileRef = E48175F71C99D59E00DD09AF /* app */; };
 		E4BAA8CA1D4FC4BB0048B7DA /* lib-test in Resources */ = {isa = PBXBuildFile; fileRef = E48175F11C99D15E00DD09AF /* lib-test */; };
-		E4BAA8CE1D4FD3750048B7DA /* NKScripting.podspec in Resources */ = {isa = PBXBuildFile; fileRef = E4BAA8CD1D4FD3750048B7DA /* NKScripting.podspec */; };
 		E4E6678C1D4EA44100B525E9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA5941D4E51E800687BD5 /* app */; };
 		E4E6678D1D4EA44400B525E9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA51F1D4E51B000687BD5 /* main.swift */; };
 		E4E6678E1D4EA45400B525E9 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4129D1B1D4E8F3D006ABA3B /* Launch Screen.storyboard */; };
@@ -550,7 +549,6 @@
 		E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NKCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B5AFF21D4FC1BE005077D2 /* NKCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NKCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B5B0061D4FC21B005077D2 /* platform */ = {isa = PBXFileReference; lastKnownFileType = folder; path = platform; sourceTree = "<group>"; };
-		E4BAA8CD1D4FD3750048B7DA /* NKScripting.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NKScripting.podspec; sourceTree = "<group>"; };
 		E4E667961D4EA53F00B525E9 /* appdelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = appdelegate.swift; sourceTree = "<group>"; };
 		E4EBA0C51D4E251500687BD5 /* NKElectroHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKElectroHost.swift; sourceTree = "<group>"; };
 		E4EBA0C71D4E251500687BD5 /* NKEHostMain-osx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NKEHostMain-osx.swift"; sourceTree = "<group>"; };
@@ -1031,7 +1029,6 @@
 		E48172B41C99B61300DD09AF = {
 			isa = PBXGroup;
 			children = (
-				E4BAA8CD1D4FD3750048B7DA /* NKScripting.podspec */,
 				E481731B1C99B71B00DD09AF /* src */,
 				E48174971C99B72A00DD09AF /* test */,
 				E45F83631D4C0F980088D28F /* platformsupport */,
@@ -1656,7 +1653,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4B5AF681D4FBBDB005077D2 /* lib-scripting in Resources */,
-				E4BAA8CE1D4FD3750048B7DA /* NKScripting.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -29,7 +29,9 @@ import Foundation
 
 import CoreFoundation
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 @objc protocol NKC_SwiftSocketProtocol: class {
     

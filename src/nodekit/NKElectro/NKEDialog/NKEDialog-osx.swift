@@ -23,7 +23,9 @@ import Foundation
 
 import Cocoa
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 extension NKE_Dialog: NKScriptExport {
 

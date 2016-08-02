@@ -20,7 +20,9 @@ import Darwin
 
 import Foundation
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 class NKC_Crypto: NSObject, NKScriptExport {
     

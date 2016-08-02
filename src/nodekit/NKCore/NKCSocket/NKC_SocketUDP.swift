@@ -18,8 +18,10 @@
  
  import Foundation
  
- import NKScripting
-
+ #if !COCOAPODS
+    import NKScripting
+ #endif
+ 
  class NKC_SocketUDP: NSObject, NKScriptExport {
     
     class func attachTo(context: NKScriptContext) {

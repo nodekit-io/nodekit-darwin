@@ -19,7 +19,9 @@
 
 import Foundation
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 public enum NKEBrowserType: String {
   

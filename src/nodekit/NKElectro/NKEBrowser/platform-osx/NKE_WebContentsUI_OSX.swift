@@ -23,7 +23,9 @@ import Foundation
 
 import WebKit
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 class NKE_WebContentsUI: NKE_WebContentsBase {
 

@@ -20,11 +20,6 @@
 
 #import <Foundation/Foundation.h>
 
-#ifndef NKScripting
-#define NKScripting
-#endif
-
-
 NS_ASSUME_NONNULL_BEGIN
 
 // The workaround for using NSInvocation and NSMethodSignature in Swift.

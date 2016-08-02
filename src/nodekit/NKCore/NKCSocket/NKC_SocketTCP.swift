@@ -18,8 +18,10 @@
  
  import Foundation
  
- import NKScripting
-
+ #if !COCOAPODS
+    import NKScripting
+ #endif
+ 
  /*
  * Creates _tcp javascript value that inherits from EventEmitter
  * _tcp.on("connection", function(_tcp))

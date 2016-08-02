@@ -18,7 +18,9 @@
 
 import Foundation
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 class NKE_ProtocolFileDecode: NSObject {
 

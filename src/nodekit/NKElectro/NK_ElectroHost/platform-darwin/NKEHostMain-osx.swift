@@ -18,7 +18,9 @@
 #if os(OSX)
 import Cocoa
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 class NKEHostMain {
     

@@ -19,7 +19,9 @@
     
 import Cocoa
 
-import NKScripting
+#if !COCOAPODS
+    import NKScripting
+#endif
 
 class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
     
