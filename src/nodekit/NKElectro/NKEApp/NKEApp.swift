@@ -39,7 +39,7 @@ extension NKE_App: NKScriptExport {
         
         case ".global":
         
-            return NKStorage.getPluginWithStub(stub, "lib-electro/app.js", NKElectro.self)
+            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/app.js", NKElectro.self)
         
         default:
         

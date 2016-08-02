@@ -50,7 +50,7 @@
     class func rewriteGeneratedStub(stub: String, forKey: String) -> String {
         switch (forKey) {
         case ".global":
-            return NKStorage.getPluginWithStub(stub, "lib/platform/tcp.js", NKC_SocketTCP.self)
+            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/platform/tcp.js", NKC_SocketTCP.self)
         default:
             return stub
         }

@@ -156,7 +156,7 @@ extension NKE_Tray: NKScriptExport {
         
         case ".global":
         
-            return NKStorage.getPluginWithStub(stub, "lib-electro/tray.js", NKElectro.self)
+            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/tray.js", NKElectro.self)
         
         default:
         

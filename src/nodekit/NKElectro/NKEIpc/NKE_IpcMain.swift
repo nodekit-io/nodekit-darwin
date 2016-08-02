@@ -85,7 +85,7 @@ extension NKE_IpcMain: NKScriptExport {
         
         case ".global":
         
-            return NKStorage.getPluginWithStub(stub, "lib-electro/ipc-main", NKElectro.self)
+            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/ipc-main", NKElectro.self)
        
         default:
         

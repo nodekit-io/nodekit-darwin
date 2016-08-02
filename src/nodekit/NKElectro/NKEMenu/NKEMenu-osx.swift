@@ -45,9 +45,9 @@ extension NKE_Menu: NKScriptExport {
         
         case ".global":
         
-            let appjs = NKStorage.getResource("lib-electro/menu.js", NKElectro.self)
+            let appjs = NKStorage.getResource("lib-electro.nkar/menu.js", NKElectro.self)
             
-            let appjs2 = NKStorage.getResource("lib-electro/menu-item.js", NKElectro.self)
+            let appjs2 = NKStorage.getResource("lib-electro.nkar/menu-item.js", NKElectro.self)
             
             return "function loadplugin1(){\n" + appjs! + "\n}\n" + "\n" + "function loadplugin2(){\n" + appjs2! + "\n}\n" + stub + "\n" + "loadplugin1(); loadplugin2();" + "\n"
        

@@ -237,7 +237,7 @@ extension NKStorage:  NKScriptExport {
             
         case ".global":
             
-            return NKStorage.getPluginWithStub(stub, "lib-scripting/native_module.js", NKStorage.self)
+            return NKStorage.getPluginWithStub(stub, "lib-scripting.nkar/native_module.js", NKStorage.self)
             
         default:
             

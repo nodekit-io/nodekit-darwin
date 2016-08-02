@@ -105,7 +105,7 @@ extension NKE_IpcRenderer: NKScriptExport {
         
         case ".global":
         
-            return NKStorage.getPluginWithStub(stub, "lib-electro/ipc-renderer.js", NKElectro.self)
+            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/ipc-renderer.js", NKElectro.self)
         
         default:
         

@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E40D3F7B1D50DADB00872E4D /* lib-scripting.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F7A1D50DADB00872E4D /* lib-scripting.nkar */; };
+		E40D3F7E1D50DBA600872E4D /* lib-electro.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F7D1D50DBA600872E4D /* lib-electro.nkar */; };
+		E40D3F811D50DBB200872E4D /* default.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F7F1D50DBB200872E4D /* default.nkar */; };
+		E40D3F821D50DBB200872E4D /* splash.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F801D50DBB200872E4D /* splash.nkar */; };
+		E40D3F881D50DC2900872E4D /* lib-core.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F861D50DC2400872E4D /* lib-core.nkar */; };
 		E4129D201D4E9078006ABA3B /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4129D191D4E8F34006ABA3B /* Launch Screen.storyboard */; };
 		E4129D211D4E907F006ABA3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA5371D4E51B000687BD5 /* Assets.xcassets */; };
 		E4129D3C1D4E910F006ABA3B /* appdelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4129D381D4E90F4006ABA3B /* appdelegate.swift */; };
@@ -25,7 +30,6 @@
 		E45F74061D4E74FD00D96796 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA58B1D4E51B000687BD5 /* Assets.xcassets */; };
 		E45F74071D4E750000D96796 /* SamplePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA58D1D4E51B000687BD5 /* SamplePlugin.swift */; };
 		E496F8961D4E8CBE00377794 /* sample-NKCore-Mac.app in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA4911D4E508D00687BD5 /* sample-NKCore-Mac.app */; };
-		E4B5AF681D4FBBDB005077D2 /* lib-scripting in Resources */ = {isa = PBXBuildFile; fileRef = E45F88F11D4CDF4E0088D28F /* lib-scripting */; };
 		E4B5AF691D4FBBE4005077D2 /* NKJSCContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845A1D4CDEA40088D28F /* NKJSCContextFactory.swift */; };
 		E4B5AF6A1D4FBBE4005077D2 /* NKJSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845B1D4CDEA40088D28F /* NKJSContext.swift */; };
 		E4B5AF6B1D4FBBE4005077D2 /* NKJSCScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845C1D4CDEA40088D28F /* NKJSCScript.swift */; };
@@ -66,7 +70,6 @@
 		E4B5AF8E1D4FBD03005077D2 /* NKScripting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4B5AF911D4FBD12005077D2 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; };
 		E4B5AF921D4FBD12005077D2 /* NKScripting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E4B5AFA71D4FBFB9005077D2 /* lib-electro in Resources */ = {isa = PBXBuildFile; fileRef = E45F88EB1D4CDF360088D28F /* lib-electro */; };
 		E4B5AFA81D4FBFBE005077D2 /* NKElectro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA1161D4E281700687BD5 /* NKElectro.swift */; };
 		E4B5AFA91D4FBFBE005077D2 /* NKElectro_Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA1171D4E281700687BD5 /* NKElectro_Renderer.swift */; };
 		E4B5AFAA1D4FBFBE005077D2 /* NKElectroHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA0C51D4E251500687BD5 /* NKElectroHost.swift */; };
@@ -74,8 +77,6 @@
 		E4B5AFAC1D4FBFC0005077D2 /* NKEAppDelegate-osx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA0C81D4E251500687BD5 /* NKEAppDelegate-osx.swift */; };
 		E4B5AFAD1D4FBFC3005077D2 /* NKEHostMain-ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA0CA1D4E251500687BD5 /* NKEHostMain-ios.swift */; };
 		E4B5AFAE1D4FBFC3005077D2 /* NKEAppDelegate-ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA0CB1D4E251500687BD5 /* NKEAppDelegate-ios.swift */; };
-		E4B5AFAF1D4FBFC7005077D2 /* default in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA12E1D4E3B6100687BD5 /* default */; };
-		E4B5AFB01D4FBFC7005077D2 /* splash in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA12F1D4E3B6100687BD5 /* splash */; };
 		E4B5AFB11D4FBFCC005077D2 /* NKEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F842F1D4CDEA40088D28F /* NKEApp.swift */; };
 		E4B5AFB21D4FBFCC005077D2 /* NKEAppDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84301D4CDEA40088D28F /* NKEAppDirectory.swift */; };
 		E4B5AFB31D4FBFCC005077D2 /* NKEAppProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84311D4CDEA40088D28F /* NKEAppProtocol.swift */; };
@@ -121,7 +122,6 @@
 		E4B5AFF31D4FC1BE005077D2 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */; };
 		E4B5B0081D4FC30D005077D2 /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */; };
 		E4B5B0091D4FC30D005077D2 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; };
-		E4B5B00A1D4FC316005077D2 /* lib in Resources */ = {isa = PBXBuildFile; fileRef = E45F88E61D4CDF240088D28F /* lib */; };
 		E4B5B00B1D4FC31A005077D2 /* NodeKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA1241D4E3A2F00687BD5 /* NodeKit.swift */; };
 		E4B5B00C1D4FC31E005077D2 /* NKC_Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84101D4CDEA40088D28F /* NKC_Console.swift */; };
 		E4B5B00D1D4FC321005077D2 /* NKC_Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84131D4CDEA40088D28F /* NKC_Crypto.swift */; };
@@ -438,6 +438,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E40D3F7A1D50DADB00872E4D /* lib-scripting.nkar */ = {isa = PBXFileReference; lastKnownFileType = file; path = "lib-scripting.nkar"; sourceTree = "<group>"; };
+		E40D3F7D1D50DBA600872E4D /* lib-electro.nkar */ = {isa = PBXFileReference; lastKnownFileType = file; path = "lib-electro.nkar"; sourceTree = "<group>"; };
+		E40D3F7F1D50DBB200872E4D /* default.nkar */ = {isa = PBXFileReference; lastKnownFileType = file; path = default.nkar; sourceTree = "<group>"; };
+		E40D3F801D50DBB200872E4D /* splash.nkar */ = {isa = PBXFileReference; lastKnownFileType = file; path = splash.nkar; sourceTree = "<group>"; };
+		E40D3F841D50DC0900872E4D /* lib-core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "lib-core"; sourceTree = "<group>"; };
+		E40D3F861D50DC2400872E4D /* lib-core.nkar */ = {isa = PBXFileReference; lastKnownFileType = file; path = "lib-core.nkar"; sourceTree = "<group>"; };
 		E4129CC51D4E8E48006ABA3B /* sample-NKScripting-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-NKScripting-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4129CDB1D4E8E59006ABA3B /* sample-NKElectro-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-NKElectro-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4129CF11D4E8E69006ABA3B /* sample-NKCore-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-NKCore-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -535,7 +541,6 @@
 		E45F84861D4CDEA40088D28F /* NKEventEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKEventEmitter.swift; sourceTree = "<group>"; };
 		E45F84871D4CDEA40088D28F /* NKLogging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKLogging.swift; sourceTree = "<group>"; };
 		E45F84881D4CDEA40088D28F /* NKStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKStorage.swift; sourceTree = "<group>"; };
-		E45F88E61D4CDF240088D28F /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
 		E45F88EB1D4CDF360088D28F /* lib-electro */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "lib-electro"; sourceTree = "<group>"; };
 		E45F88F11D4CDF4E0088D28F /* lib-scripting */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "lib-scripting"; sourceTree = "<group>"; };
 		E45F88F71D4CE0190088D28F /* NKETray-ios.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NKETray-ios.swift"; sourceTree = "<group>"; };
@@ -750,7 +755,8 @@
 		E45F837E1D4CDEA40088D28F /* NKCore */ = {
 			isa = PBXGroup;
 			children = (
-				E45F88E61D4CDF240088D28F /* lib */,
+				E40D3F861D50DC2400872E4D /* lib-core.nkar */,
+				E40D3F841D50DC0900872E4D /* lib-core */,
 				E4EBA1231D4E3A2F00687BD5 /* NK_NodeKitHost */,
 				E45F840F1D4CDEA40088D28F /* NKCConsole */,
 				E45F84121D4CDEA40088D28F /* NKCCrypto */,
@@ -815,6 +821,7 @@
 		E45F841E1D4CDEA40088D28F /* NKElectro */ = {
 			isa = PBXGroup;
 			children = (
+				E40D3F7D1D50DBA600872E4D /* lib-electro.nkar */,
 				E45F88EB1D4CDF360088D28F /* lib-electro */,
 				E4EBA0C41D4E251500687BD5 /* NK_ElectroHost */,
 				E45F842E1D4CDEA40088D28F /* NKEApp */,
@@ -929,6 +936,7 @@
 		E45F84571D4CDEA40088D28F /* NKScripting */ = {
 			isa = PBXGroup;
 			children = (
+				E40D3F7A1D50DADB00872E4D /* lib-scripting.nkar */,
 				E45F88F11D4CDF4E0088D28F /* lib-scripting */,
 				E45F84581D4CDEA40088D28F /* engines */,
 				E45F84751D4CDEA40088D28F /* NKScripting.h */,
@@ -1131,6 +1139,8 @@
 		E4EBA0CC1D4E251500687BD5 /* www */ = {
 			isa = PBXGroup;
 			children = (
+				E40D3F7F1D50DBB200872E4D /* default.nkar */,
+				E40D3F801D50DBB200872E4D /* splash.nkar */,
 				E4EBA12E1D4E3B6100687BD5 /* default */,
 				E4EBA12F1D4E3B6100687BD5 /* splash */,
 			);
@@ -1368,6 +1378,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4B5AF651D4FBAA9005077D2 /* Build configuration list for PBXNativeTarget "NKScripting" */;
 			buildPhases = (
+				E40D3F791D50DA0F00872E4D /* ShellScript */,
 				E4B5AF571D4FBAA9005077D2 /* Sources */,
 				E4B5AF581D4FBAA9005077D2 /* Frameworks */,
 				E4B5AF591D4FBAA9005077D2 /* Headers */,
@@ -1386,6 +1397,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4B5AFA41D4FBF1F005077D2 /* Build configuration list for PBXNativeTarget "NKElectro" */;
 			buildPhases = (
+				E40D3F7C1D50DB0400872E4D /* ShellScript */,
 				E4B5AF961D4FBF1E005077D2 /* Sources */,
 				E4B5AF971D4FBF1E005077D2 /* Frameworks */,
 				E4B5AF981D4FBF1E005077D2 /* Headers */,
@@ -1404,6 +1416,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E4B5B0001D4FC1BE005077D2 /* Build configuration list for PBXNativeTarget "NKCore" */;
 			buildPhases = (
+				E40D3F781D50D92200872E4D /* ShellScript */,
 				E4B5AFE41D4FC1BD005077D2 /* Sources */,
 				E4B5AFE51D4FC1BD005077D2 /* Frameworks */,
 				E4B5AFE61D4FC1BD005077D2 /* Headers */,
@@ -1652,7 +1665,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4B5AF681D4FBBDB005077D2 /* lib-scripting in Resources */,
+				E40D3F7B1D50DADB00872E4D /* lib-scripting.nkar in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1660,9 +1673,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4B5AFAF1D4FBFC7005077D2 /* default in Resources */,
-				E4B5AFB01D4FBFC7005077D2 /* splash in Resources */,
-				E4B5AFA71D4FBFB9005077D2 /* lib-electro in Resources */,
+				E40D3F821D50DBB200872E4D /* splash.nkar in Resources */,
+				E40D3F7E1D50DBA600872E4D /* lib-electro.nkar in Resources */,
+				E40D3F811D50DBB200872E4D /* default.nkar in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1670,7 +1683,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4B5B00A1D4FC316005077D2 /* lib in Resources */,
+				E40D3F881D50DC2900872E4D /* lib-core.nkar in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1721,6 +1734,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E40D3F781D50D92200872E4D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $SRCROOT/src/nodekit/NKCore\nrm -f lib-core.nkar\nzip -r lib-core.nkar lib-core";
+		};
+		E40D3F791D50DA0F00872E4D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $SRCROOT/src/nodekit/NKScripting\nrm -f lib-scripting.nkar\nzip -r lib-scripting.nkar lib-scripting";
+		};
+		E40D3F7C1D50DB0400872E4D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $SRCROOT/src/nodekit/NKElectro\nrm -f lib-electro.nkar\nzip -r lib-electro.nkar lib-electro\ncd $SRCROOT/src/nodekit/NKElectro/NK_ElectroHost/www\nrm -f default.nkar\nzip -r default.nkar default\nrm -f splash.nkar\nzip -r splash.nkar splash";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E4129CC11D4E8E48006ABA3B /* Sources */ = {

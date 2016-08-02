@@ -31,7 +31,7 @@
     class func rewriteGeneratedStub(stub: String, forKey: String) -> String {
         switch (forKey) {
         case ".global":
-            return NKStorage.getPluginWithStub(stub, "lib/platform/udp.js", NKC_SocketUDP.self)
+            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/platform/udp.js", NKC_SocketUDP.self)
         default:
             return stub
         }
