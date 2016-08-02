@@ -65,6 +65,23 @@ public extension NKArchiveReader {
         }
     }
     
+    mutating func exists(archive: String, filename: String) -> Bool {
+        
+        if let nkArchive = _cacheCDirs.objectForKey(archive) as? NKArchive {
+            
+                return nkArchive.exists(filename)
+            
+        } else {
+            
+            guard let (nkArchive, data) = NKArchive.createFromPath(archive) else { return false }
+            
+            _cacheCDirs.setObject(nkArchive, forKey: archive)
+            _cacheArchiveData.setObject(data, forKey: archive)
+            
+            return nkArchive.exists(filename)
+        }
+    }
+    
 }
 
 

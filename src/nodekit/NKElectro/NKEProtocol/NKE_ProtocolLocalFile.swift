@@ -70,9 +70,9 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
         let urlDecode = NKE_ProtocolFileDecode(url: request.URL!)
 
         if (urlDecode.exists()) {
-        
-            let data: NSData! = NSData(contentsOfFile: urlDecode.resourcePath! as String)
-
+            
+            let data: NSData! = NKStorage.getResourceData(urlDecode.resourcePath as! String)
+       
             let response: NSURLResponse = NSURLResponse(URL: request.URL!, MIMEType: urlDecode.mimeType as String?, expectedContentLength: data.length, textEncodingName: urlDecode.textEncoding as String?)
 
             client.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: NSURLCacheStoragePolicy.AllowedInMemoryOnly)

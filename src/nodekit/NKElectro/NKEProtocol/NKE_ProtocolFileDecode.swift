@@ -42,19 +42,16 @@ class NKE_ProtocolFileDecode: NSObject {
     
         resourcePath = nil
 
-        let _mainBundle: NSBundle = NKStorage.mainBundle
-        
-        let _nodeKitBundle: NSBundle = NSBundle(forClass: NKElectro.self)
-
-        let _appPath: NSString = (_mainBundle.bundlePath as NSString).stringByDeletingLastPathComponent
-        
-        let _fileManager: NSFileManager = NSFileManager.defaultManager()
-        
         var _fileTypes: [NSString: NSString] = ["html": "text/html" ,
             "js" : "application/javascript" ,
             "css": "text/css" ]
 
         urlPath = (url.path! as NSString).stringByDeletingLastPathComponent
+        
+        if urlPath.substringToIndex(1) == "/"
+        {
+            urlPath = urlPath.substringFromIndex(1)
+        }
 
         fileExtension = url.pathExtension!.lowercaseString
         
@@ -78,47 +75,35 @@ class NKE_ProtocolFileDecode: NSObject {
 
         if (fileName.length > 0) {
 
-            resourcePath = _appPath.stringByAppendingPathComponent(urlPath.stringByAppendingPathComponent(fileName as String))
+            resourcePath = urlPath.stringByAppendingPathComponent(fileName as String)
 
-            if (!_fileManager.fileExistsAtPath(resourcePath! as String)) {
-                resourcePath = nil
-            }
-
-              if ((resourcePath == nil) && (fileExtension.length > 0)) {
-        
-                resourcePath = _mainBundle.pathForResource(fileBase as String, ofType:fileExtension as String, inDirectory: ("app" as NSString).stringByAppendingPathComponent(urlPath as String))
-            
-            }
+            if (!NKStorage.exists(resourcePath as! String)) { resourcePath = nil }
 
             if ((resourcePath == nil) && (fileExtension.length > 0)) {
-            
-                resourcePath = _mainBundle.pathForResource(fileBase as String, ofType:fileExtension as String, inDirectory: urlPath as String)
+        
+                resourcePath = (("app" as NSString).stringByAppendingPathComponent(urlPath as String) as NSString).stringByAppendingPathComponent(fileName as String)
+                
+                 if (!NKStorage.exists(resourcePath as! String)) { resourcePath = nil }
             
             }
-
+            
             if ((resourcePath == nil) && (fileExtension.length == 0)) {
-            
-                resourcePath = _mainBundle.pathForResource(fileBase as String, ofType:"html", inDirectory: ("app" as NSString).stringByAppendingPathComponent(urlPath as String))
-           
+                
+                resourcePath = (("app" as NSString).stringByAppendingPathComponent(urlPath as String) as NSString).stringByAppendingPathComponent((fileBase as String) + ".html")
+                
+                if (!NKStorage.exists(resourcePath as! String)) { resourcePath = nil }
+                
             }
-
+            
+            
             if ((resourcePath == nil) && (fileExtension.length == 0)) {
-            
-                resourcePath = _mainBundle.pathForResource("index", ofType:"html", inDirectory: ("app" as NSString).stringByAppendingPathComponent(urlPath as String))
-            
+                
+                resourcePath = (("app" as NSString).stringByAppendingPathComponent(urlPath as String) as NSString).stringByAppendingPathComponent("index.html")
+                
+                if (!NKStorage.exists(resourcePath as! String)) { resourcePath = nil }
+                
             }
-
-            if ((resourcePath == nil)  && (fileExtension.length > 0)) {
-           
-                resourcePath = _nodeKitBundle.pathForResource(fileBase as String, ofType:fileExtension as String, inDirectory: urlPath as String)
             
-            }
-
-            if ((resourcePath == nil)  && (fileExtension.length == 0)) {
-           
-                resourcePath = _nodeKitBundle.pathForResource(fileBase as String, ofType:"html", inDirectory: urlPath as String)
-            
-            }
 
             mimeType = _fileTypes[fileExtension]
 

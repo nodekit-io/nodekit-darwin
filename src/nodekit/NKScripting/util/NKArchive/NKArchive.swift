@@ -86,6 +86,11 @@ public extension NKArchive {
         
     }
     
+    func exists(filename: String) -> Bool {
+        
+        if (self._cdirs[filename] != nil) {return true} else { return false }
+
+    }
     
     var files: [String] {
         

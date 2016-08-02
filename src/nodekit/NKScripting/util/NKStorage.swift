@@ -95,6 +95,19 @@ public class NKStorage: NSObject {
         }
     }
     
+    public class func exists(module: String, _ t: AnyClass? = nil) -> Bool {
+        
+        if module.lowercaseString.rangeOfString(".nkar/") != nil {
+            return existsNKAR(module, t)
+        }
+        
+        let bundle = (t != nil) ?  NSBundle(forClass: t!) :  NKStorage.mainBundle
+        
+        if (getPath_(bundle, module) != nil) { return true } else { return false}
+        
+
+    }
+    
     // PRIVATE METHODS
     
     private static var unzipper_ : NKArchiveReader? = nil
@@ -108,6 +121,33 @@ public class NKStorage: NSObject {
         return NSString(data: data, encoding: NSUTF8StringEncoding) as String?
         
     }
+    
+    private class func existsNKAR(module: String, _ t: AnyClass? = nil) -> Bool {
+        
+        let moduleArr = module.componentsSeparatedByString(".nkar/")
+        
+        let nkarModule: String = moduleArr[0] + ".nkar"
+        
+        var resource: String = moduleArr[1]
+        
+        let bundle = (t != nil) ?  NSBundle(forClass: t!) :  NKStorage.mainBundle
+        
+        unzipper_ = unzipper_ ?? NKArchiveReader.create()
+        
+        let fileExtension = (resource as NSString).pathExtension
+        
+        if (fileExtension=="") {
+            
+            resource += ".js"
+            
+        }
+        
+        guard let nkarPath = getPath_(bundle, nkarModule)   else { return false }
+        
+        return  unzipper_!.exists(nkarPath, filename: resource)
+        
+    }
+
     
     private class func getNKARData_(module: String, _ t: AnyClass? = nil) -> NSData? {
         
@@ -138,7 +178,7 @@ public class NKStorage: NSObject {
         return data
         
     }
-
+    
     private class func getPath_(mainBundle: NSBundle, _ module: String) -> String? {
         
         let directory = (module as NSString).stringByDeletingLastPathComponent
@@ -150,9 +190,9 @@ public class NKStorage: NSObject {
         fileName = (fileName as NSString).stringByDeletingPathExtension
         
         if (fileExtension=="") {
-        
+            
             fileExtension = "js"
-        
+            
         }
         
         var path = mainBundle.pathForResource(fileName, ofType: fileExtension, inDirectory: directory)
@@ -164,17 +204,17 @@ public class NKStorage: NSObject {
                 path = _nodeKitBundle.pathForResource(fileName, ofType: fileExtension, inDirectory: directory)
                 
                 if !(path == nil) { break; }
-
+                
             }
             
             if (path == nil) {
                 
                 NKLogging.log("!Error - source file not found: \(directory + "/" + fileName + "." + fileExtension)")
-        
+                
                 return nil
-            
+                
             }
-        
+            
         }
         
         return path!
