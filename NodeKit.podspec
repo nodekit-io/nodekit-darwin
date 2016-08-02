@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.subspec 'NKScripting' do |nks|
-    nks.frameworks = 'libcompression'
+    nks.libraries = 'libcompression'
     nks.source_files =  "src/nodekit/NKScripting/**/*.{swift,h,m}"
     nks.resources =  [
           'src/nodekit/NKScripting/lib-scripting/**/*',
