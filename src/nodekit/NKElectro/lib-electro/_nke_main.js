@@ -32,4 +32,4 @@ process.waitFor = function(signal) {
 
 }
 
-process.bootstrap.NativeModule.loadPreCacheSource('electro',  process.bootstrap.NativeModule.getSource('lib-electro.nkar/electro.js'))
+process.bootstrap.NativeModule.loadPreCacheSource('electro',  process.bootstrap.NativeModule.getSource('lib-electro.nkar/lib-electro/electro.js'))

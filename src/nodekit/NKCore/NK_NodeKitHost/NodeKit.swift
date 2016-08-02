@@ -57,7 +57,7 @@ public class NodeKit: NSObject {
     
     public class func bootCore(context: NKScriptContext) {
     
-        guard let script = NKStorage.getResource("lib-core.nkar/_nodekit_bootstrapper.js", NodeKit.self) else {
+        guard let script = NKStorage.getResource("lib-core.nkar/lib-core/_nodekit_bootstrapper.js", NodeKit.self) else {
         
             NKLogging.die("Failed to read bootstrapper script")
         

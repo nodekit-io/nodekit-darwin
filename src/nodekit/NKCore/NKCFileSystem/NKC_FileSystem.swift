@@ -36,7 +36,7 @@ class NKC_FileSystem: NSObject, NKScriptExport {
         
         case ".global":
         
-            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/platform/fs.js", NKC_FileSystem.self)
+            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/lib-core/platform/fs.js", NKC_FileSystem.self)
        
         default:
         

@@ -164,7 +164,7 @@ extension NKE_BrowserWindow: NKScriptExport {
         
         case ".global":
             
-            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/browser-window.js", NKElectro.self)
+            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/lib-electro/browser-window.js", NKElectro.self)
         
         default:
         

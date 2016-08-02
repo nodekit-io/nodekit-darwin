@@ -24,7 +24,7 @@ if (!process || !process.bootstrap)
 }
 
 process.binding = function(id) {
-    return process.bootstrap.NativeModule._load('lib/bindings/' + id);
+    return process.bootstrap.NativeModule._load('lib-core.nkar/lib-core/bindings/' + id + '.js');
 };
 
 process.bootstrap.NativeModule.setPreCacheSources(process.binding('natives'));
@@ -32,7 +32,7 @@ process.bootstrap.NativeModule.setPreCacheSources(process.binding('natives'));
 console.log = native.console.log;
 
 // run vanilla node.js startup
-process.bootstrap.NativeModule.bootstrap('lib/node.js');
+process.bootstrap.NativeModule.bootstrap('lib-core.nkar/lib-core/node.js');
 
 global.setImmediate = function(fn){ process.nextTick(fn.bind.apply(fn, arguments)) }
 

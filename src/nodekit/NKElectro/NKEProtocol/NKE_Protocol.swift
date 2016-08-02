@@ -44,7 +44,7 @@ class NKE_Protocol: NSObject, NKScriptExport {
         
         case ".global":
         
-            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/protocol.js", NKElectro.self)
+            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/lib-electro/protocol.js", NKElectro.self)
         
         default:
         

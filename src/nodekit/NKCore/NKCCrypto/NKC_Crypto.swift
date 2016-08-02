@@ -38,7 +38,7 @@ class NKC_Crypto: NSObject, NKScriptExport {
         
         case ".global":
         
-            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/platform/crypto.js", NKC_Crypto.self)
+            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/lib-core/platform/crypto.js", NKC_Crypto.self)
        
         default:
         

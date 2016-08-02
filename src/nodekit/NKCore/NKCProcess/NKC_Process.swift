@@ -36,7 +36,7 @@
         
         case ".global":
         
-            let appjs = NKStorage.getResource("lib-core.nkar/platform/process.js", NKC_Process.self)
+            let appjs = NKStorage.getResource("lib-core.nkar/lib-core/platform/process.js", NKC_Process.self)
              
             // UNIQUE SCRIPT FOR PROCESS
             

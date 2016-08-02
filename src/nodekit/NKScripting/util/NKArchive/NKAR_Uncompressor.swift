@@ -83,13 +83,13 @@ struct NKAR_Uncompressor {
                     
                 case COMPRESSION_STATUS_OK.rawValue:
                 
-                    print("Unexpected end of stream")
+                    print("Unexpected end of stream when uncompressing nkar")
                     
                     return nil
                     
                 case COMPRESSION_STATUS_ERROR.rawValue:
                     
-                    print("Unexpected error in stream")
+                    print("Unexpected error in stream when uncompressing nkar")
                     
                     return nil
                     

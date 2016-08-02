@@ -139,7 +139,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
         
         objc_setAssociatedObject(context, key, self, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
-        guard let source = NKStorage.getResource("lib-scripting.nkar/nkscripting.js", NKScriptChannel.self) else {
+        guard let source = NKStorage.getResource("lib-scripting.nkar/lib-scripting/nkscripting.js", NKScriptChannel.self) else {
      
              NKLogging.die("Failed to read provision script: nkscripting")
         
@@ -147,7 +147,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
 
         context!.NKinjectJavaScript(NKScriptSource(source: source, asFilename: "io.nodekit.scripting/NKScripting/nkscripting.js", namespace: "NKScripting"))
         
-        guard let source2 = NKStorage.getResource("lib-scripting.nkar/promise.js", NKScriptChannel.self) else {
+        guard let source2 = NKStorage.getResource("lib-scripting.nkar/lib-scripting/promise.js", NKScriptChannel.self) else {
             NKLogging.die("Failed to read provision script: promise")
         }
 

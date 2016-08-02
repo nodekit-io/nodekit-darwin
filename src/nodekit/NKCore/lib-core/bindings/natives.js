@@ -72,14 +72,14 @@ var source = {};
     'vm',
 	'zlib',
      ].forEach( function(name) {
-  source[name] = getSource('lib-core.nkar/node/' + name);
+  source[name] = getSource('lib-core.nkar/lib-core/node/' + name + '.js');
    });
 
 /* CUSTOM NODE.JS API REPLACEMENTS*/
 [
 	'buffer', /* 'dns', alternative to cares_wrap */ 'crypto'
  ].forEach(function (name) {
-           source[name] = getSource('lib-core.nkar/builtin-replacements/' + name );
+           source[name] = getSource('lib-core.nkar/lib-core/builtin-replacements/' + name + '.js');
            });
 
 /* CUSTOM NODE.JS API ADDITIONS*/
@@ -87,14 +87,14 @@ var source = {};
     'asap',
 	'promise',
  ].forEach(function (name) {
-           source[name] = getSource('lib-core.nkar/builtin-additions/' + name );
+           source[name] = getSource('lib-core.nkar/lib-core/builtin-additions/' + name + '.js' );
            });
 
 /* CUSTOM NODEKIT ADDITIONS*/
 [
  'platform'
  ].forEach(function (name) {
-           source[name] = getSource('lib-core.nkar/builtin-nodekit/' + name );
+           source[name] = getSource('lib-core.nkar/lib-core/builtin-nodekit/' + name );
            });
 
 /* CUSTOM NODEKIT ELECTRO ADDITIONS*/
@@ -109,7 +109,7 @@ if (io.nodekit.electro) {
      
      'electro_protocol'
      ].forEach(function (name) {
-               source[name] = getSource('lib-core.nkar/builtin-nodekit/' + name );
+               source[name] = getSource('lib-core.nkar/lib-core/builtin-nodekit/' + name + '.js' );
                });
     
     source['electron'] = source['electro'];
@@ -118,7 +118,7 @@ if (io.nodekit.electro) {
 
 
 /* CUSTOM NODE.JS API ADDITIONS*/
-  source["_third_party_main"] = getSource('lib-core.nkar/_nodekit_third_party_main.js');
+  source["_third_party_main"] = getSource('lib-core.nkar/lib-core/_nodekit_third_party_main.js');
 
 source.config = "\\gyp\n{}";
 

@@ -96,7 +96,7 @@ extension NKE_WebContentsBase: NKScriptExport {
             
             if (temp < 1 ) { return stub; }
             
-            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/web-contents.js", NKElectro.self)
+            return NKStorage.getPluginWithStub(stub, "lib-electro.nkar/lib-electro/web-contents.js", NKElectro.self)
         
         default:
         

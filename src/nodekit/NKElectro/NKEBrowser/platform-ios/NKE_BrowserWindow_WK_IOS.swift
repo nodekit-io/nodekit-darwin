@@ -50,13 +50,13 @@ extension NKE_BrowserWindow {
 
             let url: NSURL?
           
-            if (urlAddress == "file:///splash.nkar/views/StartupSplash.html") {
+            if (urlAddress == "file:///splash.nkar/splash/views/StartupSplash.html") {
             
-                var urlpath = NKStorage.mainBundle.pathForResource("StartupSplash", ofType: "html", inDirectory: "splash.nkar/views/")
+                var urlpath = NKStorage.mainBundle.pathForResource("StartupSplash", ofType: "html", inDirectory: "splash.nkar/splash/views/")
 
                 if (urlpath == nil) {
                 
-                    urlpath = NSBundle(forClass: NKElectroHost.self).pathForResource("StartupSplash", ofType: "html", inDirectory: "splash.nkar/views/")
+                    urlpath = NSBundle(forClass: NKElectroHost.self).pathForResource("StartupSplash", ofType: "html", inDirectory: "splash.nkar/splash/views/")
                 }
 
                 url = NSURL.fileURLWithPath(urlpath!)

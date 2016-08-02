@@ -115,11 +115,19 @@ public class NKStorage: NSObject {
         
         let nkarModule: String = moduleArr[0] + ".nkar"
         
-        let resource: String = moduleArr[1]
+        var resource: String = moduleArr[1]
         
         let bundle = (t != nil) ?  NSBundle(forClass: t!) :  NKStorage.mainBundle
         
         unzipper_ = unzipper_ ?? NKArchiveReader.create()
+        
+        let fileExtension = (resource as NSString).pathExtension
+        
+        if (fileExtension=="") {
+            
+            resource += ".js"
+            
+        }
         
         guard let nkarPath = getPath_(bundle, nkarModule),
             
@@ -237,7 +245,7 @@ extension NKStorage:  NKScriptExport {
             
         case ".global":
             
-            return NKStorage.getPluginWithStub(stub, "lib-scripting.nkar/native_module.js", NKStorage.self)
+            return NKStorage.getPluginWithStub(stub, "lib-scripting.nkar/lib-scripting/native_module.js", NKStorage.self)
             
         default:
             

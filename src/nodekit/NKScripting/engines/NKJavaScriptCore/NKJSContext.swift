@@ -56,7 +56,7 @@ extension JSContext: NKScriptContextHost {
         scriptingBridge.setObject(unsafeBitCast(logjs, AnyObject.self), forKeyedSubscript: "log")
         context.setObject(unsafeBitCast(scriptingBridge, AnyObject.self), forKeyedSubscript: "NKScriptingBridge")
         
-        let appjs = NKStorage.getResource("lib-scripting.nkar/init_jsc.js", NKScriptChannel.self)
+        let appjs = NKStorage.getResource("lib-scripting.nkar/lib-scripting/init_jsc.js", NKScriptChannel.self)
         
         let script = "function loadinit(){\n" + appjs! + "\n}\n" + "loadinit();" + "\n"
         

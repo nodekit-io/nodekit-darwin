@@ -44,7 +44,7 @@
         
         case ".global":
         
-            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/platform/console.js", NKC_Console.self)
+            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/lib-core/platform/console.js", NKC_Console.self)
        
         default:
         

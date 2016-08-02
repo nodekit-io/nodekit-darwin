@@ -36,7 +36,7 @@ class NKC_Timer: NSObject, NKScriptExport {
         
         case ".global":
         
-            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/platform/timer.js", NKC_Timer.self)
+            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/lib-core/platform/timer.js", NKC_Timer.self)
         
         default:
         

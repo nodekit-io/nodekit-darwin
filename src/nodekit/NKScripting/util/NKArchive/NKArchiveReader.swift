@@ -34,7 +34,7 @@ public extension NKArchiveReader {
         
         let cacheArchiveData2 = NSCache()
 
-        cacheArchiveData2.countLimit = 2
+        cacheArchiveData2.countLimit = 10
         
         return NKArchiveReader( _cacheCDirs: NSCache(), _cacheArchiveData: cacheArchiveData2)
     
@@ -46,21 +46,15 @@ public extension NKArchiveReader {
             
             if let data = _cacheArchiveData.objectForKey(archive) as? NSData {
                 
-                print ("READING FROM CACHE")
-                
                 return nkArchive[filename, withArchiveData: data]
                 
             } else
                 
             {
-                print ("LOADING FROM DISK WITH CACHED DIRECTORY")
-
                 return nkArchive[filename]
             }
             
         } else {
-            
-               print ("LOADING FROM DISK")
             
             guard let (nkArchive, data) = NKArchive.createFromPath(archive) else { return nil }
             

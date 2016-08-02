@@ -50,7 +50,7 @@ extension WKWebView: NKScriptContext, NKScriptContextHost {
         
         context.configuration.userContentController.addScriptMessageHandler(handler, name: "NKScriptingBridgeLog")
         
-        let appjs = NKStorage.getResource("lib-scripting.nkar/init_nitro.js", NKScriptChannel.self)
+        let appjs = NKStorage.getResource("lib-scripting.nkar/lib-scripting/init_nitro.js", NKScriptChannel.self)
         
         let script = "function loadinit(){\n" + appjs! + "\n}\n" + "loadinit();" + "\n"
         
