@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 protocol NKE_BrowserWindowProtocol: NKScriptExport {
 
     // Creates a new BrowserWindow with native properties as set by the options.

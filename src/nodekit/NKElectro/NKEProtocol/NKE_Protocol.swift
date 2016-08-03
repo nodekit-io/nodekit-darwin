@@ -18,10 +18,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKE_Protocol: NSObject, NKScriptExport {
   
     static var registeredSchemes: Dictionary<String, NKScriptValue> = Dictionary<String, NKScriptValue>()

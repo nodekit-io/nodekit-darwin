@@ -20,10 +20,6 @@
     
 import UIKit
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 public class NKEHostMain {
 
     public class func start (options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate?) {

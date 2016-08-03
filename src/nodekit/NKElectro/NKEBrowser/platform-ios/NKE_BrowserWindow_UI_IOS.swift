@@ -24,10 +24,6 @@ import WebKit
 
 import UIKit
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 extension NKE_BrowserWindow {
 
     internal func UIScriptEnvironmentReady() -> Void {

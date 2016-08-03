@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 protocol NKEMenuProtocol: NKScriptExport {
 
     func setApplicationMenu(menu: [String: AnyObject]) -> Void

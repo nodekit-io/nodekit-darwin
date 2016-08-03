@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 struct NKEAppDirectory {
 
     static func getPath(name: String) -> String {

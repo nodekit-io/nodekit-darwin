@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 public enum NKEBrowserType: String {
   
     case WKWebView = "WKWebView"

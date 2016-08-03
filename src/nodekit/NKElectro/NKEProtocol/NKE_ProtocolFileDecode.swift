@@ -18,10 +18,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKE_ProtocolFileDecode: NSObject {
 
     var resourcePath: NSString?   // The path to the bundle resource

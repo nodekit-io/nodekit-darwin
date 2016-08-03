@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 internal struct NKE_IPC_Event {
     
     var sender: Int

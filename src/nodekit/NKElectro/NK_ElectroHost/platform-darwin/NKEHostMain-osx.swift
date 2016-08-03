@@ -18,10 +18,6 @@
 #if os(OSX)
 import Cocoa
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKEHostMain {
     
       class func start(options: Dictionary<String, AnyObject>, delegate nkScriptDelegate: NKScriptContextDelegate?) {

@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-import NKScripting
-#endif
-
 public class NodeKit: NSObject {
     
     public class func attachTo(context: NKScriptContext) {

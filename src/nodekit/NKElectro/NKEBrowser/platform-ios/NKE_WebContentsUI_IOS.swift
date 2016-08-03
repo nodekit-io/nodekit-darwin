@@ -23,10 +23,6 @@ import Foundation
 
 import WebKit
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKE_WebContentsUI: NKE_WebContentsBase {
 
     internal weak var webView: UIWebView? = nil

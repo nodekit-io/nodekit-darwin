@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKE_BrowserWindow: NSObject {
 
     internal var _events: NKEventEmitter = NKEventEmitter()

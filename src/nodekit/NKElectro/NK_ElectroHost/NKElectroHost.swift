@@ -18,10 +18,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 @objc public class NKElectroHost: NSObject, NKScriptContextDelegate {
     
     // Common Public Methods

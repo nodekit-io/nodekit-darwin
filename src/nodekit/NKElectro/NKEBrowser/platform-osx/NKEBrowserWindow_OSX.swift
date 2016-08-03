@@ -23,10 +23,6 @@ import Foundation
 
 import Cocoa
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 extension NKE_BrowserWindow {
 
     internal func createWindow(options: Dictionary<String, AnyObject>) -> AnyObject {

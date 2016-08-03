@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 protocol NKE_IpcProtocol: NKScriptExport {
     
     func ipcSend(channel: String, replyId: String, arg: [AnyObject]) -> Void

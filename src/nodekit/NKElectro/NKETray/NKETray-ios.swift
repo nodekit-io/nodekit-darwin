@@ -21,10 +21,6 @@
     
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 // Tray not applicable for iOS
 
 class NKE_Tray: NSObject {

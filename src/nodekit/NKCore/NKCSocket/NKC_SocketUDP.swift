@@ -17,10 +17,7 @@
  */
  
  import Foundation
- 
- #if !COCOAPODS
-    import NKScripting
- #endif
+
  
  class NKC_SocketUDP: NSObject, NKScriptExport {
     

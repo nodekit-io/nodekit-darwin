@@ -23,10 +23,6 @@ import Foundation
 
 import Cocoa
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKE_Tray: NSObject {
     
     internal var _events: NKEventEmitter = NKEventEmitter()

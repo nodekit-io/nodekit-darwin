@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 protocol NKEAppProtocol: NKScriptExport {
     
     func quit() -> Void

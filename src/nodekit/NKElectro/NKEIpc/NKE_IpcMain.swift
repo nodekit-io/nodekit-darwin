@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKE_IpcMain: NSObject, NKE_IpcProtocol {
   
     private var globalEvents: NKEventEmitter = NKEventEmitter.global

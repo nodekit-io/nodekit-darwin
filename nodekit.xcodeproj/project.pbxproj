@@ -30,6 +30,108 @@
 		E45F74061D4E74FD00D96796 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA58B1D4E51B000687BD5 /* Assets.xcassets */; };
 		E45F74071D4E750000D96796 /* SamplePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA58D1D4E51B000687BD5 /* SamplePlugin.swift */; };
 		E496F8961D4E8CBE00377794 /* sample-NKCore-Mac.app in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA4911D4E508D00687BD5 /* sample-NKCore-Mac.app */; };
+		E4ACCB8D1D5240EA006E0684 /* NKElectro.h in Headers */ = {isa = PBXBuildFile; fileRef = E4ACCB8C1D5240A3006E0684 /* NKElectro.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E4ACCB911D5244DC006E0684 /* NKCore.h in Headers */ = {isa = PBXBuildFile; fileRef = E4ACCB8F1D524492006E0684 /* NKCore.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E4ACCBA11D524524006E0684 /* NodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4ACCB971D524523006E0684 /* NodeKit.framework */; };
+		E4ACCBAC1D524524006E0684 /* NodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4ACCB971D524523006E0684 /* NodeKit.framework */; };
+		E4ACCBAD1D524524006E0684 /* NodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4ACCB971D524523006E0684 /* NodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4ACCBB61D52461A006E0684 /* NodeKit.h in Headers */ = {isa = PBXBuildFile; fileRef = E4ACCBB41D5245FE006E0684 /* NodeKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E4ACCBB71D52462F006E0684 /* NKScripting.h in Headers */ = {isa = PBXBuildFile; fileRef = E45F84751D4CDEA40088D28F /* NKScripting.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E4ACCBB81D52463C006E0684 /* lib-core.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F861D50DC2400872E4D /* lib-core.nkar */; };
+		E4ACCBB91D524641006E0684 /* NodeKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA1241D4E3A2F00687BD5 /* NodeKit.swift */; };
+		E4ACCBBA1D524672006E0684 /* NKC_Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84101D4CDEA40088D28F /* NKC_Console.swift */; };
+		E4ACCBBB1D524679006E0684 /* NKC_FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84151D4CDEA40088D28F /* NKC_FileSystem.swift */; };
+		E4ACCBBC1D52467D006E0684 /* NKC_Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84171D4CDEA40088D28F /* NKC_Process.swift */; };
+		E4ACCBBD1D524681006E0684 /* NKC_SocketTCP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84191D4CDEA40088D28F /* NKC_SocketTCP.swift */; };
+		E4ACCBBE1D524681006E0684 /* NKC_SocketUDP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F841A1D4CDEA40088D28F /* NKC_SocketUDP.swift */; };
+		E4ACCBBF1D524681006E0684 /* NKC_SwiftSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F841B1D4CDEA40088D28F /* NKC_SwiftSocket.swift */; };
+		E4ACCBC01D524687006E0684 /* NKC_Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F841D1D4CDEA40088D28F /* NKC_Timer.swift */; };
+		E4ACCBC11D52468C006E0684 /* lib-electro.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F7D1D50DBA600872E4D /* lib-electro.nkar */; };
+		E4ACCBC21D524691006E0684 /* NKElectro.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA1161D4E281700687BD5 /* NKElectro.swift */; };
+		E4ACCBC31D524691006E0684 /* NKElectro_Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA1171D4E281700687BD5 /* NKElectro_Renderer.swift */; };
+		E4ACCBC41D524691006E0684 /* NKElectroHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA0C51D4E251500687BD5 /* NKElectroHost.swift */; };
+		E4ACCBC51D524695006E0684 /* NKEHostMain-osx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA0C71D4E251500687BD5 /* NKEHostMain-osx.swift */; };
+		E4ACCBC61D524695006E0684 /* NKEAppDelegate-osx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA0C81D4E251500687BD5 /* NKEAppDelegate-osx.swift */; };
+		E4ACCBC71D524699006E0684 /* NKEHostMain-ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA0CA1D4E251500687BD5 /* NKEHostMain-ios.swift */; };
+		E4ACCBC81D524699006E0684 /* NKEAppDelegate-ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA0CB1D4E251500687BD5 /* NKEAppDelegate-ios.swift */; };
+		E4ACCBC91D52469E006E0684 /* default.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F7F1D50DBB200872E4D /* default.nkar */; };
+		E4ACCBCA1D52469E006E0684 /* splash.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F801D50DBB200872E4D /* splash.nkar */; };
+		E4ACCBCB1D5246A4006E0684 /* NKEApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F842F1D4CDEA40088D28F /* NKEApp.swift */; };
+		E4ACCBCC1D5246A4006E0684 /* NKEAppDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84301D4CDEA40088D28F /* NKEAppDirectory.swift */; };
+		E4ACCBCD1D5246A4006E0684 /* NKEAppProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84311D4CDEA40088D28F /* NKEAppProtocol.swift */; };
+		E4ACCBCE1D5246A8006E0684 /* NKE_BrowserConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84331D4CDEA40088D28F /* NKE_BrowserConstants.swift */; };
+		E4ACCBCF1D5246A8006E0684 /* NKE_BrowserWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84341D4CDEA40088D28F /* NKE_BrowserWindow.swift */; };
+		E4ACCBD01D5246A8006E0684 /* NKE_BrowserWindowProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84351D4CDEA40088D28F /* NKE_BrowserWindowProtocol.swift */; };
+		E4ACCBD11D5246A8006E0684 /* NKE_WebContentsBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84361D4CDEA40088D28F /* NKE_WebContentsBase.swift */; };
+		E4ACCBD21D5246A8006E0684 /* NKE_WebContentsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84371D4CDEA40088D28F /* NKE_WebContentsProtocol.swift */; };
+		E4ACCBD31D5246AC006E0684 /* NKE_BrowserWindow_IOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84391D4CDEA40088D28F /* NKE_BrowserWindow_IOS.swift */; };
+		E4ACCBD41D5246AC006E0684 /* NKE_BrowserWindow_UI_IOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F843A1D4CDEA40088D28F /* NKE_BrowserWindow_UI_IOS.swift */; };
+		E4ACCBD51D5246AC006E0684 /* NKE_BrowserWindow_WK_IOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F843B1D4CDEA40088D28F /* NKE_BrowserWindow_WK_IOS.swift */; };
+		E4ACCBD61D5246AC006E0684 /* NKE_WebContentsUI_IOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F843C1D4CDEA40088D28F /* NKE_WebContentsUI_IOS.swift */; };
+		E4ACCBD71D5246AC006E0684 /* NKE_WebContentsWK_IOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F843D1D4CDEA40088D28F /* NKE_WebContentsWK_IOS.swift */; };
+		E4ACCBD81D5246B0006E0684 /* NKE_BrowserWindow_UI_OSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F843F1D4CDEA40088D28F /* NKE_BrowserWindow_UI_OSX.swift */; };
+		E4ACCBD91D5246B0006E0684 /* NKE_BrowserWindow_WK_OSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84401D4CDEA40088D28F /* NKE_BrowserWindow_WK_OSX.swift */; };
+		E4ACCBDA1D5246B0006E0684 /* NKE_WebContentsUI_OSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84411D4CDEA40088D28F /* NKE_WebContentsUI_OSX.swift */; };
+		E4ACCBDB1D5246B0006E0684 /* NKE_WebContentsWK_OSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84421D4CDEA40088D28F /* NKE_WebContentsWK_OSX.swift */; };
+		E4ACCBDC1D5246B0006E0684 /* NKEBrowserWindow_OSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84431D4CDEA40088D28F /* NKEBrowserWindow_OSX.swift */; };
+		E4ACCBDD1D5246B4006E0684 /* NKEDialog-ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84451D4CDEA40088D28F /* NKEDialog-ios.swift */; };
+		E4ACCBDE1D5246B4006E0684 /* NKEDialog-osx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84461D4CDEA40088D28F /* NKEDialog-osx.swift */; };
+		E4ACCBDF1D5246B4006E0684 /* NKEDialogProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84471D4CDEA40088D28F /* NKEDialogProtocol.swift */; };
+		E4ACCBE01D5246B9006E0684 /* NKE_IpcEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84491D4CDEA40088D28F /* NKE_IpcEvents.swift */; };
+		E4ACCBE11D5246B9006E0684 /* NKE_IpcMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F844A1D4CDEA40088D28F /* NKE_IpcMain.swift */; };
+		E4ACCBE21D5246B9006E0684 /* NKE_IpcProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F844B1D4CDEA40088D28F /* NKE_IpcProtocol.swift */; };
+		E4ACCBE31D5246B9006E0684 /* NKE_IpcRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F844C1D4CDEA40088D28F /* NKE_IpcRenderer.swift */; };
+		E4ACCBE41D5246BE006E0684 /* NKEMenu-ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F844E1D4CDEA40088D28F /* NKEMenu-ios.swift */; };
+		E4ACCBE51D5246BE006E0684 /* NKEMenu-osx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F844F1D4CDEA40088D28F /* NKEMenu-osx.swift */; };
+		E4ACCBE61D5246BE006E0684 /* NKEMenuProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84501D4CDEA40088D28F /* NKEMenuProtocol.swift */; };
+		E4ACCBE71D5246C2006E0684 /* NKE_Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84521D4CDEA40088D28F /* NKE_Protocol.swift */; };
+		E4ACCBE81D5246C2006E0684 /* NKE_ProtocolFileDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84531D4CDEA40088D28F /* NKE_ProtocolFileDecode.swift */; };
+		E4ACCBE91D5246C2006E0684 /* NKE_ProtocolLocalFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84541D4CDEA40088D28F /* NKE_ProtocolLocalFile.swift */; };
+		E4ACCBEA1D5246C6006E0684 /* NKETray-osx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84561D4CDEA40088D28F /* NKETray-osx.swift */; };
+		E4ACCBEB1D5246C6006E0684 /* NKETray-ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F88F71D4CE0190088D28F /* NKETray-ios.swift */; };
+		E4ACCBEC1D5246CB006E0684 /* lib-scripting.nkar in Resources */ = {isa = PBXBuildFile; fileRef = E40D3F7A1D50DADB00872E4D /* lib-scripting.nkar */; };
+		E4ACCBED1D5246CF006E0684 /* NKScriptChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84711D4CDEA40088D28F /* NKScriptChannel.swift */; };
+		E4ACCBEE1D5246CF006E0684 /* NKScriptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84721D4CDEA40088D28F /* NKScriptContext.swift */; };
+		E4ACCBEF1D5246CF006E0684 /* NKScriptContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84731D4CDEA40088D28F /* NKScriptContextFactory.swift */; };
+		E4ACCBF01D5246CF006E0684 /* NKScriptExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84741D4CDEA40088D28F /* NKScriptExport.swift */; };
+		E4ACCBF11D5246CF006E0684 /* NKScriptInvocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84761D4CDEA40088D28F /* NKScriptInvocation.swift */; };
+		E4ACCBF21D5246CF006E0684 /* NKScriptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84771D4CDEA40088D28F /* NKScriptMessage.swift */; };
+		E4ACCBF31D5246CF006E0684 /* NKScriptSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84781D4CDEA40088D28F /* NKScriptSource.swift */; };
+		E4ACCBF41D5246CF006E0684 /* NKScriptTypeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84791D4CDEA40088D28F /* NKScriptTypeInfo.swift */; };
+		E4ACCBF51D5246CF006E0684 /* NKScriptValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F847A1D4CDEA40088D28F /* NKScriptValue.swift */; };
+		E4ACCBF61D5246CF006E0684 /* NKScriptValueNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F847B1D4CDEA40088D28F /* NKScriptValueNative.swift */; };
+		E4ACCBF71D5246DA006E0684 /* NKJSCContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845A1D4CDEA40088D28F /* NKJSCContextFactory.swift */; };
+		E4ACCBF81D5246DA006E0684 /* NKJSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845B1D4CDEA40088D28F /* NKJSContext.swift */; };
+		E4ACCBF91D5246DA006E0684 /* NKJSCScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845C1D4CDEA40088D28F /* NKJSCScript.swift */; };
+		E4ACCBFA1D5246DD006E0684 /* NKUIContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845E1D4CDEA40088D28F /* NKUIContextFactory.swift */; };
+		E4ACCBFB1D5246DD006E0684 /* NKUIWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845F1D4CDEA40088D28F /* NKUIWebView.swift */; };
+		E4ACCBFC1D5246DD006E0684 /* NKUIWebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84601D4CDEA40088D28F /* NKUIWebViewDelegate.swift */; };
+		E4ACCBFD1D5246E2006E0684 /* NKWKContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84621D4CDEA40088D28F /* NKWKContextFactory.swift */; };
+		E4ACCBFE1D5246E2006E0684 /* NKWKMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84631D4CDEA40088D28F /* NKWKMessageHandler.swift */; };
+		E4ACCBFF1D5246E2006E0684 /* NKWKUserScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84641D4CDEA40088D28F /* NKWKUserScript.swift */; };
+		E4ACCC001D5246E2006E0684 /* NKWKWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84651D4CDEA40088D28F /* NKWKWebView.swift */; };
+		E4ACCC011D5246E2006E0684 /* NKWKWebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84661D4CDEA40088D28F /* NKWKWebViewDelegate.swift */; };
+		E4ACCC021D5246E6006E0684 /* NKWVContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84681D4CDEA40088D28F /* NKWVContextFactory.swift */; };
+		E4ACCC031D5246E6006E0684 /* NKWVWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84691D4CDEA40088D28F /* NKWVWebView.swift */; };
+		E4ACCC041D5246E6006E0684 /* NKWVWebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F846A1D4CDEA40088D28F /* NKWVWebViewDelegate.swift */; };
+		E4ACCC051D5246EE006E0684 /* NKAR_BytesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F847E1D4CDEA40088D28F /* NKAR_BytesReader.swift */; };
+		E4ACCC061D5246EE006E0684 /* NKAR_CentralDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F847F1D4CDEA40088D28F /* NKAR_CentralDirectory.swift */; };
+		E4ACCC071D5246EE006E0684 /* NKAR_EndRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84801D4CDEA40088D28F /* NKAR_EndRecord.swift */; };
+		E4ACCC081D5246EE006E0684 /* NKAR_Uncompressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84811D4CDEA40088D28F /* NKAR_Uncompressor.swift */; };
+		E4ACCC091D5246EE006E0684 /* NKArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84821D4CDEA40088D28F /* NKArchive.swift */; };
+		E4ACCC0A1D5246EE006E0684 /* NKArchiveReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84831D4CDEA40088D28F /* NKArchiveReader.swift */; };
+		E4ACCC0B1D5246F0006E0684 /* NKDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84851D4CDEA40088D28F /* NKDateFormatter.swift */; };
+		E4ACCC0C1D5246F0006E0684 /* NKEventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84861D4CDEA40088D28F /* NKEventEmitter.swift */; };
+		E4ACCC0D1D5246F0006E0684 /* NKLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84871D4CDEA40088D28F /* NKLogging.swift */; };
+		E4ACCC0E1D5246F0006E0684 /* NKStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84881D4CDEA40088D28F /* NKStorage.swift */; };
+		E4ACCC0F1D524758006E0684 /* NKC_Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84131D4CDEA40088D28F /* NKC_Crypto.swift */; };
+		E4ACCC101D52476C006E0684 /* libcompression.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E45F83581D4C0CEB0088D28F /* libcompression.tbd */; };
+		E4ACCC111D524797006E0684 /* NodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4ACCB971D524523006E0684 /* NodeKit.framework */; };
+		E4ACCC121D524797006E0684 /* NodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4ACCB971D524523006E0684 /* NodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4ACCC161D5249AE006E0684 /* NKT_XCTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48174981C99B72A00DD09AF /* NKT_XCTestCase.swift */; };
+		E4ACCC171D5249B1006E0684 /* NKT_TestRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E481761F1C9A444500DD09AF /* NKT_TestRunner.swift */; };
+		E4ACCC181D5249B5006E0684 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E48175F71C99D59E00DD09AF /* app */; };
+		E4ACCC191D5249B8006E0684 /* lib-test in Resources */ = {isa = PBXBuildFile; fileRef = E48175F11C99D15E00DD09AF /* lib-test */; };
 		E4B5AF691D4FBBE4005077D2 /* NKJSCContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845A1D4CDEA40088D28F /* NKJSCContextFactory.swift */; };
 		E4B5AF6A1D4FBBE4005077D2 /* NKJSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845B1D4CDEA40088D28F /* NKJSContext.swift */; };
 		E4B5AF6B1D4FBBE4005077D2 /* NKJSCScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845C1D4CDEA40088D28F /* NKJSCScript.swift */; };
@@ -119,7 +221,6 @@
 		E4B5AFDD1D4FC153005077D2 /* NKScripting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4B5AFE01D4FC156005077D2 /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */; };
 		E4B5AFE11D4FC156005077D2 /* NKElectro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E4B5AFF31D4FC1BE005077D2 /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */; };
 		E4B5B0081D4FC30D005077D2 /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */; };
 		E4B5B0091D4FC30D005077D2 /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; };
 		E4B5B00B1D4FC31A005077D2 /* NodeKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA1241D4E3A2F00687BD5 /* NodeKit.swift */; };
@@ -143,22 +244,6 @@
 		E4BAA8A71D4FC4110048B7DA /* NKElectro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4BAA8AA1D4FC4110048B7DA /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */; };
 		E4BAA8AB1D4FC4110048B7DA /* NKCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E4BAA8AF1D4FC4160048B7DA /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; };
-		E4BAA8B01D4FC4160048B7DA /* NKScripting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E4BAA8B31D4FC4160048B7DA /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */; };
-		E4BAA8B41D4FC4160048B7DA /* NKElectro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E4BAA8B71D4FC4160048B7DA /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */; };
-		E4BAA8B81D4FC4160048B7DA /* NKCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E4BAA8BB1D4FC41B0048B7DA /* NKScripting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; };
-		E4BAA8BC1D4FC41B0048B7DA /* NKScripting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E4BAA8BF1D4FC41B0048B7DA /* NKElectro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */; };
-		E4BAA8C01D4FC41B0048B7DA /* NKElectro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E4BAA8C31D4FC41B0048B7DA /* NKCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */; };
-		E4BAA8C41D4FC41B0048B7DA /* NKCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E4BAA8C71D4FC4B80048B7DA /* NKT_XCTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48174981C99B72A00DD09AF /* NKT_XCTestCase.swift */; };
-		E4BAA8C81D4FC4B80048B7DA /* NKT_TestRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E481761F1C9A444500DD09AF /* NKT_TestRunner.swift */; };
-		E4BAA8C91D4FC4BB0048B7DA /* app in Resources */ = {isa = PBXBuildFile; fileRef = E48175F71C99D59E00DD09AF /* app */; };
-		E4BAA8CA1D4FC4BB0048B7DA /* lib-test in Resources */ = {isa = PBXBuildFile; fileRef = E48175F11C99D15E00DD09AF /* lib-test */; };
 		E4E6678C1D4EA44100B525E9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E4EBA5941D4E51E800687BD5 /* app */; };
 		E4E6678D1D4EA44400B525E9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EBA51F1D4E51B000687BD5 /* main.swift */; };
 		E4E6678E1D4EA45400B525E9 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4129D1B1D4E8F3D006ABA3B /* Launch Screen.storyboard */; };
@@ -193,6 +278,41 @@
 			proxyType = 1;
 			remoteGlobalIDString = E4EBA4901D4E508D00687BD5;
 			remoteInfo = "sample-NKCore-Mac";
+		};
+		E4ACCBA21D524524006E0684 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4ACCB961D524523006E0684;
+			remoteInfo = NodeKit;
+		};
+		E4ACCBA41D524524006E0684 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4129D061D4E8E7B006ABA3B;
+			remoteInfo = "sample-nodekit-iOS";
+		};
+		E4ACCBAA1D524524006E0684 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4ACCB961D524523006E0684;
+			remoteInfo = NodeKit;
+		};
+		E4ACCC131D524797006E0684 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4ACCB961D524523006E0684;
+			remoteInfo = NodeKit;
+		};
+		E4ACCC1D1D524A44006E0684 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4EBA4B21D4E515500687BD5;
+			remoteInfo = "sample-nodekit-Mac";
 		};
 		E4B5AF8F1D4FBD03005077D2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -236,20 +356,6 @@
 			remoteGlobalIDString = E4B5AF9A1D4FBF1E005077D2;
 			remoteInfo = NKElectro;
 		};
-		E4B5AFF41D4FC1BE005077D2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B5AFE81D4FC1BD005077D2;
-			remoteInfo = NKCore;
-		};
-		E4B5AFF61D4FC1BE005077D2 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4129CF01D4E8E69006ABA3B;
-			remoteInfo = "sample-NKCore-iOS";
-		};
 		E4BAA8981D4FC4070048B7DA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
@@ -292,60 +398,16 @@
 			remoteGlobalIDString = E4B5AFE81D4FC1BD005077D2;
 			remoteInfo = NKCore;
 		};
-		E4BAA8B11D4FC4160048B7DA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B5AF5B1D4FBAA9005077D2;
-			remoteInfo = NKScripting;
-		};
-		E4BAA8B51D4FC4160048B7DA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B5AF9A1D4FBF1E005077D2;
-			remoteInfo = NKElectro;
-		};
-		E4BAA8B91D4FC4160048B7DA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B5AFE81D4FC1BD005077D2;
-			remoteInfo = NKCore;
-		};
-		E4BAA8BD1D4FC41B0048B7DA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B5AF5B1D4FBAA9005077D2;
-			remoteInfo = NKScripting;
-		};
-		E4BAA8C11D4FC41B0048B7DA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B5AF9A1D4FBF1E005077D2;
-			remoteInfo = NKElectro;
-		};
-		E4BAA8C51D4FC41B0048B7DA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E48172B51C99B61300DD09AF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B5AFE81D4FC1BD005077D2;
-			remoteInfo = NKCore;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		E486E4841D4E880E00DC4F29 /* Embed Frameworks */ = {
+		E4ACCC151D524797006E0684 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E4BAA8B41D4FC4160048B7DA /* NKElectro.framework in Embed Frameworks */,
-				E4BAA8B81D4FC4160048B7DA /* NKCore.framework in Embed Frameworks */,
-				E4BAA8B01D4FC4160048B7DA /* NKScripting.framework in Embed Frameworks */,
+				E4ACCC121D524797006E0684 /* NodeKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -380,9 +442,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E4BAA8C01D4FC41B0048B7DA /* NKElectro.framework in Embed Frameworks */,
-				E4BAA8C41D4FC41B0048B7DA /* NKCore.framework in Embed Frameworks */,
-				E4BAA8BC1D4FC41B0048B7DA /* NKScripting.framework in Embed Frameworks */,
+				E4ACCBAD1D524524006E0684 /* NodeKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -549,11 +609,16 @@
 		E48175F11C99D15E00DD09AF /* lib-test */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "lib-test"; sourceTree = "<group>"; };
 		E48175F71C99D59E00DD09AF /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; path = app; sourceTree = "<group>"; };
 		E481761F1C9A444500DD09AF /* NKT_TestRunner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKT_TestRunner.swift; sourceTree = "<group>"; };
+		E4ACCB8C1D5240A3006E0684 /* NKElectro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NKElectro.h; sourceTree = "<group>"; };
+		E4ACCB8F1D524492006E0684 /* NKCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NKCore.h; sourceTree = "<group>"; };
+		E4ACCB971D524523006E0684 /* NodeKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NodeKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4ACCBA01D524523006E0684 /* NodeKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NodeKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4ACCBB41D5245FE006E0684 /* NodeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeKit.h; sourceTree = "<group>"; };
+		E4ACCC1B1D5249CF006E0684 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4ACCC1F1D524B19006E0684 /* NodeKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NodeKit.podspec; sourceTree = "<group>"; };
 		E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NKScripting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NKElectro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NKCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4B5AFF21D4FC1BE005077D2 /* NKCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NKCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E4B5B0061D4FC21B005077D2 /* platform */ = {isa = PBXFileReference; lastKnownFileType = folder; path = platform; sourceTree = "<group>"; };
 		E4E667961D4EA53F00B525E9 /* appdelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = appdelegate.swift; sourceTree = "<group>"; };
 		E4EBA0C51D4E251500687BD5 /* NKElectroHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKElectroHost.swift; sourceTree = "<group>"; };
 		E4EBA0C71D4E251500687BD5 /* NKEHostMain-osx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NKEHostMain-osx.swift"; sourceTree = "<group>"; };
@@ -629,9 +694,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4BAA8BF1D4FC41B0048B7DA /* NKElectro.framework in Frameworks */,
-				E4BAA8C31D4FC41B0048B7DA /* NKCore.framework in Frameworks */,
-				E4BAA8BB1D4FC41B0048B7DA /* NKScripting.framework in Frameworks */,
+				E4ACCBAC1D524524006E0684 /* NodeKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4ACCB931D524523006E0684 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4ACCC101D52476C006E0684 /* libcompression.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4ACCB9D1D524523006E0684 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4ACCBA11D524524006E0684 /* NodeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,14 +736,6 @@
 			files = (
 				E4B5B0081D4FC30D005077D2 /* NKElectro.framework in Frameworks */,
 				E4B5B0091D4FC30D005077D2 /* NKScripting.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4B5AFEF1D4FC1BE005077D2 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E4B5AFF31D4FC1BE005077D2 /* NKCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,9 +770,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4BAA8B31D4FC4160048B7DA /* NKElectro.framework in Frameworks */,
-				E4BAA8B71D4FC4160048B7DA /* NKCore.framework in Frameworks */,
-				E4BAA8AF1D4FC4160048B7DA /* NKScripting.framework in Frameworks */,
+				E4ACCC111D524797006E0684 /* NodeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1037,6 +1106,7 @@
 		E48172B41C99B61300DD09AF = {
 			isa = PBXGroup;
 			children = (
+				E4ACCC1F1D524B19006E0684 /* NodeKit.podspec */,
 				E481731B1C99B71B00DD09AF /* src */,
 				E48174971C99B72A00DD09AF /* test */,
 				E45F83631D4C0F980088D28F /* platformsupport */,
@@ -1050,7 +1120,6 @@
 				E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */,
 				E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */,
 				E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */,
-				E4B5AFF21D4FC1BE005077D2 /* NKCoreTests.xctest */,
 				E4EBA46F1D4E507A00687BD5 /* sample-NKScripting-Mac.app */,
 				E4129CC51D4E8E48006ABA3B /* sample-NKScripting-iOS.app */,
 				E4EBA4801D4E508400687BD5 /* sample-NKElectro-Mac.app */,
@@ -1059,6 +1128,8 @@
 				E4129CF11D4E8E69006ABA3B /* sample-NKCore-iOS.app */,
 				E4EBA4B31D4E515500687BD5 /* sample-nodekit-Mac.app */,
 				E4129D071D4E8E7B006ABA3B /* sample-nodekit-iOS.app */,
+				E4ACCB971D524523006E0684 /* NodeKit.framework */,
+				E4ACCBA01D524523006E0684 /* NodeKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1078,30 +1149,40 @@
 				E45F837E1D4CDEA40088D28F /* NKCore */,
 				E45F841E1D4CDEA40088D28F /* NKElectro */,
 				E45F84571D4CDEA40088D28F /* NKScripting */,
-				E48174261C99B71B00DD09AF /* platform */,
+				E48174261C99B71B00DD09AF /* platform-darwin */,
 			);
 			path = nodekit;
 			sourceTree = "<group>";
 		};
-		E48174261C99B71B00DD09AF /* platform */ = {
+		E48174261C99B71B00DD09AF /* platform-darwin */ = {
 			isa = PBXGroup;
 			children = (
 				E48174271C99B71B00DD09AF /* Info.plist */,
+				E4ACCB8C1D5240A3006E0684 /* NKElectro.h */,
+				E4ACCB8F1D524492006E0684 /* NKCore.h */,
+				E4ACCBB41D5245FE006E0684 /* NodeKit.h */,
 			);
-			name = platform;
 			path = "platform-darwin";
 			sourceTree = "<group>";
 		};
 		E48174971C99B72A00DD09AF /* test */ = {
 			isa = PBXGroup;
 			children = (
-				E4B5B0061D4FC21B005077D2 /* platform */,
+				E4ACCC1A1D5249CF006E0684 /* platform */,
 				E48174981C99B72A00DD09AF /* NKT_XCTestCase.swift */,
 				E481761F1C9A444500DD09AF /* NKT_TestRunner.swift */,
 				E48175F71C99D59E00DD09AF /* app */,
 				E48175F11C99D15E00DD09AF /* lib-test */,
 			);
 			path = test;
+			sourceTree = "<group>";
+		};
+		E4ACCC1A1D5249CF006E0684 /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				E4ACCC1B1D5249CF006E0684 /* Info.plist */,
+			);
+			path = platform;
 			sourceTree = "<group>";
 		};
 		E4EBA0C41D4E251500687BD5 /* NK_ElectroHost */ = {
@@ -1268,6 +1349,15 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		E4ACCB941D524523006E0684 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4ACCBB61D52461A006E0684 /* NodeKit.h in Headers */,
+				E4ACCBB71D52462F006E0684 /* NKScripting.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4B5AF591D4FBAA9005077D2 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1280,6 +1370,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4ACCB8D1D5240EA006E0684 /* NKElectro.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1287,6 +1378,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4ACCB911D5244DC006E0684 /* NKCore.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1365,14 +1457,50 @@
 			buildRules = (
 			);
 			dependencies = (
-				E4BAA8BE1D4FC41B0048B7DA /* PBXTargetDependency */,
-				E4BAA8C21D4FC41B0048B7DA /* PBXTargetDependency */,
-				E4BAA8C61D4FC41B0048B7DA /* PBXTargetDependency */,
+				E4ACCBAB1D524524006E0684 /* PBXTargetDependency */,
 			);
 			name = "sample-nodekit-iOS";
 			productName = "sample-nodekit-iOS";
 			productReference = E4129D071D4E8E7B006ABA3B /* sample-nodekit-iOS.app */;
 			productType = "com.apple.product-type.application";
+		};
+		E4ACCB961D524523006E0684 /* NodeKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4ACCBAE1D524524006E0684 /* Build configuration list for PBXNativeTarget "NodeKit" */;
+			buildPhases = (
+				E4ACCB921D524523006E0684 /* Sources */,
+				E4ACCB931D524523006E0684 /* Frameworks */,
+				E4ACCB941D524523006E0684 /* Headers */,
+				E4ACCB951D524523006E0684 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NodeKit;
+			productName = NodeKit;
+			productReference = E4ACCB971D524523006E0684 /* NodeKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		E4ACCB9F1D524523006E0684 /* NodeKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4ACCBB11D524524006E0684 /* Build configuration list for PBXNativeTarget "NodeKitTests" */;
+			buildPhases = (
+				E4ACCB9C1D524523006E0684 /* Sources */,
+				E4ACCB9D1D524523006E0684 /* Frameworks */,
+				E4ACCB9E1D524523006E0684 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E4ACCBA31D524524006E0684 /* PBXTargetDependency */,
+				E4ACCBA51D524524006E0684 /* PBXTargetDependency */,
+				E4ACCC1E1D524A44006E0684 /* PBXTargetDependency */,
+			);
+			name = NodeKitTests;
+			productName = NodeKitTests;
+			productReference = E4ACCBA01D524523006E0684 /* NodeKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		E4B5AF5B1D4FBAA9005077D2 /* NKScripting */ = {
 			isa = PBXNativeTarget;
@@ -1430,25 +1558,6 @@
 			productName = NKCore;
 			productReference = E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		E4B5AFF11D4FC1BE005077D2 /* NKCoreTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E4B5B0031D4FC1BE005077D2 /* Build configuration list for PBXNativeTarget "NKCoreTests" */;
-			buildPhases = (
-				E4B5AFEE1D4FC1BE005077D2 /* Sources */,
-				E4B5AFEF1D4FC1BE005077D2 /* Frameworks */,
-				E4B5AFF01D4FC1BE005077D2 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E4B5AFF51D4FC1BE005077D2 /* PBXTargetDependency */,
-				E4B5AFF71D4FC1BE005077D2 /* PBXTargetDependency */,
-			);
-			name = NKCoreTests;
-			productName = NKCoreTests;
-			productReference = E4B5AFF21D4FC1BE005077D2 /* NKCoreTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		E4EBA46E1D4E507A00687BD5 /* sample-NKScripting-Mac */ = {
 			isa = PBXNativeTarget;
@@ -1517,15 +1626,13 @@
 				E4EBA4AF1D4E515500687BD5 /* Sources */,
 				E4EBA4B01D4E515500687BD5 /* Frameworks */,
 				E4EBA4B11D4E515500687BD5 /* Resources */,
-				E486E4841D4E880E00DC4F29 /* Embed Frameworks */,
+				E4ACCC151D524797006E0684 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				E496F8981D4E8CBE00377794 /* PBXTargetDependency */,
-				E4BAA8B21D4FC4160048B7DA /* PBXTargetDependency */,
-				E4BAA8B61D4FC4160048B7DA /* PBXTargetDependency */,
-				E4BAA8BA1D4FC4160048B7DA /* PBXTargetDependency */,
+				E4ACCC141D524797006E0684 /* PBXTargetDependency */,
 			);
 			name = "sample-nodekit-Mac";
 			productName = "sample-nodekit-Mac";
@@ -1556,6 +1663,14 @@
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 3XLSYS5AFW;
 					};
+					E4ACCB961D524523006E0684 = {
+						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 3XLSYS5AFW;
+					};
+					E4ACCB9F1D524523006E0684 = {
+						CreatedOnToolsVersion = 7.3.1;
+						TestTargetID = E4EBA4B21D4E515500687BD5;
+					};
 					E4B5AF5B1D4FBAA9005077D2 = {
 						CreatedOnToolsVersion = 7.3.1;
 					};
@@ -1565,10 +1680,6 @@
 					E4B5AFE81D4FC1BD005077D2 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 3XLSYS5AFW;
-					};
-					E4B5AFF11D4FC1BE005077D2 = {
-						CreatedOnToolsVersion = 7.3.1;
-						TestTargetID = E4129CF01D4E8E69006ABA3B;
 					};
 					E4EBA46E1D4E507A00687BD5 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -1607,7 +1718,8 @@
 				E4B5AF5B1D4FBAA9005077D2 /* NKScripting */,
 				E4B5AF9A1D4FBF1E005077D2 /* NKElectro */,
 				E4B5AFE81D4FC1BD005077D2 /* NKCore */,
-				E4B5AFF11D4FC1BE005077D2 /* NKCoreTests */,
+				E4ACCB961D524523006E0684 /* NodeKit */,
+				E4ACCB9F1D524523006E0684 /* NodeKitTests */,
 				E4EBA46E1D4E507A00687BD5 /* sample-NKScripting-Mac */,
 				E4129CC41D4E8E48006ABA3B /* sample-NKScripting-iOS */,
 				E4EBA47F1D4E508400687BD5 /* sample-NKElectro-Mac */,
@@ -1661,6 +1773,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4ACCB951D524523006E0684 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4ACCBEC1D5246CB006E0684 /* lib-scripting.nkar in Resources */,
+				E4ACCBCA1D52469E006E0684 /* splash.nkar in Resources */,
+				E4ACCBC91D52469E006E0684 /* default.nkar in Resources */,
+				E4ACCBC11D52468C006E0684 /* lib-electro.nkar in Resources */,
+				E4ACCBB81D52463C006E0684 /* lib-core.nkar in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4ACCB9E1D524523006E0684 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4ACCC191D5249B8006E0684 /* lib-test in Resources */,
+				E4ACCC181D5249B5006E0684 /* app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4B5AF5A1D4FBAA9005077D2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1684,15 +1817,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E40D3F881D50DC2900872E4D /* lib-core.nkar in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E4B5AFF01D4FC1BE005077D2 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E4BAA8CA1D4FC4BB0048B7DA /* lib-test in Resources */,
-				E4BAA8C91D4FC4BB0048B7DA /* app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1816,6 +1940,105 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4ACCB921D524523006E0684 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4ACCBE71D5246C2006E0684 /* NKE_Protocol.swift in Sources */,
+				E4ACCBBD1D524681006E0684 /* NKC_SocketTCP.swift in Sources */,
+				E4ACCBEB1D5246C6006E0684 /* NKETray-ios.swift in Sources */,
+				E4ACCBCC1D5246A4006E0684 /* NKEAppDirectory.swift in Sources */,
+				E4ACCBE51D5246BE006E0684 /* NKEMenu-osx.swift in Sources */,
+				E4ACCC051D5246EE006E0684 /* NKAR_BytesReader.swift in Sources */,
+				E4ACCBD11D5246A8006E0684 /* NKE_WebContentsBase.swift in Sources */,
+				E4ACCBE01D5246B9006E0684 /* NKE_IpcEvents.swift in Sources */,
+				E4ACCBF01D5246CF006E0684 /* NKScriptExport.swift in Sources */,
+				E4ACCC081D5246EE006E0684 /* NKAR_Uncompressor.swift in Sources */,
+				E4ACCBC41D524691006E0684 /* NKElectroHost.swift in Sources */,
+				E4ACCBBE1D524681006E0684 /* NKC_SocketUDP.swift in Sources */,
+				E4ACCBE21D5246B9006E0684 /* NKE_IpcProtocol.swift in Sources */,
+				E4ACCBF81D5246DA006E0684 /* NKJSContext.swift in Sources */,
+				E4ACCBF21D5246CF006E0684 /* NKScriptMessage.swift in Sources */,
+				E4ACCBC61D524695006E0684 /* NKEAppDelegate-osx.swift in Sources */,
+				E4ACCC041D5246E6006E0684 /* NKWVWebViewDelegate.swift in Sources */,
+				E4ACCC021D5246E6006E0684 /* NKWVContextFactory.swift in Sources */,
+				E4ACCBFD1D5246E2006E0684 /* NKWKContextFactory.swift in Sources */,
+				E4ACCBE31D5246B9006E0684 /* NKE_IpcRenderer.swift in Sources */,
+				E4ACCC0C1D5246F0006E0684 /* NKEventEmitter.swift in Sources */,
+				E4ACCBBB1D524679006E0684 /* NKC_FileSystem.swift in Sources */,
+				E4ACCBD51D5246AC006E0684 /* NKE_BrowserWindow_WK_IOS.swift in Sources */,
+				E4ACCBF71D5246DA006E0684 /* NKJSCContextFactory.swift in Sources */,
+				E4ACCBF51D5246CF006E0684 /* NKScriptValue.swift in Sources */,
+				E4ACCC0F1D524758006E0684 /* NKC_Crypto.swift in Sources */,
+				E4ACCBC81D524699006E0684 /* NKEAppDelegate-ios.swift in Sources */,
+				E4ACCBCB1D5246A4006E0684 /* NKEApp.swift in Sources */,
+				E4ACCBF31D5246CF006E0684 /* NKScriptSource.swift in Sources */,
+				E4ACCBD81D5246B0006E0684 /* NKE_BrowserWindow_UI_OSX.swift in Sources */,
+				E4ACCBF11D5246CF006E0684 /* NKScriptInvocation.swift in Sources */,
+				E4ACCBD31D5246AC006E0684 /* NKE_BrowserWindow_IOS.swift in Sources */,
+				E4ACCBD71D5246AC006E0684 /* NKE_WebContentsWK_IOS.swift in Sources */,
+				E4ACCBC51D524695006E0684 /* NKEHostMain-osx.swift in Sources */,
+				E4ACCBDD1D5246B4006E0684 /* NKEDialog-ios.swift in Sources */,
+				E4ACCBBA1D524672006E0684 /* NKC_Console.swift in Sources */,
+				E4ACCBDE1D5246B4006E0684 /* NKEDialog-osx.swift in Sources */,
+				E4ACCBE61D5246BE006E0684 /* NKEMenuProtocol.swift in Sources */,
+				E4ACCBFA1D5246DD006E0684 /* NKUIContextFactory.swift in Sources */,
+				E4ACCBEA1D5246C6006E0684 /* NKETray-osx.swift in Sources */,
+				E4ACCC061D5246EE006E0684 /* NKAR_CentralDirectory.swift in Sources */,
+				E4ACCC011D5246E2006E0684 /* NKWKWebViewDelegate.swift in Sources */,
+				E4ACCC091D5246EE006E0684 /* NKArchive.swift in Sources */,
+				E4ACCBE11D5246B9006E0684 /* NKE_IpcMain.swift in Sources */,
+				E4ACCBBC1D52467D006E0684 /* NKC_Process.swift in Sources */,
+				E4ACCBDC1D5246B0006E0684 /* NKEBrowserWindow_OSX.swift in Sources */,
+				E4ACCBE81D5246C2006E0684 /* NKE_ProtocolFileDecode.swift in Sources */,
+				E4ACCBFB1D5246DD006E0684 /* NKUIWebView.swift in Sources */,
+				E4ACCBC21D524691006E0684 /* NKElectro.swift in Sources */,
+				E4ACCBE91D5246C2006E0684 /* NKE_ProtocolLocalFile.swift in Sources */,
+				E4ACCBCD1D5246A4006E0684 /* NKEAppProtocol.swift in Sources */,
+				E4ACCBD01D5246A8006E0684 /* NKE_BrowserWindowProtocol.swift in Sources */,
+				E4ACCBF41D5246CF006E0684 /* NKScriptTypeInfo.swift in Sources */,
+				E4ACCBDF1D5246B4006E0684 /* NKEDialogProtocol.swift in Sources */,
+				E4ACCBF61D5246CF006E0684 /* NKScriptValueNative.swift in Sources */,
+				E4ACCBD21D5246A8006E0684 /* NKE_WebContentsProtocol.swift in Sources */,
+				E4ACCBDA1D5246B0006E0684 /* NKE_WebContentsUI_OSX.swift in Sources */,
+				E4ACCBD61D5246AC006E0684 /* NKE_WebContentsUI_IOS.swift in Sources */,
+				E4ACCC031D5246E6006E0684 /* NKWVWebView.swift in Sources */,
+				E4ACCC071D5246EE006E0684 /* NKAR_EndRecord.swift in Sources */,
+				E4ACCC0A1D5246EE006E0684 /* NKArchiveReader.swift in Sources */,
+				E4ACCBFE1D5246E2006E0684 /* NKWKMessageHandler.swift in Sources */,
+				E4ACCBF91D5246DA006E0684 /* NKJSCScript.swift in Sources */,
+				E4ACCC0E1D5246F0006E0684 /* NKStorage.swift in Sources */,
+				E4ACCBFF1D5246E2006E0684 /* NKWKUserScript.swift in Sources */,
+				E4ACCC0B1D5246F0006E0684 /* NKDateFormatter.swift in Sources */,
+				E4ACCC0D1D5246F0006E0684 /* NKLogging.swift in Sources */,
+				E4ACCBC31D524691006E0684 /* NKElectro_Renderer.swift in Sources */,
+				E4ACCBBF1D524681006E0684 /* NKC_SwiftSocket.swift in Sources */,
+				E4ACCBCF1D5246A8006E0684 /* NKE_BrowserWindow.swift in Sources */,
+				E4ACCBC01D524687006E0684 /* NKC_Timer.swift in Sources */,
+				E4ACCC001D5246E2006E0684 /* NKWKWebView.swift in Sources */,
+				E4ACCBDB1D5246B0006E0684 /* NKE_WebContentsWK_OSX.swift in Sources */,
+				E4ACCBD41D5246AC006E0684 /* NKE_BrowserWindow_UI_IOS.swift in Sources */,
+				E4ACCBEF1D5246CF006E0684 /* NKScriptContextFactory.swift in Sources */,
+				E4ACCBEE1D5246CF006E0684 /* NKScriptContext.swift in Sources */,
+				E4ACCBED1D5246CF006E0684 /* NKScriptChannel.swift in Sources */,
+				E4ACCBD91D5246B0006E0684 /* NKE_BrowserWindow_WK_OSX.swift in Sources */,
+				E4ACCBCE1D5246A8006E0684 /* NKE_BrowserConstants.swift in Sources */,
+				E4ACCBE41D5246BE006E0684 /* NKEMenu-ios.swift in Sources */,
+				E4ACCBB91D524641006E0684 /* NodeKit.swift in Sources */,
+				E4ACCBC71D524699006E0684 /* NKEHostMain-ios.swift in Sources */,
+				E4ACCBFC1D5246DD006E0684 /* NKUIWebViewDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4ACCB9C1D524523006E0684 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4ACCC161D5249AE006E0684 /* NKT_XCTestCase.swift in Sources */,
+				E4ACCC171D5249B1006E0684 /* NKT_TestRunner.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4B5AF571D4FBAA9005077D2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1920,15 +2143,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E4B5AFEE1D4FC1BE005077D2 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E4BAA8C71D4FC4B80048B7DA /* NKT_XCTestCase.swift in Sources */,
-				E4BAA8C81D4FC4B80048B7DA /* NKT_TestRunner.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E4EBA46B1D4E507A00687BD5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1977,6 +2191,31 @@
 			target = E4EBA4901D4E508D00687BD5 /* sample-NKCore-Mac */;
 			targetProxy = E496F8971D4E8CBE00377794 /* PBXContainerItemProxy */;
 		};
+		E4ACCBA31D524524006E0684 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4ACCB961D524523006E0684 /* NodeKit */;
+			targetProxy = E4ACCBA21D524524006E0684 /* PBXContainerItemProxy */;
+		};
+		E4ACCBA51D524524006E0684 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4129D061D4E8E7B006ABA3B /* sample-nodekit-iOS */;
+			targetProxy = E4ACCBA41D524524006E0684 /* PBXContainerItemProxy */;
+		};
+		E4ACCBAB1D524524006E0684 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4ACCB961D524523006E0684 /* NodeKit */;
+			targetProxy = E4ACCBAA1D524524006E0684 /* PBXContainerItemProxy */;
+		};
+		E4ACCC141D524797006E0684 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4ACCB961D524523006E0684 /* NodeKit */;
+			targetProxy = E4ACCC131D524797006E0684 /* PBXContainerItemProxy */;
+		};
+		E4ACCC1E1D524A44006E0684 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4EBA4B21D4E515500687BD5 /* sample-nodekit-Mac */;
+			targetProxy = E4ACCC1D1D524A44006E0684 /* PBXContainerItemProxy */;
+		};
 		E4B5AF901D4FBD03005077D2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E4B5AF5B1D4FBAA9005077D2 /* NKScripting */;
@@ -2007,16 +2246,6 @@
 			target = E4B5AF9A1D4FBF1E005077D2 /* NKElectro */;
 			targetProxy = E4B5AFE21D4FC156005077D2 /* PBXContainerItemProxy */;
 		};
-		E4B5AFF51D4FC1BE005077D2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4B5AFE81D4FC1BD005077D2 /* NKCore */;
-			targetProxy = E4B5AFF41D4FC1BE005077D2 /* PBXContainerItemProxy */;
-		};
-		E4B5AFF71D4FC1BE005077D2 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4129CF01D4E8E69006ABA3B /* sample-NKCore-iOS */;
-			targetProxy = E4B5AFF61D4FC1BE005077D2 /* PBXContainerItemProxy */;
-		};
 		E4BAA8991D4FC4070048B7DA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E4B5AF5B1D4FBAA9005077D2 /* NKScripting */;
@@ -2046,36 +2275,6 @@
 			isa = PBXTargetDependency;
 			target = E4B5AFE81D4FC1BD005077D2 /* NKCore */;
 			targetProxy = E4BAA8AC1D4FC4110048B7DA /* PBXContainerItemProxy */;
-		};
-		E4BAA8B21D4FC4160048B7DA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4B5AF5B1D4FBAA9005077D2 /* NKScripting */;
-			targetProxy = E4BAA8B11D4FC4160048B7DA /* PBXContainerItemProxy */;
-		};
-		E4BAA8B61D4FC4160048B7DA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4B5AF9A1D4FBF1E005077D2 /* NKElectro */;
-			targetProxy = E4BAA8B51D4FC4160048B7DA /* PBXContainerItemProxy */;
-		};
-		E4BAA8BA1D4FC4160048B7DA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4B5AFE81D4FC1BD005077D2 /* NKCore */;
-			targetProxy = E4BAA8B91D4FC4160048B7DA /* PBXContainerItemProxy */;
-		};
-		E4BAA8BE1D4FC41B0048B7DA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4B5AF5B1D4FBAA9005077D2 /* NKScripting */;
-			targetProxy = E4BAA8BD1D4FC41B0048B7DA /* PBXContainerItemProxy */;
-		};
-		E4BAA8C21D4FC41B0048B7DA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4B5AF9A1D4FBF1E005077D2 /* NKElectro */;
-			targetProxy = E4BAA8C11D4FC41B0048B7DA /* PBXContainerItemProxy */;
-		};
-		E4BAA8C61D4FC41B0048B7DA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E4B5AFE81D4FC1BD005077D2 /* NKCore */;
-			targetProxy = E4BAA8C51D4FC41B0048B7DA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2484,6 +2683,212 @@
 			};
 			name = Release;
 		};
+		E4ACCBAF1D524524006E0684 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/src/nodekit/platform-darwin/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.nodekit.NodeKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E4ACCBB01D524524006E0684 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/src/nodekit/platform-darwin/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = io.nodekit.NodeKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		E4ACCBB21D524524006E0684 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = test/platform/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.nodekit.NodeKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sample-nodekit-Mac.app/Contents/MacOS/sample-nodekit-Mac";
+			};
+			name = Debug;
+		};
+		E4ACCBB31D524524006E0684 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = test/platform/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = io.nodekit.NodeKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sample-nodekit-Mac.app/Contents/MacOS/sample-nodekit-Mac";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		E4B5AF661D4FBAA9005077D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2538,6 +2943,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = " arm64 armv7 armv7s i386 x86_64";
@@ -2595,6 +3001,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = " arm64 armv7 armv7s i386 x86_64";
@@ -2838,101 +3245,6 @@
 				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		E4B5B0041D4FC1BE005077D2 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = test/platform/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks @executable_path/../Frameworks @loader_path/../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = io.nodekit.NKCoreTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sample-NKCore-iOS.app/sample-NKCore-iOS";
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
-			};
-			name = Debug;
-		};
-		E4B5B0051D4FC1BE005077D2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = test/platform/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks @executable_path/../Frameworks @loader_path/../Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = io.nodekit.NKCoreTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sample-NKCore-iOS.app/sample-NKCore-iOS";
-				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 			};
 			name = Release;
 		};
@@ -3368,6 +3680,22 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		E4ACCBAE1D524524006E0684 /* Build configuration list for PBXNativeTarget "NodeKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4ACCBAF1D524524006E0684 /* Debug */,
+				E4ACCBB01D524524006E0684 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		E4ACCBB11D524524006E0684 /* Build configuration list for PBXNativeTarget "NodeKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4ACCBB21D524524006E0684 /* Debug */,
+				E4ACCBB31D524524006E0684 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		E4B5AF651D4FBAA9005077D2 /* Build configuration list for PBXNativeTarget "NKScripting" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -3391,15 +3719,6 @@
 			buildConfigurations = (
 				E4B5B0011D4FC1BE005077D2 /* Debug */,
 				E4B5B0021D4FC1BE005077D2 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E4B5B0031D4FC1BE005077D2 /* Build configuration list for PBXNativeTarget "NKCoreTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E4B5B0041D4FC1BE005077D2 /* Debug */,
-				E4B5B0051D4FC1BE005077D2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

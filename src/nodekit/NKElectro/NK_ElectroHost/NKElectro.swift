@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKElectro: NSObject {
 
     static func addElectro(context: NKScriptContext) {

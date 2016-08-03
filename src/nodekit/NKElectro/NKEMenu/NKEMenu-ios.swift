@@ -23,10 +23,6 @@ import Foundation
 
 import UIKit
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 // NKElectro MENU Placeholder code only:  on roadmap but lower priority as not supported on mobile
 
 extension NKE_Menu: NKScriptExport {

@@ -17,9 +17,7 @@
 */
 
 import Foundation
-import NKScripting
-import NKCore
-import NKElectro
+import NodeKit
 
 class myNKDelegate: NSObject, NKScriptContextDelegate {
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {

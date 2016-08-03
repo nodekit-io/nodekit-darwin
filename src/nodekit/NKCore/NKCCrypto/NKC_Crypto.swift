@@ -20,10 +20,6 @@ import Darwin
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKC_Crypto: NSObject, NKScriptExport {
     
     class func attachTo(context: NKScriptContext) {

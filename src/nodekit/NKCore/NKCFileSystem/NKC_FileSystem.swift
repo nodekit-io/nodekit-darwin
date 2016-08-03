@@ -18,10 +18,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKC_FileSystem: NSObject {
     
     private let _NKStorage = NKStorage()

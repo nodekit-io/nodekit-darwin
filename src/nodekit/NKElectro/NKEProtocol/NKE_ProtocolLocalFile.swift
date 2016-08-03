@@ -18,10 +18,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKE_ProtocolLocalFile: NSURLProtocol {
 
     override class func canInitWithRequest(request: NSURLRequest) -> Bool {

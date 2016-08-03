@@ -18,10 +18,6 @@
  
 import Foundation
  
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKC_Timer: NSObject, NKScriptExport {
 
     class func attachTo(context: NKScriptContext) {

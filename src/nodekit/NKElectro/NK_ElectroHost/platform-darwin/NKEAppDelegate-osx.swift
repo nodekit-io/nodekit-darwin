@@ -19,10 +19,6 @@
     
 import Cocoa
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
     
     internal static var options: Dictionary<String, AnyObject>?

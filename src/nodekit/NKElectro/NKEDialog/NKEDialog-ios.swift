@@ -23,10 +23,6 @@ import Foundation
 
 import UIKit
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 extension NKE_Dialog: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {

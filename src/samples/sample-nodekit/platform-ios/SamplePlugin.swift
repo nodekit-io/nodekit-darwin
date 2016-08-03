@@ -18,7 +18,7 @@
 
 import Foundation
 import UIKit
-import NKScripting
+import NodeKit
 
 protocol SamplePluginProtocol: NKScriptExport {
     func logconsole(text: AnyObject?) -> Void

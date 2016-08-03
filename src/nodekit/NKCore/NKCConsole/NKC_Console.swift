@@ -17,11 +17,7 @@
  */
  
  import Foundation
- 
- #if !COCOAPODS
-    import NKScripting
- #endif
- 
+
  typealias NKStringViewer = (msg: String, title: String) -> Void
  
  typealias NKUrlNavigator = (uri: String, title: String) -> Void

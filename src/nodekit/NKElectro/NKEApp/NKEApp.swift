@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 extension NKE_App: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {

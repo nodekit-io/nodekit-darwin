@@ -17,10 +17,7 @@
  */
  
  import Foundation
- 
- #if !COCOAPODS
-    import NKScripting
- #endif
+
  
  /*
  * Creates _tcp javascript value that inherits from EventEmitter

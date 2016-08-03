@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 extension NKElectro {
 
     static func bootToRenderer(context: NKScriptContext) {

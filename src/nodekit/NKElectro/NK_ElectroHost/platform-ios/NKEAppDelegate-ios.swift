@@ -20,10 +20,6 @@
 
 import UIKit
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKEAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelegate {
 
     var window: UIWindow?

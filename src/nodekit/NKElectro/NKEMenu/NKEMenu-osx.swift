@@ -25,10 +25,6 @@ import Foundation
 
 import Cocoa
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 extension NKE_Menu: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {

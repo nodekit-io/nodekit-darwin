@@ -29,10 +29,6 @@ import Foundation
 
 import CoreFoundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 @objc protocol NKC_SwiftSocketProtocol: class {
     
     optional func socket(socket: NKC_SwiftSocket, didAcceptNewSocket newSocket: NKC_SwiftSocket)

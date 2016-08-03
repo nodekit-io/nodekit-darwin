@@ -19,10 +19,6 @@
 
 import Foundation
 
-#if !COCOAPODS
-    import NKScripting
-#endif
-
 class NKE_IpcRenderer: NSObject, NKE_IpcProtocol {
 
     internal weak var _window: NKE_BrowserWindow? = nil
