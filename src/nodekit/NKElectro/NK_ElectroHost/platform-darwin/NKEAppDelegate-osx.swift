@@ -46,7 +46,12 @@ class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
         let noSplash = (NKEAppDelegate.options?["nk.NoSplash"] as? Bool) ?? false
         
         if (!testMode && !noSplash)
+            
         {
+            
+            
+            NKStorage.includeBundle(NSBundle(forClass: NKElectro.self))
+        
             
             let splash: [String: AnyObject] = (NKEAppDelegate.options?["nk.splashWindow"] as? [String: AnyObject]) ??  [
                 "nk.browserType": "UIWebView",

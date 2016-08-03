@@ -82,6 +82,42 @@ public extension NKArchiveReader {
         }
     }
     
+    mutating func stat(archive: String, filename: String) -> Dictionary<String, AnyObject> {
+        
+        if let nkArchive = _cacheCDirs.objectForKey(archive) as? NKArchive {
+            
+            return nkArchive.stat(filename)
+            
+        } else {
+            
+            guard let (nkArchive, data) = NKArchive.createFromPath(archive) else { return Dictionary<String, AnyObject>() }
+            
+            _cacheCDirs.setObject(nkArchive, forKey: archive)
+            _cacheArchiveData.setObject(data, forKey: archive)
+            
+            return nkArchive.stat(filename)
+        }
+    }
+    
+    mutating func getDirectory(archive: String, foldername: String) -> [String] {
+        
+        if let nkArchive = _cacheCDirs.objectForKey(archive) as? NKArchive {
+            
+            return nkArchive.getDirectory(foldername)
+            
+        } else {
+            
+            guard let (nkArchive, data) = NKArchive.createFromPath(archive) else { return [String]() }
+            
+            _cacheCDirs.setObject(nkArchive, forKey: archive)
+            _cacheArchiveData.setObject(data, forKey: archive)
+            
+            return nkArchive.getDirectory(foldername)
+        }
+    }
+
+
+    
 }
 
 

@@ -22,85 +22,14 @@ import Foundation
     import NKScripting
 #endif
 
-class NKC_FileSystem: NSObject, NKScriptExport {
-
-    class func attachTo(context: NKScriptContext) {
-        
-        context.NKloadPlugin(NKC_FileSystem(), namespace: "io.nodekit.platform.fs", options: [String:AnyObject]())
+class NKC_FileSystem: NSObject {
     
-    }
-
-    func rewriteGeneratedStub(stub: String, forKey: String) -> String {
-    
-        switch (forKey) {
-        
-        case ".global":
-        
-            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/lib-core/platform/fs.js", NKC_FileSystem.self)
-       
-        default:
-        
-            return stub
-       
-        }
-    
-    }
+    private let _NKStorage = NKStorage()
 
      func statSync(module: String) -> Dictionary<String, AnyObject> {
-
-        let path=module; //self.getPath(module)
-    
-        var storageItem  = Dictionary<String, NSObject>()
-
-        let attr: [String : AnyObject]
         
-        do {
+        return _NKStorage.statSync(module)
         
-            attr = try NSFileManager.defaultManager().attributesOfItemAtPath(path)
-
-        } catch _ {
-            
-            return storageItem
-        
-        }
-
-        storageItem["birthtime"] = attr[NSFileCreationDate] as! NSDate
-        
-        storageItem["size"] = attr[NSFileSize] as! NSNumber
-        
-        storageItem["mtime"] = attr[NSFileModificationDate] as! NSDate
-        
-        storageItem["path"] = path as String
-
-        switch attr[NSFileType] as! String {
-        
-        case NSFileTypeDirectory:
-        
-            storageItem["filetype"] = "Directory"
-            
-            break
-        
-        case NSFileTypeRegular:
-        
-            storageItem["filetype"] = "File"
-            
-            break
-        
-        case NSFileTypeSymbolicLink:
-        
-            storageItem["filetype"] = "SymbolicLink"
-            
-            break
-        
-        default:
-        
-            storageItem["filetype"] = "File"
-            
-            break
-       
-        }
-
-        return storageItem
     }
 
     func statAsync(module: String, completionHandler: NKScriptValue) -> Void {
@@ -120,9 +49,9 @@ class NKC_FileSystem: NSObject, NKScriptExport {
     }
 
     func existsSync (path: String) -> Bool {
-
-        return NSFileManager().fileExistsAtPath(path)
-    
+        
+        return NKStorage.exists(path)
+        
     }
 
     func getDirectoryAsync(module: String, completionHandler: NKScriptValue) -> Void {
@@ -132,12 +61,8 @@ class NKC_FileSystem: NSObject, NKScriptExport {
     }
 
     func getDirectorySync(module: String) -> [String] {
-    
-        let path=module; //self.getPath(module)
         
-        let dirContents = (try? NSFileManager.defaultManager().contentsOfDirectoryAtPath(path)) ?? [String]()
-        
-        return dirContents
+        return _NKStorage.getDirectorySync(module)
     
     }
 
@@ -160,21 +85,8 @@ class NKC_FileSystem: NSObject, NKScriptExport {
     
         guard let path = storageItem["path"] as? String else {return ""}
         
-        var data: NSData?
+        return _NKStorage.getSourceSync(path) ?? ""
         
-        do {
-        
-            data = try NSData(contentsOfFile: path as String, options: NSDataReadingOptions(rawValue: 0))
-        
-        } catch _ {
-        
-            NKLogging.log("!ERROR reading file")
-
-            return ""
-        }
-
-        return (data!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0)))
-    
     }
 
     func writeContentSync(storageItem: Dictionary<String, AnyObject>, str: String) -> Bool {
@@ -191,33 +103,6 @@ class NKC_FileSystem: NSObject, NKScriptExport {
     
         completionHandler.callWithArguments([ NSNull(),  self.writeContentSync(storageItem, str: str)], completionHandler: nil)
     
-    }
-
-    func getSourceSync(module: String) -> String {
-
-        let path=getPathSync(module)
-
-        if (path=="") {
-    
-            return ""
-        
-        }
-
-       var data: NSData?
-        
-        do {
-        
-            data = try NSData(contentsOfFile: path as String, options: NSDataReadingOptions(rawValue: 0))
-        
-        } catch _ {
-        
-            NKLogging.log("!ERROR reading file")
-            
-            return ""
-        }
-        
-        return (data!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0)))
-
     }
 
     func mkdirSync (path: String) -> Bool {
@@ -282,45 +167,29 @@ class NKC_FileSystem: NSObject, NKScriptExport {
         }
 
     }
+}
 
-    func getPathSync(module: String) -> String {
-
-        let directory = (module as NSString).stringByDeletingLastPathComponent
-
-        var fileName = (module as NSString).lastPathComponent
+extension NKC_FileSystem: NKScriptExport {
+    
+    class func attachTo(context: NKScriptContext) {
         
-        var fileExtension = (fileName as NSString).pathExtension
+        context.NKloadPlugin(NKC_FileSystem(), namespace: "io.nodekit.platform.fs", options: [String:AnyObject]())
         
-        fileName = (fileName as NSString).stringByDeletingPathExtension
-
-        if (fileExtension=="") {
-        
-            fileExtension = "js"
-        
-        }
-
-        let mainBundle: NSBundle = NKStorage.mainBundle
-  
-        var path = mainBundle.pathForResource(fileName, ofType: fileExtension, inDirectory: directory)
-
-        if (path == nil) {
-  
-            let _nodeKitBundle: NSBundle = NSBundle(forClass: NKC_FileSystem.self)
-
-            path = _nodeKitBundle.pathForResource(fileName, ofType: fileExtension, inDirectory: directory)
-
-            if (path == nil) {
-            
-                NKLogging.log("!Error - source file not found: \(directory + "/" + fileName + "." + fileExtension)")
-            
-                return ""
-            
-            }
-            
-        }
-
-        return path!
-
     }
-
+    
+    func rewriteGeneratedStub(stub: String, forKey: String) -> String {
+        
+        switch (forKey) {
+            
+        case ".global":
+            
+            return NKStorage.getPluginWithStub(stub, "lib-core.nkar/lib-core/platform/fs.js", NKC_FileSystem.self)
+            
+        default:
+            
+            return stub
+            
+        }
+        
+    }
 }

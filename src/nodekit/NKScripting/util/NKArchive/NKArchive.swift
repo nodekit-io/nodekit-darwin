@@ -104,6 +104,52 @@ public extension NKArchive {
         
     }
     
+    func containsFolder(module: String) -> Bool {
+        
+        var folder = module
+        
+        if !folder.hasSuffix("/") {
+          folder += "/"
+        }
+        
+        return self._cdirs[folder] != nil
+    }
+    
+    
+    func stat(filename: String) -> Dictionary<String, AnyObject> {
+        
+        var storageItem  = Dictionary<String, NSObject>()
+        
+        guard let cdir = self._cdirs[filename] ?? self._cdirs[filename + "/"] else { return storageItem }
+        
+        storageItem["birthtime"] = NSDate(timeIntervalSince1970: Double(cdir.lastmodUnixTimestamp))
+        
+        storageItem["size"] = NSNumber(unsignedInt: cdir.uncompressedSize)
+        
+        storageItem["mtime"] = storageItem["birthtime"]
+        
+        storageItem["path"] = (self.path as NSString).stringByAppendingPathComponent(filename)
+        
+        storageItem["filetype"] = cdir.fileName.hasSuffix("/") ? "Directory" : "File"
+        
+        return storageItem
+    }
+    
+    func getDirectory(foldername: String) -> [String] {
+        
+        let depth = (foldername as NSString).pathComponents.count + 1
+        
+        let items = self.files.filter({(item: String) -> Bool in
+                return item.lowercaseString.hasPrefix(foldername.lowercaseString) &&
+                   ((item as NSString).pathComponents.count == depth)
+                
+            })
+        
+        return items.map({(item: String) -> String in
+            return (item as NSString).lastPathComponent
+        })
+
+    }
 }
 
 

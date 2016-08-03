@@ -58,7 +58,7 @@ class NKE_BrowserWindow: NSObject {
     required init(options: Dictionary<String, AnyObject>) {
     
         super.init()
-
+        
         // PARSE & STORE OPTIONS
         
         self._options["nk.InstallElectro"] = options["nk.InstallElectro"] as? Bool ?? true
