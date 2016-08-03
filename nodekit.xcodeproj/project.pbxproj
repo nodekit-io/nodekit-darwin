@@ -132,6 +132,9 @@
 		E4ACCC171D5249B1006E0684 /* NKT_TestRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E481761F1C9A444500DD09AF /* NKT_TestRunner.swift */; };
 		E4ACCC181D5249B5006E0684 /* app in Resources */ = {isa = PBXBuildFile; fileRef = E48175F71C99D59E00DD09AF /* app */; };
 		E4ACCC191D5249B8006E0684 /* lib-test in Resources */ = {isa = PBXBuildFile; fileRef = E48175F11C99D15E00DD09AF /* lib-test */; };
+		E4ACCC231D524DCF006E0684 /* NKScripting.podspec in Resources */ = {isa = PBXBuildFile; fileRef = E4ACCC221D524DCF006E0684 /* NKScripting.podspec */; };
+		E4ACCC251D524DD9006E0684 /* NKElectro.podspec in Resources */ = {isa = PBXBuildFile; fileRef = E4ACCC241D524DD9006E0684 /* NKElectro.podspec */; };
+		E4ACCC271D524DE7006E0684 /* NKCore.podspec in Resources */ = {isa = PBXBuildFile; fileRef = E4ACCC261D524DE7006E0684 /* NKCore.podspec */; };
 		E4B5AF691D4FBBE4005077D2 /* NKJSCContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845A1D4CDEA40088D28F /* NKJSCContextFactory.swift */; };
 		E4B5AF6A1D4FBBE4005077D2 /* NKJSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845B1D4CDEA40088D28F /* NKJSContext.swift */; };
 		E4B5AF6B1D4FBBE4005077D2 /* NKJSCScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845C1D4CDEA40088D28F /* NKJSCScript.swift */; };
@@ -616,6 +619,9 @@
 		E4ACCBB41D5245FE006E0684 /* NodeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeKit.h; sourceTree = "<group>"; };
 		E4ACCC1B1D5249CF006E0684 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4ACCC1F1D524B19006E0684 /* NodeKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NodeKit.podspec; sourceTree = "<group>"; };
+		E4ACCC221D524DCF006E0684 /* NKScripting.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NKScripting.podspec; sourceTree = "<group>"; };
+		E4ACCC241D524DD9006E0684 /* NKElectro.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NKElectro.podspec; sourceTree = "<group>"; };
+		E4ACCC261D524DE7006E0684 /* NKCore.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = NKCore.podspec; sourceTree = "<group>"; };
 		E4B5AF5C1D4FBAA9005077D2 /* NKScripting.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NKScripting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B5AF9B1D4FBF1E005077D2 /* NKElectro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NKElectro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B5AFE91D4FC1BD005077D2 /* NKCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NKCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1107,6 +1113,9 @@
 			isa = PBXGroup;
 			children = (
 				E4ACCC1F1D524B19006E0684 /* NodeKit.podspec */,
+				E4ACCC261D524DE7006E0684 /* NKCore.podspec */,
+				E4ACCC241D524DD9006E0684 /* NKElectro.podspec */,
+				E4ACCC221D524DCF006E0684 /* NKScripting.podspec */,
 				E481731B1C99B71B00DD09AF /* src */,
 				E48174971C99B72A00DD09AF /* test */,
 				E45F83631D4C0F980088D28F /* platformsupport */,
@@ -1789,7 +1798,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4ACCC251D524DD9006E0684 /* NKElectro.podspec in Resources */,
 				E4ACCC191D5249B8006E0684 /* lib-test in Resources */,
+				E4ACCC231D524DCF006E0684 /* NKScripting.podspec in Resources */,
+				E4ACCC271D524DE7006E0684 /* NKCore.podspec in Resources */,
 				E4ACCC181D5249B5006E0684 /* app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
