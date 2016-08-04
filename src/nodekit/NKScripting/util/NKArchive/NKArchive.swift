@@ -60,9 +60,31 @@ public class NKArchive {
 
 public extension NKArchive {
     
+    private func getDirectory_(filename: String) -> NKAR_CentralDirectory? {
+       
+        let cdir = _cdirs[filename]
+        
+        if (cdir != nil) { return cdir }
+        
+        if !filename.hasPrefix("*") { return nil }
+        
+        let filename = (filename as NSString).substringFromIndex(1)
+        
+        let depth = (filename as NSString).pathComponents.count
+        
+        guard let item = self.files.filter({(item: String) -> Bool in
+            return item.lowercaseString.hasSuffix(filename.lowercaseString) &&
+                ((item as NSString).pathComponents.count == depth)
+            
+        }).first else { return nil }
+        
+        return self._cdirs[item]
+        
+    }
+    
     func dataForFile(filename: String) -> NSData? {
         
-        guard let _cdir = self._cdirs[filename] else { return nil }
+        guard let _cdir = self.getDirectory_(filename) else { return nil }
         
         guard let file: NSFileHandle = NSFileHandle(forReadingAtPath: self.path) else { return nil }
         
@@ -80,15 +102,16 @@ public extension NKArchive {
     
     func dataForFileWithArchiveData(filename: String, data: NSData) -> NSData? {
         
-        guard let _cdir = self._cdirs[filename] else { return nil }
+        guard let _cdir = self.getDirectory_(filename) else  { return nil }
         
         return NKAR_Uncompressor.uncompressWithArchiveData(_cdir, data: data)
         
     }
     
+    
     func exists(filename: String) -> Bool {
         
-        if (self._cdirs[filename] != nil) {return true} else { return false }
+        if (self.getDirectory_(filename) != nil) {return true} else { return false }
 
     }
     
@@ -100,7 +123,7 @@ public extension NKArchive {
     
     func containsFile(file: String) -> Bool {
         
-        return self._cdirs[file] != nil
+        return self.getDirectory_(file) != nil
         
     }
     
@@ -112,7 +135,7 @@ public extension NKArchive {
           folder += "/"
         }
         
-        return self._cdirs[folder] != nil
+        return self.getDirectory_(folder) != nil
     }
     
     
@@ -120,7 +143,9 @@ public extension NKArchive {
         
         var storageItem  = Dictionary<String, NSObject>()
         
-        guard let cdir = self._cdirs[filename] ?? self._cdirs[filename + "/"] else { return storageItem }
+        guard let cdir = self.getDirectory_(filename)
+            ?? self.getDirectory_(filename + "/")
+          else { return storageItem }
         
         storageItem["birthtime"] = NSDate(timeIntervalSince1970: Double(cdir.lastmodUnixTimestamp))
         

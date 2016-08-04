@@ -3279,7 +3279,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "src/samples/sample-NKScripting/sample-NKScripting.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "src/samples/sample-NKScripting/";
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -3330,7 +3330,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "src/samples/sample-NKScripting/sample-NKScripting.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "src/samples/sample-NKScripting/";
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -3699,6 +3699,7 @@
 				E4ACCBB01D524524006E0684 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4ACCBB11D524524006E0684 /* Build configuration list for PBXNativeTarget "NodeKitTests" */ = {
 			isa = XCConfigurationList;
@@ -3707,6 +3708,7 @@
 				E4ACCBB31D524524006E0684 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E4B5AF651D4FBAA9005077D2 /* Build configuration list for PBXNativeTarget "NKScripting" */ = {
 			isa = XCConfigurationList;
