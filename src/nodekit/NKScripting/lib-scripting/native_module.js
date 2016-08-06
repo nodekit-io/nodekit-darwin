@@ -48,7 +48,8 @@ process.bootstrap = function(id) {
 };
 
 var BootstrapModule = function BootstrapModule(id) {
-    this.filename = id + '.js';
+    this.__filename = id + '.js';
+    this.__dirname = id.substring(0, id.lastIndexOf('/') - 1);
     this.id = id;
     this.exports = {};
     this.loaded = false;
@@ -185,38 +186,39 @@ BootstrapModule.prototype.cache = function() {
     BootstrapModule._cache[this.id] = this;
 };
 
+BootstrapModule.prototype.require = function(id) {
+    
+    if (id[0] == ".")
+    {
+        id = _absolutePath(this.__dirname + '/', id);
+    }
+    
+    return BootstrapModule._load(id);
+    
+};
+
 BootstrapModule.prototype.compile = function() {
-    var self = this;
-    
-    var reqFunc = function(id) {
-        if (id[0] == ".")
-        {
-            id = _getFullPath(self.filename, id.substr(1));
-        }
-        
-        return BootstrapModule._load(id);
-    };
-    
     var source = BootstrapModule.getSource(this.id);
     source = BootstrapModule.wrap(source);
-    var fn = BootstrapModule.runInThisContext(source, { filename: this.filename , displayErrors: true});
-    fn(this.exports, reqFunc, this, this.filename);
+    var fn = BootstrapModule.runInThisContext(source, { filename: this.__filename , displayErrors: true});
+    fn(this.exports, this.require.bind(this), this, this.__filename, this.__dirname);
     this.loaded = true;
 };
 
-function _getFullPath(pathwithfilename, module) {
-    
-    if (pathwithfilename != "" && (pathwithfilename.indexOf("/") !== -1)) {
-        
-        var parentPath = pathwithfilename.substring(0, pathwithfilename.lastIndexOf("/"));
-        
-        return parentPath + module
-        
-    } else {
-        
-        return module
-        
+function _absolutePath(base, relative) {
+    var stack = base.split("/"),
+    parts = relative.split("/");
+    stack.pop(); // remove current file name (or empty string)
+
+    for (var i=0; i<parts.length; i++) {
+        if (parts[i] == ".")
+            continue;
+        if (parts[i] == "..")
+            stack.pop();
+        else
+            stack.push(parts[i]);
     }
+    return stack.join("/");
 }
 
 BootstrapModule._preCache = {};
