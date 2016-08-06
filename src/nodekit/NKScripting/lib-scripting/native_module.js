@@ -44,7 +44,7 @@ process.moduleLoadList = process.moduleLoadList || [];
 process.sources = process.sources || [];
 
 process.bootstrap = function(id) {
-    return BootstrapModule.require(id).bind(this);
+    return BootstrapModule.require(id);
 };
 
 var BootstrapModule = function BootstrapModule(id) {
@@ -207,7 +207,7 @@ BootstrapModule.prototype.cache = function() {
     BootstrapModule._cache[this.id] = this;
 };
 
-BootstrapModule.prototype.load_ = function() {
+BootstrapModule.prototype.load = function() {
     
     if (this.__ext == 'js')
     {
