@@ -49,7 +49,7 @@ process.bootstrap = function(id) {
 
 var BootstrapModule = function BootstrapModule(id) {
     this.__filename = id + '.js';
-    this.__dirname = id.substring(0, id.lastIndexOf('/') - 1);
+    this.__dirname = id.substring(0, id.lastIndexOf('/'));
     this.id = id;
     this.exports = {};
     this.loaded = false;
