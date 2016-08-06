@@ -90,6 +90,12 @@ BootstrapModule.getSource = function(id) {
     
 }
 
+BootstrapModule.loadSource = function(id) {
+    
+    return atob(NativeStorage.getSourceSync(id))
+    
+}
+
 BootstrapModule._cache = {};
 
 BootstrapModule.prototype.require = function(id)
@@ -216,7 +222,7 @@ BootstrapModule.prototype.load = function() {
     else if (this.__ext == 'json')
     {
         
-        var source = BootstrapModule.getSource(this.id);
+        var source = BootstrapModule.loadSource(this.id);
         try {
             this.exports = JSON.parse(source);
         } catch (err) {
