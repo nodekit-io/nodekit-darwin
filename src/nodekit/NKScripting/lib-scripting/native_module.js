@@ -44,12 +44,25 @@ process.moduleLoadList = process.moduleLoadList || [];
 process.sources = process.sources || [];
 
 process.bootstrap = function(id) {
-    return BootstrapModule._load(id);
+    return BootstrapModule.require(id).bind(this);
 };
 
 var BootstrapModule = function BootstrapModule(id) {
-    this.__filename = id + '.js';
+   
+    var file = id.substring(id.lastIndexOf('/')+1);
+ 
+    if (file.indexOf('.') == -1)
+    {
+        this.__ext = 'js'
+        this.__filename = id + '.js'
+    } else
+    {
+        this.__ext = file.substring(file.lastIndexOf('.') + 1);
+        this.__filename = id;
+    }
+        
     this.__dirname = id.substring(0, id.lastIndexOf('/'));
+    
     this.id = id;
     this.exports = {};
     this.loaded = false;
@@ -79,10 +92,15 @@ BootstrapModule.getSource = function(id) {
 
 BootstrapModule._cache = {};
 
-BootstrapModule._load = function(id)
+BootstrapModule.prototype.require = function(id)
 {
     if (id == 'native_module') {
         return BootstrapModule;
+    }
+    
+    if (id[0] == ".")
+    {
+        id = _absolutePath(this.__dirname + '/', id);
     }
     
     var cached = BootstrapModule.getCached(id);
@@ -95,10 +113,13 @@ BootstrapModule._load = function(id)
     var bootstrapModule = new BootstrapModule(id);
     
     bootstrapModule.cache();
-    bootstrapModule.compile();
+    
+    bootstrapModule.load();
     
     return bootstrapModule.exports;
 };
+
+BootstrapModule.require = BootstrapModule.prototype.require
 
 BootstrapModule.error = function(e, source)
 {
@@ -186,23 +207,35 @@ BootstrapModule.prototype.cache = function() {
     BootstrapModule._cache[this.id] = this;
 };
 
-BootstrapModule.prototype.require = function(id) {
+BootstrapModule.prototype.load_ = function() {
     
-    if (id[0] == ".")
+    if (this.__ext == 'js')
     {
-        id = _absolutePath(this.__dirname + '/', id);
+        this.compile()
+    }
+    else if (this.__ext == 'json')
+    {
+        
+        var source = BootstrapModule.getSource(this.id);
+        try {
+            this.exports = JSON.parse(source);
+        } catch (err) {
+            err.message = this.__filename + ': ' + err.message;
+            throw err;
+        }
     }
     
-    return BootstrapModule._load(id);
+    this.loaded = true;
     
 };
 
+
 BootstrapModule.prototype.compile = function() {
     var source = BootstrapModule.getSource(this.id);
+    
     source = BootstrapModule.wrap(source);
     var fn = BootstrapModule.runInThisContext(source, { filename: this.__filename , displayErrors: true});
     fn(this.exports, this.require.bind(this), this, this.__filename, this.__dirname);
-    this.loaded = true;
 };
 
 function _absolutePath(base, relative) {

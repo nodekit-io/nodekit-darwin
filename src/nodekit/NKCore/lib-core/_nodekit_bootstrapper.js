@@ -24,7 +24,7 @@ if (!process || !process.bootstrap)
 }
 
 process.binding = function(id) {
-    return process.bootstrap.NativeModule._load('lib-core.nkar/lib-core/bindings/' + id + '.js');
+    return process.bootstrap.NativeModule.require('lib-core.nkar/lib-core/bindings/' + id + '.js');
 };
 
 process.bootstrap.NativeModule.setPreCacheSources(process.binding('natives'));
