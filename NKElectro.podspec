@@ -18,6 +18,6 @@ s.resources =  [
 'src/nodekit/NKElectro/NK_ElectroHost/www/default.nkar',
 'src/nodekit/NKElectro/NK_ElectroHost/splash/default.nkar'
 ]
-
+s.dependency 'NKScripting'
 
 end

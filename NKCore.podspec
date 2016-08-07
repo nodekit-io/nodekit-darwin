@@ -16,5 +16,6 @@ s.source_files =  "src/nodekit/NKCore/**/*.{swift,h,m}"
 s.resources =  [
 'src/nodekit/NKCore/lib-core.nkar',
 ]
+s.dependency 'NKScripting'
 
 end
