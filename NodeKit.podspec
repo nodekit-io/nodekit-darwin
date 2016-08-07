@@ -27,6 +27,7 @@ Pod::Spec.new do |s|
           'src/nodekit/NKElectro/NK_ElectroHost/www/default.nkar',
           'src/nodekit/NKElectro/NK_ElectroHost/splash/default.nkar'
         ]
+    nke.dependency 'NodeKit/NKScripting'
   end
 
   s.subspec 'NKCore' do |nkc|
@@ -34,6 +35,7 @@ Pod::Spec.new do |s|
     nkc.resources =  [
           'src/nodekit/NKCore/lib-core.nkar',
         ]
+    nkc.dependency 'NodeKit/NKScripting'
   end
 
 end

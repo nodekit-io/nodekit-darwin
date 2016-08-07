@@ -76,7 +76,7 @@ BootstrapModule.getSource = function(id) {
     if (id.indexOf("/") > -1)
     {
         var source = atob(NativeStorage.getSourceSync(id))
-        var append = "\r\n //# sourceURL=io.nodekit.require/" + id + "\r\n";
+        var append = "\r\n //# sourceURL=" + id + "\r\n";
         return source + append;
     }
     
@@ -85,7 +85,7 @@ BootstrapModule.getSource = function(id) {
     }
     
     var source = atob(NativeStorage.getSourceSync(id))
-    var append = "\r\n //# sourceURL=io.nodekit.require/" + id + "\r\n";
+    var append = "\r\n //# sourceURL=" + id + "\r\n";
     return source + append;
     
 }
