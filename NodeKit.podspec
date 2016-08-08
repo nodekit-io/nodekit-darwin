@@ -8,8 +8,8 @@ Pod::Spec.new do |s|
   s.author       = { "OffGrid Networks" => 'admin@offgridn.com' }
   s.source       = { :git => "https://github.com/nodekit-io/nodekit-darwin.git" }
 
-  s.ios.deployment_target = '9.3'
-  s.osx.deployment_target = '10.11'
+  s.ios.deployment_target = '9.0'
+  s.osx.deployment_target = '10.10'
   s.requires_arc = true
 
   s.subspec 'NKScripting' do |nks|
