@@ -24,7 +24,7 @@ class NKC_Crypto: NSObject, NKScriptExport {
     
     class func attachTo(context: NKScriptContext) {
         
-        context.NKloadPlugin(NKC_Crypto(), namespace: "io.nodekit.platform.crypto", options: [String:AnyObject]())
+        context.loadPlugin(NKC_Crypto(), namespace: "io.nodekit.platform.crypto", options: [String:AnyObject]())
         
     }
 

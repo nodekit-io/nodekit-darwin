@@ -48,7 +48,7 @@ public class NKWKMessageHandler: NSObject, WKScriptMessageHandler {
             
             let result = messageHandler.userContentControllerSync(didReceiveScriptMessage: NKScriptMessage(name: name, body: message.body))
             
-            let resultJSON = context?.NKserialize(result)
+            let resultJSON = context?.serialize(result)
             
             NKEventEmitter.global.emit(id, resultJSON)
             

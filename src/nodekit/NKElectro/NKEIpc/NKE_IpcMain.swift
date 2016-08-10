@@ -71,7 +71,7 @@ extension NKE_IpcMain: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
         
-        context.NKloadPlugin(NKE_IpcMain(), namespace: "io.nodekit.electro.ipcMain", options: [String:AnyObject]())
+        context.loadPlugin(NKE_IpcMain(), namespace: "io.nodekit.electro.ipcMain", options: [String:AnyObject]())
     
     }
 
@@ -90,11 +90,5 @@ extension NKE_IpcMain: NKScriptExport {
         }
     
     }
-
- /*   class func scriptNameForSelector(selector: Selector) -> String? {
-    
-        return selector == #selector(NKE_IpcMain.init(options:)) ? "" : nil
-    
-    } */
 
 }

@@ -116,7 +116,7 @@ extension NKE_WebContentsUI: NKE_WebContentsProtocol {
     
         guard let context = _window._context else {return;}
     
-        context.NKevaluateJavaScript(code, completionHandler: nil)
+        context.evaluateJavaScript(code, completionHandler: nil)
     
     }
     

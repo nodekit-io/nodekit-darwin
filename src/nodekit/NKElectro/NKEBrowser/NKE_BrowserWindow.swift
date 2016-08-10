@@ -150,7 +150,7 @@ extension NKE_BrowserWindow: NKScriptExport {
 
         let principal = NKE_BrowserWindow.self
         
-        context.NKloadPlugin(principal, namespace: "io.nodekit.electro.BrowserWindow", options: [String:AnyObject]())
+        context.loadPlugin(principal, namespace: "io.nodekit.electro.BrowserWindow", options: [String:AnyObject]())
     
     }
 
@@ -170,17 +170,15 @@ extension NKE_BrowserWindow: NKScriptExport {
     
     }
 
-    class func scriptNameForSelector(selector: Selector) -> String? {
-    
-        return selector == #selector(NKE_BrowserWindow.init(options:)) ? "" : nil
-    
+    class func rewriteScriptNameForKey(name: String) -> String? {
+        return (name == "initWithOptions:" ? "" : nil)
     }
     
-    class func isSelectorExcludedFromScript(selector: Selector) -> Bool {
+    class func isExcludedFromScript(selector: String) -> Bool {
     
-        return selector.description.hasPrefix("webView") ||
-        selector.description.hasPrefix("NKScriptEngineLoaded") ||
-         selector.description.hasPrefix("NKApplicationReady")
+        return selector.hasPrefix("webView") ||
+        selector.hasPrefix("NKScriptEngineLoaded") ||
+         selector.hasPrefix("NKApplicationReady")
     
     }
 
@@ -190,7 +188,7 @@ extension NKE_BrowserWindow: NKScriptContextDelegate {
 
     internal func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
     
-        NKLogging.log("+E\(context.NKid) Renderer Loaded")
+        NKLogging.log("+E\(context.id) Renderer Loaded")
 
         if (!(self._options["nk.InstallElectro"] as! Bool)) { return;}
         

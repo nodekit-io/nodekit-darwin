@@ -28,7 +28,7 @@ public class NKWVWebViewDelegate: NSObject, WebFrameLoadDelegate {
 
     weak var webView: WebView?
     
-    var context: JSContext?
+    var context: NKScriptContext?
     
     var id: Int
 
@@ -48,7 +48,7 @@ public class NKWVWebViewDelegate: NSObject, WebFrameLoadDelegate {
     
     }
 
-    public func webView(sender: WebView!, didCreateJavaScriptContext context: JSContext!, forFrame: WebFrame!) {
+    public func webView(sender: WebView!, didCreateJavaScriptContext jsContext: JSContext!, forFrame: WebFrame!) {
         
         let didCreateContext = {() -> Void in
         
@@ -60,13 +60,13 @@ public class NKWVWebViewDelegate: NSObject, WebFrameLoadDelegate {
             
             let id = self.id
             
+            webView.currentJSContext = jsContext
+            
+            let context = NKJSContext(jsContext, id: id)
+            
             self.context = context
             
-            webView.currentJSContext = context
-            
-            objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-          
-            context.NKPrepareEnvironment()
+            context.prepareEnvironment()
             
             callback.NKScriptEngineDidLoad(context)
         }

@@ -25,7 +25,7 @@ class NKT_TestRunner: NSObject, NKScriptExport {
     static var current: NKT_TestRunner = NKT_TestRunner()
     
     class func attachTo(context: NKScriptContext) {
-        context.NKloadPlugin(NKT_TestRunner.current, namespace: "io.nodekit.test.runner", options: [String:AnyObject]())
+        context.loadPlugin(NKT_TestRunner.current, namespace: "io.nodekit.test.runner", options: [String:AnyObject]())
     }
     
     func rewriteGeneratedStub(stub: String, forKey: String) -> String {

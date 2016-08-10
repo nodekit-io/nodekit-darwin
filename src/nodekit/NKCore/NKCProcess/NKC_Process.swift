@@ -23,7 +23,7 @@
     
     class func attachTo(context: NKScriptContext) {
     
-        context.NKloadPlugin(NKC_Process(), namespace: "io.nodekit.platform.process", options: [String:AnyObject]())
+        context.loadPlugin(NKC_Process(), namespace: "io.nodekit.platform.process", options: [String:AnyObject]())
     
     }
 
@@ -51,7 +51,7 @@
 
     func nextTick(callBack: NKScriptValue) -> Void {
     
-        dispatch_async(NKScriptChannel.defaultQueue, {() -> Void in
+        dispatch_async(NKScriptContextFactory.defaultQueue, {() -> Void in
         
             callBack.callWithArguments([], completionHandler: nil)
         

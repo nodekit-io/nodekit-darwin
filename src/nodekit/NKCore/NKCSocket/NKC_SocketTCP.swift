@@ -41,7 +41,7 @@
     // NKScripting
 
     class func attachTo(context: NKScriptContext) {
-        context.NKloadPlugin(NKC_SocketTCP.self, namespace: "io.nodekit.platform.TCP", options: [String:AnyObject]())
+        context.loadPlugin(NKC_SocketTCP.self, namespace: "io.nodekit.platform.TCP", options: [String:AnyObject]())
     }
 
     class func rewriteGeneratedStub(stub: String, forKey: String) -> String {
@@ -53,21 +53,23 @@
         }
     }
 
-    private static let exclusion: Set<Selector> = {
+    private static let exclusion: Set<String> = {
         var methods = NKInstanceMethods(forProtocol: NKC_SwiftSocketProtocol.self)
-          //    methods.remove(Selector("invokeDefaultMethodWithArguments:"))
-        return methods.union([
-            //       Selector(".cxx_construct"),
-            ])
+        return Set<String>(methods.union([
+            ]).map({selector in
+                return selector.description
+        }))
     }()
 
-    class func  isSelectorExcludedFromScript(selector: Selector) -> Bool {
+    class func  isExcludedFromScript(selector: String) -> Bool {
+        
         return exclusion.contains(selector)
     }
-
-    class func scriptNameForSelector(selector: Selector) -> String? {
-        return selector == #selector(NKC_SocketTCP.init(options:)) ? "" : nil
+    
+    class func rewriteScriptNameForKey(name: String) -> String? {
+        return (name == "initWithOptions:" ? "" : nil)
     }
+    
 
     // local variables and init
 
@@ -78,14 +80,14 @@
     override init() {
         self._socket = NKC_SwiftSocket(domain: NKC_DomainAddressFamily.INET, type: NKC_SwiftSocketType.Stream, proto: NKC_CommunicationProtocol.TCP)
         super.init()
-        self._socket!.setDelegate(self, delegateQueue: NKScriptChannel.defaultQueue /* dispatch_get_main_queue() */)
+        self._socket!.setDelegate(self, delegateQueue: NKScriptContextFactory.defaultQueue /* dispatch_get_main_queue() */)
     }
     
     
     init(options: AnyObject) {
         self._socket = NKC_SwiftSocket(domain: NKC_DomainAddressFamily.INET, type: NKC_SwiftSocketType.Stream, proto: NKC_CommunicationProtocol.TCP)
         super.init()
-        self._socket!.setDelegate(self, delegateQueue: NKScriptChannel.defaultQueue /* dispatch_get_main_queue() */)
+        self._socket!.setDelegate(self, delegateQueue: NKScriptContextFactory.defaultQueue /* dispatch_get_main_queue() */)
     }
 
 
@@ -182,7 +184,7 @@
     func socket(socket: NKC_SwiftSocket, didAcceptNewSocket newSocket: NKC_SwiftSocket) {
         let socketConnection = NKC_SocketTCP(socket: newSocket, server: self)
         connections.addObject(socketConnection)
-        newSocket.setDelegate(socketConnection, delegateQueue: NKScriptChannel.defaultQueue /* dispatch_get_main_queue() */)
+        newSocket.setDelegate(socketConnection, delegateQueue: NKScriptContextFactory.defaultQueue /* dispatch_get_main_queue() */)
         
         self.emitConnection(socketConnection)
          do {

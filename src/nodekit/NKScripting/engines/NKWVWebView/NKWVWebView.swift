@@ -22,9 +22,7 @@ import WebKit
 
 extension WebView: NKScriptContextHost {
 
-    public var NKid: Int { get { return objc_getAssociatedObject(self, unsafeAddressOf(NKJSContextId)) as! Int; } }
-
-    public func NKgetScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(),
+    public func NKcreateScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(),
         delegate cb: NKScriptContextDelegate) -> Void {
     
         NKLogging.log("+NodeKit WebView-JavaScriptCore JavaScript Engine E\(id)")

@@ -23,8 +23,8 @@ extension NKScriptContextFactory {
 
     func createContextJavaScriptCore(options: [String: AnyObject] = Dictionary<String, AnyObject>(), delegate cb: NKScriptContextDelegate) {
     
-      dispatch_async(NKScriptChannel.defaultQueue) {
-    //  dispatch_async(dispatch_get_main_queue()) {
+    //  dispatch_async(NKScriptContextFactory.defaultQueue) {
+      dispatch_async(dispatch_get_main_queue()) {
         
             let vm = JSVirtualMachine()
             
@@ -32,7 +32,7 @@ extension NKScriptContextFactory {
 
             let id = NKScriptContextFactory.sequenceNumber
             
-            context.NKgetScriptContext(id, options: options, delegate: cb)
+            context.NKcreateScriptContext(id, options: options, delegate: cb)
 
             var item = Dictionary<String, AnyObject>()
             
@@ -43,4 +43,25 @@ extension NKScriptContextFactory {
             item["context"] = context
         }
     }
+}
+
+extension JSContext: NKScriptContextHost {
+    
+    public func NKcreateScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(), delegate cb: NKScriptContextDelegate) -> Void {
+        
+        let context = NKJSContext(self, id: id)
+        
+        NKLogging.log("+NodeKit JavaScriptCore JavaScript Engine E\(id)")
+        
+        objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
+        
+        context.prepareEnvironment()
+        
+        cb.NKScriptEngineDidLoad(context)
+        
+        cb.NKScriptEngineReady(context)
+        
+    }
+    
 }

@@ -48,7 +48,7 @@ public class NKScriptContextFactory: NSObject {
     
     }
 
-    public func createContext(options: [String: AnyObject] = Dictionary<String, AnyObject>(), delegate cb: NKScriptContextDelegate) {
+    public func createScriptContext(options: [String: AnyObject] = Dictionary<String, AnyObject>(), delegate cb: NKScriptContextDelegate) {
     
         let engine = NKEngineType(rawValue: (options["Engine"] as? Int)!) ?? NKEngineType.JavaScriptCore
 
@@ -69,5 +69,20 @@ public class NKScriptContextFactory: NSObject {
         }
     
     }
+    
+    public static var defaultQueue: dispatch_queue_t = {
+        
+        let label = "io.nodekit.scripting.default-queue"
+        
+        return dispatch_queue_create(label, DISPATCH_QUEUE_SERIAL)
+        
+    }()
 
+}
+
+
+public protocol NKScriptContextHost: class {
+    
+    func NKcreateScriptContext(id: Int, options: [String: AnyObject], delegate cb: NKScriptContextDelegate) -> Void
+    
 }

@@ -87,7 +87,7 @@ extension NKE_BrowserWindow {
                 
             }
             
-            webView.NKgetScriptContext(id, options: [String: AnyObject](), delegate: self)
+            webView.NKcreateScriptContext(id, options: [String: AnyObject](), delegate: self)
 
             // PROTOCOL NOT SUPPORTED ON WKWEBVIEW
             

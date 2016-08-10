@@ -169,7 +169,7 @@ extension NKC_FileSystem: NKScriptExport {
     
     class func attachTo(context: NKScriptContext) {
         
-        context.NKloadPlugin(NKC_FileSystem(), namespace: "io.nodekit.platform.fs", options: [String:AnyObject]())
+        context.loadPlugin(NKC_FileSystem(), namespace: "io.nodekit.platform.fs", options: [String:AnyObject]())
         
     }
     

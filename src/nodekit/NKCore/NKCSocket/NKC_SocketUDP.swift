@@ -22,7 +22,7 @@
  class NKC_SocketUDP: NSObject, NKScriptExport {
     
     class func attachTo(context: NKScriptContext) {
-        context.NKloadPlugin(NKC_SocketUDP.self, namespace: "io.nodekit.platform.UDP", options: [String:AnyObject]())
+        context.loadPlugin(NKC_SocketUDP.self, namespace: "io.nodekit.platform.UDP", options: [String:AnyObject]())
     }
     
     class func rewriteGeneratedStub(stub: String, forKey: String) -> String {
@@ -34,20 +34,21 @@
         }
     }
     
-    private static let exclusion: Set<Selector> = {
+    private static let exclusion: Set<String> = {
         var methods = NKInstanceMethods(forProtocol: NKC_SwiftSocketProtocol.self)
-        //    methods.remove(Selector("invokeDefaultMethodWithArguments:"))
-        return methods.union([
-            //       Selector(".cxx_construct"),
-            ])
+        return Set<String>(methods.union([
+            ]).map({selector in
+                return selector.description
+            }))
     }()
     
-    class func  isSelectorExcludedFromScript(selector: Selector) -> Bool {
+    class func  isExcludedFromScript(selector: String) -> Bool {
         return exclusion.contains(selector)
     }
     
-    class func scriptNameForSelector(selector: Selector) -> String? {
-        return selector == #selector(NKC_SocketUDP.init) ? "" : nil
+
+    class func rewriteScriptNameForKey(name: String) -> String? {
+        return (name == "init" ? "" : nil)
     }
     
     /* NKSocketUDP

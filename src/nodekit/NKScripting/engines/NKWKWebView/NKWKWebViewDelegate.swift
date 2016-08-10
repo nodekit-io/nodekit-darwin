@@ -50,10 +50,12 @@ internal class NKWKWebViewDelegate: NSObject, WKNavigationDelegate {
                 webView.navigationDelegate = nil
                 
                 objc_setAssociatedObject(webView, unsafeAddressOf(self), nil, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-               
+                
                 self.delegate = nil
-
-                callback.NKScriptEngineReady(webView)
+                
+                guard let context = objc_getAssociatedObject(webView, unsafeAddressOf(NKWKContext)) as? NKWKContext else { return }
+          
+                callback.NKScriptEngineReady(context)
             
         }
 

@@ -64,7 +64,7 @@ import Foundation
         
         options["Engine"] = options["Engine"] ?? NKEngineType.JavaScriptCore.rawValue
         
-        NKScriptContextFactory().createContext(options, delegate: self)
+        NKScriptContextFactory().createScriptContext(options, delegate: self)
     
     }
     

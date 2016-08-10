@@ -29,7 +29,7 @@ class NKElectro: NSObject {
         
         let script = "function loadbootstrap(){\n" + appjs! + "\n}\n" + "loadbootstrap();" + "\n"
         
-        context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.electro/lib-electro.nkar/lib-electro/_nke_main.js", namespace: "io.nodekit.electro.main"))
+        context.injectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.electro/lib-electro.nkar/lib-electro/_nke_main.js", namespace: "io.nodekit.electro.main"))
 
         NKE_App.attachTo(context)
       

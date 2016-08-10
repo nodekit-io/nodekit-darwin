@@ -27,7 +27,7 @@ extension NKElectro {
         
         let script = "function loadbootstrap(){\n" + appjs! + "\n}\n" + "loadbootstrap();" + "\n"
         
-        context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.electro/lib-electro.nkar/lib-electro/_nke_renderer.js", namespace: "io.nodekit.electro.renderer"))
+        context.injectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.electro/lib-electro.nkar/lib-electro/_nke_renderer.js", namespace: "io.nodekit.electro.renderer"))
 
         NKE_IpcRenderer.attachTo(context)
 

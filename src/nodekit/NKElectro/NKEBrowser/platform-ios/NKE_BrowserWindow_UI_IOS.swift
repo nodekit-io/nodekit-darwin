@@ -58,7 +58,7 @@ extension NKE_BrowserWindow {
      
             NSURLProtocol.registerClass(NKE_ProtocolCustom)
 
-            webView.NKgetScriptContext(id, options: [String: AnyObject](), delegate: self)
+            webView.NKcreateScriptContext(id, options: [String: AnyObject](), delegate: self)
 
             let url = NSURL(string: urlAddress as String)
 

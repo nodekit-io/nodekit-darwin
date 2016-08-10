@@ -20,30 +20,19 @@
 
 import JavaScriptCore
 
-extension JSContext: NKScriptContextHost {
+public class NKJSContext: NSObject {
     
-    public var NKid: Int { get { return objc_getAssociatedObject(self, unsafeAddressOf(NKJSContextId)) as! Int; } }
-
-    public func NKgetScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(), delegate cb: NKScriptContextDelegate) -> Void {
-        
-        let context = self
-
-        NKLogging.log("+NodeKit JavaScriptCore JavaScript Engine E\(id)")
-        
-        objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        
-        
-        context.NKPrepareEnvironment()
-  
-        cb.NKScriptEngineDidLoad(context)
-        
-        cb.NKScriptEngineReady(context)
+    private let _jsContext: JSContext
+    private let _id: Int
     
+    internal init(_ jsContext: JSContext, id: Int) {
+        _jsContext = jsContext
+        _id = id
+        super.init()
     }
     
-    internal func NKPrepareEnvironment() -> Void {
-        
-        let context = self;
+    
+    internal func prepareEnvironment() -> Void {
         
         let logjs: @convention(block) (String) -> () = { body in
             
@@ -51,24 +40,28 @@ extension JSContext: NKScriptContextHost {
             
         }
         
-        let scriptingBridge = JSValue(newObjectInContext: context)
+        let scriptingBridge = JSValue(newObjectInContext: _jsContext)
         
         scriptingBridge.setObject(unsafeBitCast(logjs, AnyObject.self), forKeyedSubscript: "log")
-        context.setObject(unsafeBitCast(scriptingBridge, AnyObject.self), forKeyedSubscript: "NKScriptingBridge")
+        _jsContext.setObject(unsafeBitCast(scriptingBridge, AnyObject.self), forKeyedSubscript: "NKScriptingBridge")
         
         let appjs = NKStorage.getResource("lib-scripting.nkar/lib-scripting/init_jsc.js", NKScriptChannel.self)
         
         let script = "function loadinit(){\n" + appjs! + "\n}\n" + "loadinit();" + "\n"
         
-        context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.scripting/init_jsc", namespace: "io.nodekit.scripting.init"))
+        self.injectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.scripting/init_jsc", namespace: "io.nodekit.scripting.init"))
         
-        NKStorage.attachTo(context)
+        NKStorage.attachTo(self)
     }
 }
 
-extension JSContext: NKScriptContext {
+extension NKJSContext: NKScriptContext {
+    
+    public var id: Int {
+        get { return self._id }
+    }
 
-    public func NKloadPlugin(object: AnyObject, namespace: String, options: Dictionary<String, AnyObject> = Dictionary<String, AnyObject>() ) -> Void {
+    public func loadPlugin(object: AnyObject, namespace: String, options: Dictionary<String, AnyObject> = Dictionary<String, AnyObject>() ) -> Void {
     
         let mainThread: Bool = (options["MainThread"] as? Bool) ?? false
 
@@ -107,47 +100,27 @@ extension JSContext: NKScriptContext {
         }
     }
 
-    public func NKinjectJavaScript(script: NKScriptSource) -> Void {
+    public func injectJavaScript(script: NKScriptSource) -> Void {
+        
+        script.inject(self)
       
-        let item = NKJSCScript(context: self, script: script)
+        objc_setAssociatedObject(self, unsafeAddressOf(script), script, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
-        objc_setAssociatedObject(self, unsafeAddressOf(item), item, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
-    
-    private class var evalSequenceNumber: Int {
-        
-        struct sequence {
-        
-            static var number: Int = 0
-        
-        }
-        
-        let temp = sequence.number
-        
-        sequence.number += 1
-        
-        return temp
     }
 
 
-    public func NKevaluateJavaScript(javaScriptString: String,
+    public func evaluateJavaScript(javaScriptString: String,
         completionHandler: ((AnyObject?,
         NSError?) -> Void)?) {
         
-        let result = self.evaluateScript(javaScriptString)
+        let result = self._jsContext.evaluateScript(javaScriptString)
         
         completionHandler?(result, nil)
-    }
-    
-    internal func NKevaluateJavaScript(javaScriptString: String, withSourceURL: NSURL,
-        completionHandler: ((AnyObject?,
-        NSError?) -> Void)?) {
-     
-        let result = self.evaluateScript(javaScriptString, withSourceURL: withSourceURL)
-        completionHandler?(result, nil)
+        
+        
     }
 
-    public func NKserialize(object: AnyObject?) -> String {
+    public func serialize(object: AnyObject?) -> String {
     
         var obj: AnyObject? = object
         
@@ -206,11 +179,11 @@ extension JSContext: NKScriptContext {
         
         } else if let a = obj as? [AnyObject] {
         
-            return "[" + a.map(self.NKserialize).joinWithSeparator(", ") + "]"
+            return "[" + a.map(self.serialize).joinWithSeparator(", ") + "]"
        
         } else if let d = obj as? [String: AnyObject] {
         
-            return "{" + d.keys.map {"\"\($0)\": \(self.NKserialize(d[$0]!))"}.joinWithSeparator(", ") + "}"
+            return "{" + d.keys.map {"\"\($0)\": \(self.serialize(d[$0]!))"}.joinWithSeparator(", ") + "}"
         
         } else if obj === NSNull() {
         
@@ -225,25 +198,10 @@ extension JSContext: NKScriptContext {
         return "'\(obj!.description)'"
     }
 
-    public static func NKcurrentContext() -> NKScriptContext! {
-        
-        let currentContext = NSThread.currentThread().threadDictionary.objectForKey("nk.CurrentContext") as? NKScriptContext
-        
-        if (currentContext != nil) {
-        
-            return currentContext
-            
-        } else {
-        
-            return JSContext.currentContext()
-        
-        }
-    }
-
     // private methods
     private func setObjectForNamespace(object: AnyObject, namespace: String) -> Void {
 
-        let global = self.globalObject
+        let global = _jsContext.globalObject
 
         var fullNameArr = namespace.characters.split {$0 == "."}.map(String.init)
         
@@ -251,7 +209,7 @@ extension JSContext: NKScriptContext {
         
         if (fullNameArr.isEmpty) {
         
-            self.setObject(object, forKeyedSubscript: lastItem)
+            _jsContext.setObject(object, forKeyedSubscript: lastItem)
             
             return
         
@@ -265,7 +223,7 @@ extension JSContext: NKScriptContext {
            
             }
             
-            let _jsv = JSValue(newObjectInContext: self)
+            let _jsv = JSValue(newObjectInContext: _jsContext)
             
             previous.setObject(_jsv, forKeyedSubscript: current)
             
@@ -276,14 +234,13 @@ extension JSContext: NKScriptContext {
     }
 }
 
-extension JSContext: NKScriptContentController {
-    internal func NKaddScriptMessageHandler (scriptMessageHandler: NKScriptMessageHandler, name: String) {
+extension NKJSContext: NKScriptContentController {
     
-        let context: JSContext = self
+    internal func addScriptMessageHandler (scriptMessageHandler: NKScriptMessageHandler, name: String) {
         
         let name = name
         
-        guard let messageHandlers = context.objectForKeyedSubscript("NKScripting")?.objectForKeyedSubscript("messageHandlers") else {return }
+        guard let messageHandlers = _jsContext.objectForKeyedSubscript("NKScripting")?.objectForKeyedSubscript("messageHandlers") else {return }
 
         var namedHandler: JSValue
 
@@ -293,7 +250,7 @@ extension JSContext: NKScriptContentController {
        
         } else {
         
-            namedHandler = JSValue(object: Dictionary<String, AnyObject>(), inContext: context)
+            namedHandler = JSValue(object: Dictionary<String, AnyObject>(), inContext: _jsContext)
             
             messageHandlers.setValue(namedHandler, forProperty: name)
         
@@ -317,7 +274,7 @@ extension JSContext: NKScriptContentController {
             
             NSThread.currentThread().threadDictionary.setObject(false, forKey: "nk.jsCallThread")
             
-            return self.NKserialize(result)
+            return self.serialize(result)
         }
 
         namedHandler.setObject(unsafeBitCast(postMessage, AnyObject.self), forKeyedSubscript: "postMessage")
@@ -326,11 +283,11 @@ extension JSContext: NKScriptContentController {
       
     }
 
-    internal func NKremoveScriptMessageHandlerForName (name: String) {
+    internal func removeScriptMessageHandlerForName (name: String) {
         
         let cleanup = "delete NKScripting.messageHandlers.\(name)"
         
-        self.NKevaluateJavaScript(cleanup, completionHandler: nil)
+        self.evaluateJavaScript(cleanup, completionHandler: nil)
     
     }
 

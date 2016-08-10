@@ -22,7 +22,7 @@ import WebKit
 extension NKScriptContextFactory {
     func createContextWKWebView(options: [String: AnyObject] = Dictionary<String, AnyObject>(), delegate cb: NKScriptContextDelegate) {
    
-        //    dispatch_async(NKScriptChannel.defaultQueue) {
+        //    dispatch_async(NKScriptContextFactory.defaultQueue) {
 
         let config = WKWebViewConfiguration()
         
@@ -38,7 +38,7 @@ extension NKScriptContextFactory {
         
         let id = NKScriptContextFactory.sequenceNumber
         
-        webView.NKgetScriptContext(id, options: options, delegate: cb)
+        webView.NKcreateScriptContext(id, options: options, delegate: cb)
         
         var item = Dictionary<String, AnyObject>()
         
@@ -46,10 +46,28 @@ extension NKScriptContextFactory {
         
         NKScriptContextFactory._contexts[id] = item
         
-        
         webView.loadHTMLString("<HTML><BODY>NodeKit WKWebView: VM \(id)</BODY></HTML>", baseURL: NSURL(string: "about: blank"))
         
   //      }
         
+    }
+}
+
+extension WKWebView: NKScriptContextHost {
+    
+    public func NKcreateScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(),
+                                      delegate cb: NKScriptContextDelegate) -> Void {
+        
+        NKLogging.log("+NodeKit Nitro JavaScript Engine E\(id)")
+        
+        self.navigationDelegate = NKWKWebViewDelegate(id: id, webView: self, delegate: cb)
+        
+        self.UIDelegate = NKWKWebViewUIDelegate(webView: self)
+        
+        let context = NKWKContext(self, id: id)
+        
+        context.prepareEnvironment()
+        
+        cb.NKScriptEngineDidLoad(context)
     }
 }

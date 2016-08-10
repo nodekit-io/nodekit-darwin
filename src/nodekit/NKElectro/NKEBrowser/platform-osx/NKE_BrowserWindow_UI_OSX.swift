@@ -102,7 +102,7 @@ extension NKE_BrowserWindow: WebUIDelegate {
                 
             }
             
-            webView.NKgetScriptContext(id, options: [String: AnyObject](), delegate: self)
+            webView.NKcreateScriptContext(id, options: [String: AnyObject](), delegate: self)
 
             NSURLProtocol.registerClass(NKE_ProtocolLocalFile)
             

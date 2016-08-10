@@ -31,7 +31,7 @@ extension NKE_Menu: NKScriptExport {
 
         let principal = NKE_Menu()
         
-        context.NKloadPlugin(principal, namespace: "io.nodekit.electro._menu", options: [String:AnyObject]())
+        context.loadPlugin(principal, namespace: "io.nodekit.electro._menu", options: [String:AnyObject]())
     
     }
 

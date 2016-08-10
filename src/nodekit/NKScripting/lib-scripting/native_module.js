@@ -235,7 +235,6 @@ BootstrapModule.prototype.load = function() {
     
 };
 
-
 BootstrapModule.prototype.compile = function() {
     var source = BootstrapModule.getSource(this.id);
     

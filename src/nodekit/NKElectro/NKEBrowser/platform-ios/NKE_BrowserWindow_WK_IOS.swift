@@ -79,7 +79,7 @@ extension NKE_BrowserWindow {
 
             window.rootViewController?.view = webView
 
-            webView.NKgetScriptContext(id, options: [String: AnyObject](), delegate: self)
+            webView.NKcreateScriptContext(id, options: [String: AnyObject](), delegate: self)
 
             let requestObj: NSURLRequest = NSURLRequest(URL: url!)
 

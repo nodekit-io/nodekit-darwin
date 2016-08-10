@@ -142,7 +142,7 @@ extension NKE_Tray: NKScriptExport {
         
         let principal = NKE_Tray.self
         
-        context.NKloadPlugin(principal, namespace: "io.nodekit.electro.Tray", options: [String:AnyObject]())
+        context.loadPlugin(principal, namespace: "io.nodekit.electro.Tray", options: [String:AnyObject]())
     
     }
     
@@ -162,19 +162,19 @@ extension NKE_Tray: NKScriptExport {
     
     }
     
-    class func scriptNameForSelector(selector: Selector) -> String? {
     
-        return selector == #selector(NKE_Tray.init(imageName:)) ? "" : nil
-    
+    class func rewriteScriptNameForKey(name: String) -> String? {
+        return (name == "initWithImageName:" ? "" : nil)
     }
     
-    class func isSelectorExcludedFromScript(selector: Selector) -> Bool {
     
-        return selector.description.hasPrefix("webView") ||
-            selector.description.hasPrefix("createTray") ||
-            selector.description.hasPrefix("createTrayType1") ||
-            selector.description.hasPrefix("NKScriptEngineLoaded") ||
-            selector.description.hasPrefix("NKApplicationReady")
+    class func isExcludedFromScript(selector: String) -> Bool {
+    
+        return selector.hasPrefix("webView") ||
+            selector.hasPrefix("createTray") ||
+            selector.hasPrefix("createTrayType1") ||
+            selector.hasPrefix("NKScriptEngineLoaded") ||
+            selector.hasPrefix("NKApplicationReady")
     
     }
 

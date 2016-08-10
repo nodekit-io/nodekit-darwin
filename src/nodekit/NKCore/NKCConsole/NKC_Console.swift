@@ -30,7 +30,7 @@
 
     class func attachTo(context: NKScriptContext) {
     
-        context.NKloadPlugin(NKC_Console(), namespace: "io.nodekit.platform.console", options: [String:AnyObject]())
+        context.loadPlugin(NKC_Console(), namespace: "io.nodekit.platform.console", options: [String:AnyObject]())
     
     }
 

@@ -28,9 +28,7 @@ internal struct NKUIWebView {
 
 extension UIWebView: NKScriptContextHost {
 
-    public var NKid: Int { get { return objc_getAssociatedObject(self, unsafeAddressOf(NKJSContextId)) as! Int; } }
-
-    public func NKgetScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(),
+    public func NKcreateScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(),
         delegate cb: NKScriptContextDelegate) -> Void {
 
         NKLogging.log("+NodeKit UIWebView-JavaScriptCore JavaScript Engine E\(id)")
@@ -48,28 +46,24 @@ extension UIWebView: NKScriptContextHost {
 }
 
 extension UIWebView {
+    
     var currentJSContext: JSContext? {
         get {
   
-            let key = unsafeAddressOf(JSContext)
+            return objc_getAssociatedObject(self, unsafeAddressOf(JSContext)) as? JSContext
             
-            return objc_getAssociatedObject(self, key) as? JSContext
         }
         set(context) {
             
-            let key = unsafeAddressOf(JSContext)
-            
-            objc_setAssociatedObject(self, key, context, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, unsafeAddressOf(JSContext), context, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 
     func registerForJSContext(callback cb: (JSContext)-> Void) {
         
-        let key = unsafeAddressOf(JSContextCallback)
-        
         let value = JSContextCallback(callback: cb)
         
-        objc_setAssociatedObject(self, key, value, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(self, unsafeAddressOf(JSContextCallback), value, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         
         if NKUIWebView.__globalWebViews.contains(self) { return }
         

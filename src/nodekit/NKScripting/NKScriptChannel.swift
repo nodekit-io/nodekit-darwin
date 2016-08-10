@@ -77,17 +77,9 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
         return temp
     }
 
-    public static var defaultQueue: dispatch_queue_t = {
-        
-        let label = "io.nodekit.scripting.default-queue"
-        
-        return dispatch_queue_create(label, DISPATCH_QUEUE_SERIAL)
+     public convenience init(context: NKScriptContext) {
     
-    }()
-
-    public convenience init(context: NKScriptContext) {
-    
-        self.init(context: context, queue: NKScriptChannel.defaultQueue)
+        self.init(context: context, queue: NKScriptContextFactory.defaultQueue)
     
     }
 
@@ -145,15 +137,15 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
         
         }
 
-        context!.NKinjectJavaScript(NKScriptSource(source: source, asFilename: "io.nodekit.scripting/NKScripting/nkscripting.js", namespace: "NKScripting"))
+        context!.injectJavaScript(NKScriptSource(source: source, asFilename: "io.nodekit.scripting/NKScripting/nkscripting.js", namespace: "NKScripting"))
         
         guard let source2 = NKStorage.getResource("lib-scripting.nkar/lib-scripting/promise.js", NKScriptChannel.self) else {
             NKLogging.die("Failed to read provision script: promise")
         }
 
-        context!.NKinjectJavaScript(NKScriptSource(source: source2, asFilename: "io.nodekit.scripting/NKScripting/promise.js", namespace: "Promise"))
+        context!.injectJavaScript(NKScriptSource(source: source2, asFilename: "io.nodekit.scripting/NKScripting/promise.js", namespace: "Promise"))
      
-        NKLogging.log("+E\(context!.NKid) JavaScript Engine is ready for loading plugins")
+        NKLogging.log("+E\(context!.id) JavaScript Engine is ready for loading plugins")
     
     }
 
@@ -161,11 +153,11 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
     
         guard identifier == nil, let context = context else { return nil }
 
-        let id = (object as? NKScriptExport)?.channelIdentifier ?? String(NKScriptChannel.sequenceNumber)
+        let id = String(NKScriptChannel.sequenceNumber)
         
         identifier = id
         
-        userContentController?.NKaddScriptMessageHandler(self, name: id)
+        userContentController?.addScriptMessageHandler(self, name: id)
 
         if (object is AnyClass) {
             
@@ -185,7 +177,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
 
         principal = NKScriptValueNative(namespace: namespace, channel: self, object: object)
 
-        context.NKinjectJavaScript(NKScriptSource(source: generateStubs(String(object.dynamicType)), asFilename: namespace + "/plugin/" + String(object.dynamicType) + ".js" ))
+        context.injectJavaScript(NKScriptSource(source: generateStubs(String(object.dynamicType)), asFilename: namespace + "/plugin/" + String(object.dynamicType) + ".js" ))
 
         return principal as NKScriptValue
     
@@ -197,7 +189,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
  
         instances.removeAll(keepCapacity: false)
         
-        userContentController?.NKremoveScriptMessageHandlerForName(id)
+        userContentController?.removeScriptMessageHandlerForName(id)
         
         userScript = nil
         
@@ -424,7 +416,7 @@ public class NKScriptChannel: NSObject, NKScriptMessageHandler {
                
                 if (isFactory) {  stub = "NKScripting.defineProperty(exports, '\(key)', null, \(member.setter != nil));" } else {
                     
-                    let value = self.context?.NKserialize(principal.valueForPropertyNative(key))
+                    let value = self.context?.serialize(principal.valueForPropertyNative(key))
                     
                     stub = "NKScripting.defineProperty(exports, '\(key)', \(value), \(member.setter != nil));"
                

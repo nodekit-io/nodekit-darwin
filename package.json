@@ -1,0 +1,15 @@
+{
+  "name": "nodekit-darwin",
+  "version": "0.8.1",
+  "description": "The universal, open-source, embedded engine that provides a full Node.js instance inside desktop and mobile applications for OS X, iOS, Android, and Windows.",
+  "main": "index.js",
+  "scripts": {
+    "publish": "git push --delete origin v0.8.1 && git tag -d v0.8.1 && git add . -A && git commit -m \"v0.8.1\" && git tag -a v0.8.1 -m \"v0.8.1\" && git push origin master --tags "  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodekit-io/nodekit-darwin.git"
+  },
+   "author": "OffGrid Networks",
+  "license": "APACHE-2",
+  "homepage": "http://nodekit.io"
+}

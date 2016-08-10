@@ -93,7 +93,6 @@
 		E4ACCBED1D5246CF006E0684 /* NKScriptChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84711D4CDEA40088D28F /* NKScriptChannel.swift */; };
 		E4ACCBEE1D5246CF006E0684 /* NKScriptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84721D4CDEA40088D28F /* NKScriptContext.swift */; };
 		E4ACCBEF1D5246CF006E0684 /* NKScriptContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84731D4CDEA40088D28F /* NKScriptContextFactory.swift */; };
-		E4ACCBF01D5246CF006E0684 /* NKScriptExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84741D4CDEA40088D28F /* NKScriptExport.swift */; };
 		E4ACCBF11D5246CF006E0684 /* NKScriptInvocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84761D4CDEA40088D28F /* NKScriptInvocation.swift */; };
 		E4ACCBF21D5246CF006E0684 /* NKScriptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84771D4CDEA40088D28F /* NKScriptMessage.swift */; };
 		E4ACCBF31D5246CF006E0684 /* NKScriptSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84781D4CDEA40088D28F /* NKScriptSource.swift */; };
@@ -102,14 +101,12 @@
 		E4ACCBF61D5246CF006E0684 /* NKScriptValueNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F847B1D4CDEA40088D28F /* NKScriptValueNative.swift */; };
 		E4ACCBF71D5246DA006E0684 /* NKJSCContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845A1D4CDEA40088D28F /* NKJSCContextFactory.swift */; };
 		E4ACCBF81D5246DA006E0684 /* NKJSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845B1D4CDEA40088D28F /* NKJSContext.swift */; };
-		E4ACCBF91D5246DA006E0684 /* NKJSCScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845C1D4CDEA40088D28F /* NKJSCScript.swift */; };
 		E4ACCBFA1D5246DD006E0684 /* NKUIContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845E1D4CDEA40088D28F /* NKUIContextFactory.swift */; };
 		E4ACCBFB1D5246DD006E0684 /* NKUIWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845F1D4CDEA40088D28F /* NKUIWebView.swift */; };
 		E4ACCBFC1D5246DD006E0684 /* NKUIWebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84601D4CDEA40088D28F /* NKUIWebViewDelegate.swift */; };
 		E4ACCBFD1D5246E2006E0684 /* NKWKContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84621D4CDEA40088D28F /* NKWKContextFactory.swift */; };
 		E4ACCBFE1D5246E2006E0684 /* NKWKMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84631D4CDEA40088D28F /* NKWKMessageHandler.swift */; };
-		E4ACCBFF1D5246E2006E0684 /* NKWKUserScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84641D4CDEA40088D28F /* NKWKUserScript.swift */; };
-		E4ACCC001D5246E2006E0684 /* NKWKWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84651D4CDEA40088D28F /* NKWKWebView.swift */; };
+		E4ACCC001D5246E2006E0684 /* NKWKContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84651D4CDEA40088D28F /* NKWKContext.swift */; };
 		E4ACCC011D5246E2006E0684 /* NKWKWebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84661D4CDEA40088D28F /* NKWKWebViewDelegate.swift */; };
 		E4ACCC021D5246E6006E0684 /* NKWVContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84681D4CDEA40088D28F /* NKWVContextFactory.swift */; };
 		E4ACCC031D5246E6006E0684 /* NKWVWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84691D4CDEA40088D28F /* NKWVWebView.swift */; };
@@ -137,20 +134,17 @@
 		E4ACCC271D524DE7006E0684 /* NKCore.podspec in Resources */ = {isa = PBXBuildFile; fileRef = E4ACCC261D524DE7006E0684 /* NKCore.podspec */; };
 		E4B5AF691D4FBBE4005077D2 /* NKJSCContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845A1D4CDEA40088D28F /* NKJSCContextFactory.swift */; };
 		E4B5AF6A1D4FBBE4005077D2 /* NKJSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845B1D4CDEA40088D28F /* NKJSContext.swift */; };
-		E4B5AF6B1D4FBBE4005077D2 /* NKJSCScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845C1D4CDEA40088D28F /* NKJSCScript.swift */; };
 		E4B5AF6C1D4FBC33005077D2 /* NKUIContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845E1D4CDEA40088D28F /* NKUIContextFactory.swift */; };
 		E4B5AF6D1D4FBC33005077D2 /* NKUIWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F845F1D4CDEA40088D28F /* NKUIWebView.swift */; };
 		E4B5AF6E1D4FBC33005077D2 /* NKUIWebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84601D4CDEA40088D28F /* NKUIWebViewDelegate.swift */; };
 		E4B5AF6F1D4FBC36005077D2 /* NKWKContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84621D4CDEA40088D28F /* NKWKContextFactory.swift */; };
 		E4B5AF701D4FBC36005077D2 /* NKWKMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84631D4CDEA40088D28F /* NKWKMessageHandler.swift */; };
-		E4B5AF711D4FBC36005077D2 /* NKWKUserScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84641D4CDEA40088D28F /* NKWKUserScript.swift */; };
-		E4B5AF721D4FBC36005077D2 /* NKWKWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84651D4CDEA40088D28F /* NKWKWebView.swift */; };
+		E4B5AF721D4FBC36005077D2 /* NKWKContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84651D4CDEA40088D28F /* NKWKContext.swift */; };
 		E4B5AF731D4FBC36005077D2 /* NKWKWebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84661D4CDEA40088D28F /* NKWKWebViewDelegate.swift */; };
 		E4B5AF741D4FBC7A005077D2 /* NKScripting.h in Headers */ = {isa = PBXBuildFile; fileRef = E45F84751D4CDEA40088D28F /* NKScripting.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4B5AF751D4FBC80005077D2 /* NKScriptChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84711D4CDEA40088D28F /* NKScriptChannel.swift */; };
 		E4B5AF761D4FBC80005077D2 /* NKScriptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84721D4CDEA40088D28F /* NKScriptContext.swift */; };
 		E4B5AF771D4FBC80005077D2 /* NKScriptContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84731D4CDEA40088D28F /* NKScriptContextFactory.swift */; };
-		E4B5AF781D4FBC80005077D2 /* NKScriptExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84741D4CDEA40088D28F /* NKScriptExport.swift */; };
 		E4B5AF791D4FBC80005077D2 /* NKScriptInvocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84761D4CDEA40088D28F /* NKScriptInvocation.swift */; };
 		E4B5AF7A1D4FBC80005077D2 /* NKScriptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84771D4CDEA40088D28F /* NKScriptMessage.swift */; };
 		E4B5AF7B1D4FBC80005077D2 /* NKScriptSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F84781D4CDEA40088D28F /* NKScriptSource.swift */; };
@@ -570,14 +564,12 @@
 		E45F84561D4CDEA40088D28F /* NKETray-osx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "NKETray-osx.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E45F845A1D4CDEA40088D28F /* NKJSCContextFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKJSCContextFactory.swift; sourceTree = "<group>"; };
 		E45F845B1D4CDEA40088D28F /* NKJSContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKJSContext.swift; sourceTree = "<group>"; };
-		E45F845C1D4CDEA40088D28F /* NKJSCScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKJSCScript.swift; sourceTree = "<group>"; };
 		E45F845E1D4CDEA40088D28F /* NKUIContextFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKUIContextFactory.swift; sourceTree = "<group>"; };
 		E45F845F1D4CDEA40088D28F /* NKUIWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKUIWebView.swift; sourceTree = "<group>"; };
 		E45F84601D4CDEA40088D28F /* NKUIWebViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKUIWebViewDelegate.swift; sourceTree = "<group>"; };
 		E45F84621D4CDEA40088D28F /* NKWKContextFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWKContextFactory.swift; sourceTree = "<group>"; };
 		E45F84631D4CDEA40088D28F /* NKWKMessageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWKMessageHandler.swift; sourceTree = "<group>"; };
-		E45F84641D4CDEA40088D28F /* NKWKUserScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWKUserScript.swift; sourceTree = "<group>"; };
-		E45F84651D4CDEA40088D28F /* NKWKWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWKWebView.swift; sourceTree = "<group>"; };
+		E45F84651D4CDEA40088D28F /* NKWKContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWKContext.swift; sourceTree = "<group>"; };
 		E45F84661D4CDEA40088D28F /* NKWKWebViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWKWebViewDelegate.swift; sourceTree = "<group>"; };
 		E45F84681D4CDEA40088D28F /* NKWVContextFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWVContextFactory.swift; sourceTree = "<group>"; };
 		E45F84691D4CDEA40088D28F /* NKWVWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKWVWebView.swift; sourceTree = "<group>"; };
@@ -585,7 +577,6 @@
 		E45F84711D4CDEA40088D28F /* NKScriptChannel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKScriptChannel.swift; sourceTree = "<group>"; };
 		E45F84721D4CDEA40088D28F /* NKScriptContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKScriptContext.swift; sourceTree = "<group>"; };
 		E45F84731D4CDEA40088D28F /* NKScriptContextFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKScriptContextFactory.swift; sourceTree = "<group>"; };
-		E45F84741D4CDEA40088D28F /* NKScriptExport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKScriptExport.swift; sourceTree = "<group>"; };
 		E45F84751D4CDEA40088D28F /* NKScripting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NKScripting.h; sourceTree = "<group>"; };
 		E45F84761D4CDEA40088D28F /* NKScriptInvocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKScriptInvocation.swift; sourceTree = "<group>"; };
 		E45F84771D4CDEA40088D28F /* NKScriptMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NKScriptMessage.swift; sourceTree = "<group>"; };
@@ -1018,7 +1009,6 @@
 				E45F84711D4CDEA40088D28F /* NKScriptChannel.swift */,
 				E45F84721D4CDEA40088D28F /* NKScriptContext.swift */,
 				E45F84731D4CDEA40088D28F /* NKScriptContextFactory.swift */,
-				E45F84741D4CDEA40088D28F /* NKScriptExport.swift */,
 				E45F84761D4CDEA40088D28F /* NKScriptInvocation.swift */,
 				E45F84771D4CDEA40088D28F /* NKScriptMessage.swift */,
 				E45F84781D4CDEA40088D28F /* NKScriptSource.swift */,
@@ -1046,7 +1036,6 @@
 			children = (
 				E45F845A1D4CDEA40088D28F /* NKJSCContextFactory.swift */,
 				E45F845B1D4CDEA40088D28F /* NKJSContext.swift */,
-				E45F845C1D4CDEA40088D28F /* NKJSCScript.swift */,
 			);
 			path = NKJavaScriptCore;
 			sourceTree = "<group>";
@@ -1065,9 +1054,8 @@
 			isa = PBXGroup;
 			children = (
 				E45F84621D4CDEA40088D28F /* NKWKContextFactory.swift */,
+				E45F84651D4CDEA40088D28F /* NKWKContext.swift */,
 				E45F84631D4CDEA40088D28F /* NKWKMessageHandler.swift */,
-				E45F84641D4CDEA40088D28F /* NKWKUserScript.swift */,
-				E45F84651D4CDEA40088D28F /* NKWKWebView.swift */,
 				E45F84661D4CDEA40088D28F /* NKWKWebViewDelegate.swift */,
 			);
 			path = NKWKWebView;
@@ -1964,7 +1952,6 @@
 				E4ACCC051D5246EE006E0684 /* NKAR_BytesReader.swift in Sources */,
 				E4ACCBD11D5246A8006E0684 /* NKE_WebContentsBase.swift in Sources */,
 				E4ACCBE01D5246B9006E0684 /* NKE_IpcEvents.swift in Sources */,
-				E4ACCBF01D5246CF006E0684 /* NKScriptExport.swift in Sources */,
 				E4ACCC081D5246EE006E0684 /* NKAR_Uncompressor.swift in Sources */,
 				E4ACCBC41D524691006E0684 /* NKElectroHost.swift in Sources */,
 				E4ACCBBE1D524681006E0684 /* NKC_SocketUDP.swift in Sources */,
@@ -2018,16 +2005,14 @@
 				E4ACCC071D5246EE006E0684 /* NKAR_EndRecord.swift in Sources */,
 				E4ACCC0A1D5246EE006E0684 /* NKArchiveReader.swift in Sources */,
 				E4ACCBFE1D5246E2006E0684 /* NKWKMessageHandler.swift in Sources */,
-				E4ACCBF91D5246DA006E0684 /* NKJSCScript.swift in Sources */,
 				E4ACCC0E1D5246F0006E0684 /* NKStorage.swift in Sources */,
-				E4ACCBFF1D5246E2006E0684 /* NKWKUserScript.swift in Sources */,
 				E4ACCC0B1D5246F0006E0684 /* NKDateFormatter.swift in Sources */,
 				E4ACCC0D1D5246F0006E0684 /* NKLogging.swift in Sources */,
 				E4ACCBC31D524691006E0684 /* NKElectro_Renderer.swift in Sources */,
 				E4ACCBBF1D524681006E0684 /* NKC_SwiftSocket.swift in Sources */,
 				E4ACCBCF1D5246A8006E0684 /* NKE_BrowserWindow.swift in Sources */,
 				E4ACCBC01D524687006E0684 /* NKC_Timer.swift in Sources */,
-				E4ACCC001D5246E2006E0684 /* NKWKWebView.swift in Sources */,
+				E4ACCC001D5246E2006E0684 /* NKWKContext.swift in Sources */,
 				E4ACCBDB1D5246B0006E0684 /* NKE_WebContentsWK_OSX.swift in Sources */,
 				E4ACCBD41D5246AC006E0684 /* NKE_BrowserWindow_UI_IOS.swift in Sources */,
 				E4ACCBEF1D5246CF006E0684 /* NKScriptContextFactory.swift in Sources */,
@@ -2058,7 +2043,7 @@
 				E4B5AF771D4FBC80005077D2 /* NKScriptContextFactory.swift in Sources */,
 				E4B5AF841D4FBC87005077D2 /* NKArchiveReader.swift in Sources */,
 				E4B5AF881D4FBC8A005077D2 /* NKStorage.swift in Sources */,
-				E4B5AF721D4FBC36005077D2 /* NKWKWebView.swift in Sources */,
+				E4B5AF721D4FBC36005077D2 /* NKWKContext.swift in Sources */,
 				E4B5AF761D4FBC80005077D2 /* NKScriptContext.swift in Sources */,
 				E4B5AF7A1D4FBC80005077D2 /* NKScriptMessage.swift in Sources */,
 				E4B5AF7C1D4FBC80005077D2 /* NKScriptTypeInfo.swift in Sources */,
@@ -2071,7 +2056,6 @@
 				E4B5AF871D4FBC8A005077D2 /* NKLogging.swift in Sources */,
 				E4B5AF701D4FBC36005077D2 /* NKWKMessageHandler.swift in Sources */,
 				E4B5AF6E1D4FBC33005077D2 /* NKUIWebViewDelegate.swift in Sources */,
-				E4B5AF6B1D4FBBE4005077D2 /* NKJSCScript.swift in Sources */,
 				E4B5AF6D1D4FBC33005077D2 /* NKUIWebView.swift in Sources */,
 				E4B5AF6A1D4FBBE4005077D2 /* NKJSContext.swift in Sources */,
 				E4B5AF851D4FBC8A005077D2 /* NKDateFormatter.swift in Sources */,
@@ -2082,8 +2066,6 @@
 				E4B5AF891D4FBCA6005077D2 /* NKWVContextFactory.swift in Sources */,
 				E4B5AF861D4FBC8A005077D2 /* NKEventEmitter.swift in Sources */,
 				E4B5AF811D4FBC87005077D2 /* NKAR_EndRecord.swift in Sources */,
-				E4B5AF711D4FBC36005077D2 /* NKWKUserScript.swift in Sources */,
-				E4B5AF781D4FBC80005077D2 /* NKScriptExport.swift in Sources */,
 				E4B5AF7D1D4FBC80005077D2 /* NKScriptValue.swift in Sources */,
 				E4B5AF7E1D4FBC80005077D2 /* NKScriptValueNative.swift in Sources */,
 				E4B5AF7B1D4FBC80005077D2 /* NKScriptSource.swift in Sources */,
@@ -3279,7 +3261,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "src/samples/sample-NKScripting/";
+				CODE_SIGN_ENTITLEMENTS = "src/samples/sample-NKScripting/sample-NKScripting.entitlements";
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -3330,7 +3312,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_ENTITLEMENTS = "src/samples/sample-NKScripting/";
+				CODE_SIGN_ENTITLEMENTS = "src/samples/sample-NKScripting/sample-NKScripting.entitlements";
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;

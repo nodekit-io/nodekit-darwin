@@ -30,7 +30,7 @@ protocol SamplePluginProtocol: NKScriptExport {
 
 class SamplePlugin: NSObject, SamplePluginProtocol {
     class func attachTo(context: NKScriptContext) {
-        context.NKloadPlugin(SamplePlugin(), namespace: "io.nodekit.test", options: ["PluginBridge": NKScriptExportType.NKScriptExport.rawValue])
+        context.loadPlugin(SamplePlugin(), namespace: "io.nodekit.test", options: ["PluginBridge": NKScriptExportType.NKScriptExport.rawValue])
     }
 
     func logconsole(text: AnyObject?) -> Void {

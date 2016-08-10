@@ -154,8 +154,6 @@ class NKScriptTypeInfo: CollectionType {
     
         var methods = NKInstanceMethods(forProtocol: NKScriptExport.self)
         
-        methods.remove(#selector(NKScriptExport.invokeDefaultMethodWithArguments(_:)))
-        
         return methods.union([
         
             #selector(_SpecialSelectors.dealloc),
@@ -192,25 +190,16 @@ class NKScriptTypeInfo: CollectionType {
                     return true
             
                 } else if let cls = plugin as? NKScriptExport.Type {
-                
-                    if cls.isSelectorExcludedFromScript?(selector) ?? false {
                     
+                    if cls.isExcludedFromScript?(selector.description) ?? false {
+                        
                         return true
-                    
+                        
                     }
                     
-                    if selector == #selector(NKScriptExport.invokeDefaultMethodWithArguments(_:)) {
-                   
-                        member = .Method(selector: selector, arity: -1)
-                       
-                        name = ""
-                   
-                    } else {
                     
-                        name = cls.scriptNameForSelector?(selector) ?? name
+                    name = cls.rewriteScriptNameForKey?(selector.description) ?? name
                     
-                    }
-                
                 }
             
             case .Property(_, _):
@@ -221,17 +210,13 @@ class NKScriptTypeInfo: CollectionType {
                 
                 } else if let cls = plugin as? NKScriptExport.Type {
                 
-                    if let isExcluded = cls.isKeyExcludedFromScript where name.withCString(isExcluded) {
+                    if cls.isExcludedFromScript?(name) ?? false {
                     
                         return true
                     
                     }
                    
-                    if let scriptNameForKey = cls.scriptNameForKey {
-                   
-                        name = name.withCString(scriptNameForKey) ?? name
-                    
-                    }
+                    name = cls.rewriteScriptNameForKey?(name)  ?? name
                 
                 }
             
@@ -245,7 +230,7 @@ class NKScriptTypeInfo: CollectionType {
                
                 } else if let cls = plugin as? NKScriptExport.Type {
                 
-                    name = cls.scriptNameForSelector?(selector) ?? name
+                    name = cls.rewriteScriptNameForKey?(selector.description) ?? name
                 
                 }
                 

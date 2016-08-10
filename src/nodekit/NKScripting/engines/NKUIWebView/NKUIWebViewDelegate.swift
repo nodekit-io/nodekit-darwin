@@ -29,7 +29,7 @@ internal class NKUIWebViewDelegate: NSObject, UIWebViewDelegate {
   
     weak var webView: UIWebView?
     
-    var context: JSContext?
+    var context: NKScriptContext?
     
     var id: Int
 
@@ -50,18 +50,17 @@ internal class NKUIWebViewDelegate: NSObject, UIWebViewDelegate {
         webView.registerForJSContext(callback: self.gotJavaScriptContext)
     }
 
-    private func gotJavaScriptContext(context: JSContext) {
+    private func gotJavaScriptContext(jsContext: JSContext) {
         
         if (self.delegate == nil) {return;}
 
         guard let callback = self.delegate else {return;}
-
+        
+        let context = NKJSContext(jsContext, id: self.id)
+        
         self.context = context
         
-        objc_setAssociatedObject(context, unsafeAddressOf(NKJSContextId), self.id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        
-        
-        context.NKPrepareEnvironment()
+        context.prepareEnvironment()
         
         callback.NKScriptEngineDidLoad(context)
     }

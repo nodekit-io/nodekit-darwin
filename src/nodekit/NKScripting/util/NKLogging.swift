@@ -34,7 +34,7 @@ public typealias asl_object_t = COpaquePointer
 
 @_silgen_name("asl_set_output_file_filter") func asl_set_output_file_filter(asl: asl_object_t, _ descriptor: Int32, _ filter: Int32) -> Int32
 
-public class NKLogging: NKScriptExport {
+public class NKLogging {
     
     
     private static var logger = NKLogging(facility: "io.nodekit.core.consolelog")
@@ -199,34 +199,6 @@ public class NKLogging: NKScriptExport {
         
         log(msg, level: lvl)
    
-    }
-
-    @objc public func invokeDefaultMethodWithArguments(args: [AnyObject]!) -> AnyObject! {
-    
-        guard args.count > 0 else { return nil }
-        
-        let message = args[0] as? String ?? "\(args[0])"
-        
-        var level: Level? = nil
-        
-        if args.count > 1, let num = args[1] as? Int {
-        
-            if 3 <= num && num <= 7 {
-            
-                level = Level(rawValue: Int32(num))
-           
-            } else {
-            
-                level = .Debug
-            
-            }
-        
-        }
-        
-        log(message, level: level)
-       
-        return nil
-    
     }
 
 }

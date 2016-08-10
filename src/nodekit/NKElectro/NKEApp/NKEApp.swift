@@ -25,7 +25,7 @@ extension NKE_App: NKScriptExport {
     
         let principal = NKE_App()
         
-        context.NKloadPlugin(principal, namespace: "io.nodekit.electro.app", options: [String:AnyObject]())
+        context.loadPlugin(principal, namespace: "io.nodekit.electro.app", options: [String:AnyObject]())
     
     }
 

@@ -72,11 +72,11 @@ extension NKE_WebContentsBase: NKScriptExport {
     
         let principal = NKE_WebContentsUI.self
         
-        context.NKloadPlugin(principal, namespace: "io.nodekit.electro.WebContentsUI", options: [String:AnyObject]())
+        context.loadPlugin(principal, namespace: "io.nodekit.electro.WebContentsUI", options: [String:AnyObject]())
         
         let principal2 = NKE_WebContentsWK.self
         
-        context.NKloadPlugin(principal2, namespace: "io.nodekit.electro.WebContentsWK", options: [String:AnyObject]())
+        context.loadPlugin(principal2, namespace: "io.nodekit.electro.WebContentsWK", options: [String:AnyObject]())
     
     }
 
@@ -101,10 +101,8 @@ extension NKE_WebContentsBase: NKScriptExport {
     
     }
 
-    class func scriptNameForSelector(selector: Selector) -> String? {
-    
-        return selector == #selector(NKE_WebContentsBase.init(window:)) ? "" : nil
-    
+    class func rewriteScriptNameForKey(name: String) -> String? {
+        return (name == "initWithWindow:" ? "" : nil)
     }
 
     internal class func NotImplemented(functionName: String = #function) -> Void {

@@ -89,9 +89,9 @@ extension NKE_IpcRenderer: NKScriptExport {
 
     static func attachTo(context: NKScriptContext) {
     
-        let principal = NKE_IpcRenderer(id: context.NKid)
+        let principal = NKE_IpcRenderer(id: context.id)
         
-        context.NKloadPlugin(principal, namespace: "io.nodekit.electro.ipcRenderer", options: [String:AnyObject]())
+        context.loadPlugin(principal, namespace: "io.nodekit.electro.ipcRenderer", options: [String:AnyObject]())
     
     }
 

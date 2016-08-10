@@ -22,33 +22,24 @@ import Foundation
 
 public protocol NKScriptContext: class {
     
-    var NKid: Int { get }
+    var id: Int { get }
 
-    func NKloadPlugin(object: AnyObject, namespace: String, options: Dictionary<String, AnyObject>) -> Void
+    func loadPlugin(object: AnyObject, namespace: String, options: Dictionary<String, AnyObject>) -> Void
     
-    func NKinjectJavaScript(script: NKScriptSource) -> Void
+    func injectJavaScript(script: NKScriptSource) -> Void
     
-    func NKevaluateJavaScript(javaScriptString: String, completionHandler: ((AnyObject?,NSError?) -> Void)?)
+    func evaluateJavaScript(javaScriptString: String, completionHandler: ((AnyObject?,NSError?) -> Void)?)
     
-    func NKserialize(object: AnyObject?) -> String
+    func serialize(object: AnyObject?) -> String
 
-    static func NKcurrentContext() -> NKScriptContext!
- 
 }
 
-public protocol NKScriptContextHost: class {
-
-    var NKid: Int { get }
-    
-    func NKgetScriptContext(id: Int, options: [String: AnyObject], delegate cb: NKScriptContextDelegate) -> Void
-
-}
 
 internal protocol NKScriptContentController: class {
 
-    func NKaddScriptMessageHandler (scriptMessageHandler: NKScriptMessageHandler, name: String)
+    func addScriptMessageHandler (scriptMessageHandler: NKScriptMessageHandler, name: String)
     
-    func NKremoveScriptMessageHandlerForName (name: String)
+    func removeScriptMessageHandlerForName (name: String)
 
 }
 
@@ -59,5 +50,26 @@ public protocol NKScriptContextDelegate: class {
     func NKScriptEngineReady(context: NKScriptContext) -> Void
 
 }
+
+public enum NKScriptExportType: Int {
+    
+    case NKScriptExport = 0
+    
+    case JSExport
+    
+}
+
+@objc public protocol NKScriptExport : class {
+    
+    optional func rewriteGeneratedStub(stub: String, forKey: String) -> String
+    
+    optional static func rewriteScriptNameForKey(name: String) -> String?
+    
+    optional static func isExcludedFromScript(name: String) -> Bool
+    
+    //   optional static func initializeForContext(context: NKScriptContext, completionHandler:)
+ 
+}
+
 
 public class NKJSContextId {}

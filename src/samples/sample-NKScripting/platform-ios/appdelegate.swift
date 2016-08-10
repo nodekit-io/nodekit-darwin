@@ -87,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "Engine":  NKEngineType.JavaScriptCore.rawValue
         ]
         
-        NKScriptContextFactory().createContext(options, delegate: self.scriptContextDelegate)
+        NKScriptContextFactory().createScriptContext(options, delegate: self.scriptContextDelegate)
         
     }
     

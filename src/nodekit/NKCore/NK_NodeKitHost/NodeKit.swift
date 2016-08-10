@@ -59,7 +59,7 @@ public class NodeKit: NSObject {
         
         }
 
-        context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.core/_nodekit_bootstrapper.js", namespace: "io.nodekit.bootstrapper"))
+        context.injectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.core/_nodekit_bootstrapper.js", namespace: "io.nodekit.bootstrapper"))
         
     
     }

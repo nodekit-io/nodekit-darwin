@@ -116,8 +116,6 @@ public class NKScriptValueNative: NKScriptValue {
 
     deinit {
         
-        (plugin as? NKScriptExport)?.finalizeForScript?()
-        
         unbindObject(plugin)
         
     }
@@ -193,11 +191,11 @@ public class NKScriptValueNative: NKScriptValue {
         
             let val: AnyObject! = proxy.call(member.getter!, withObjects: nil)
             
-            script += "\(namespace).$properties['\(name)'] = \(self.context.NKserialize(val));\n"
+            script += "\(namespace).$properties['\(name)'] = \(self.context.serialize(val));\n"
         
         }
        
-        context?.NKevaluateJavaScript(script, completionHandler: nil)
+        context?.evaluateJavaScript(script, completionHandler: nil)
     
     }
 
@@ -217,11 +215,11 @@ public class NKScriptValueNative: NKScriptValue {
         
             let val: AnyObject! = proxy.call(member.getter!, withObjects: nil)
             
-            script += "instance.$properties['\(name)'] = \(self.context.NKserialize(val));\n"
+            script += "instance.$properties['\(name)'] = \(self.context.serialize(val));\n"
         
         }
        
-        context?.NKevaluateJavaScript(script, completionHandler: nil)
+        context?.evaluateJavaScript(script, completionHandler: nil)
     }
 
     // Dispatch operation to plugin object
@@ -229,13 +227,7 @@ public class NKScriptValueNative: NKScriptValue {
         
         if let selector = channel.typeInfo[name]?.selector {
         
-            var args = arguments.map(wrapScriptObject)
-            
-            if plugin is NKScriptExport && name.isEmpty && selector == #selector(NKScriptExport.invokeDefaultMethodWithArguments(_:)) {
-                
-                args = [args]
-            
-            }
+            let args = arguments.map(wrapScriptObject)
             
             proxy.asyncCall(selector, withObjects: args)
         
@@ -247,13 +239,7 @@ public class NKScriptValueNative: NKScriptValue {
     
         if let selector = channel.typeInfo[name]?.selector {
         
-            var args = arguments.map(wrapScriptObject)
-            
-            if plugin is NKScriptExport && name.isEmpty && selector == #selector(NKScriptExport.invokeDefaultMethodWithArguments(_:)) {
-            
-                args = [args]
-            
-            }
+            let args = arguments.map(wrapScriptObject)
             
             return proxy.call(selector, withObjects: args)
         
@@ -343,9 +329,9 @@ public class NKScriptValueNative: NKScriptValue {
         
         if channel.typeInfo[prop] == nil {
         
-            if let scriptNameForKey = (object.dynamicType as? NKScriptExport.Type)?.scriptNameForKey {
+            if let scriptNameForKey = (object.dynamicType as? NKScriptExport.Type)?.rewriteScriptNameForKey {
             
-                prop = prop.withCString(scriptNameForKey) ?? prop
+                prop = scriptNameForKey(prop) ?? prop
             
             }
             
@@ -353,9 +339,9 @@ public class NKScriptValueNative: NKScriptValue {
      
         }
         
-        let script = "\(namespace).$properties['\(prop)'] = \(self.context.NKserialize(change?[NSKeyValueChangeNewKey]))"
+        let script = "\(namespace).$properties['\(prop)'] = \(self.context.serialize(change?[NSKeyValueChangeNewKey]))"
       
-        scriptContext.NKevaluateJavaScript(script, completionHandler: nil)
+        scriptContext.evaluateJavaScript(script, completionHandler: nil)
     
     }
 

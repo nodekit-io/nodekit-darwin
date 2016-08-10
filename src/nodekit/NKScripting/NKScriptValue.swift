@@ -76,7 +76,7 @@ public class NKScriptValue: NSObject {
         
         }
         
-        context?.NKevaluateJavaScript(script, completionHandler: nil)
+        context?.evaluateJavaScript(script, completionHandler: nil)
     }
 
     // Async JavaScript object operations
@@ -90,7 +90,7 @@ public class NKScriptValue: NSObject {
    
     public func callWithArguments(arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)?) {
     
-        dispatch_async(NKScriptChannel.defaultQueue) {() -> Void in
+        dispatch_async(NKScriptContextFactory.defaultQueue) {() -> Void in
         
             let exp = self.scriptForCallingMethod(nil, arguments: arguments)
         
@@ -102,7 +102,7 @@ public class NKScriptValue: NSObject {
   
     public func invokeMethod(method: String!, withArguments arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)?) {
     
-        dispatch_async(NKScriptChannel.defaultQueue) {() -> Void in
+        dispatch_async(NKScriptContextFactory.defaultQueue) {() -> Void in
             
             let exp = self.scriptForCallingMethod(method, arguments: arguments)
         
@@ -114,7 +114,7 @@ public class NKScriptValue: NSObject {
   
     public func defineProperty(property: String!, descriptor: AnyObject!) {
     
-        let exp = "Object.defineProperty(\(namespace), \(property), \(self.context.NKserialize(descriptor)))"
+        let exp = "Object.defineProperty(\(namespace), \(property), \(self.context.serialize(descriptor)))"
        
         evaluateExpression(exp, completionHandler: nil)
     
@@ -140,7 +140,7 @@ public class NKScriptValue: NSObject {
     
     public func setValue(value: AnyObject!, forProperty property: String!) {
    
-        context?.NKevaluateJavaScript(scriptForUpdatingProperty(property, value: value), completionHandler: nil)
+        context?.evaluateJavaScript(scriptForUpdatingProperty(property, value: value), completionHandler: nil)
  
     }
     
@@ -152,7 +152,7 @@ public class NKScriptValue: NSObject {
     
     public func setValue(value: AnyObject!, atIndex index: Int) {
     
-        context?.NKevaluateJavaScript("\(namespace)[\(index)] = \(self.context.NKserialize(value))", completionHandler: nil)
+        context?.evaluateJavaScript("\(namespace)[\(index)] = \(self.context.serialize(value))", completionHandler: nil)
    
     }
     
@@ -182,13 +182,13 @@ public class NKScriptValue: NSObject {
     
     private func scriptForUpdatingProperty(name: String!, value: AnyObject?) -> String {
     
-        return scriptForFetchingProperty(name) + " = " + self.context.NKserialize(value)
+        return scriptForFetchingProperty(name) + " = " + self.context.serialize(value)
     
     }
     
     private func scriptForCallingMethod(name: String!, arguments: [AnyObject]?) -> String {
         
-        let args = arguments?.map(NKserialize) ?? []
+        let args = arguments?.map(serialize) ?? []
     
         let script = scriptForFetchingProperty(name) + "(" + args.joinWithSeparator(", ") + ")"
         
@@ -196,7 +196,7 @@ public class NKScriptValue: NSObject {
     
     }
 
-    private func NKserialize(object: AnyObject?) -> String {
+    private func serialize(object: AnyObject?) -> String {
      
         var obj: AnyObject? = object
         
@@ -258,11 +258,11 @@ public class NKScriptValue: NSObject {
        
         } else if let a = obj as? [AnyObject] {
         
-            return "[" + a.map(self.NKserialize).joinWithSeparator(", ") + "]"
+            return "[" + a.map(self.serialize).joinWithSeparator(", ") + "]"
        
         } else if let d = obj as? [String: AnyObject] {
         
-            return "{" + d.keys.map {"\"\($0)\": \(self.NKserialize(d[$0]!))"}.joinWithSeparator(", ") + "}"
+            return "{" + d.keys.map {"\"\($0)\": \(self.serialize(d[$0]!))"}.joinWithSeparator(", ") + "}"
        
         } else if obj === NSNull() {
         
@@ -283,13 +283,13 @@ public class NKScriptValue: NSObject {
         
         guard let completionHandler = completionHandler else {
             
-            context?.NKevaluateJavaScript(expression, completionHandler: nil)
+            context?.evaluateJavaScript(expression, completionHandler: nil)
             
             return
             
         }
         
-        context?.NKevaluateJavaScript(scriptForRetaining(expression)) {
+        context?.evaluateJavaScript(scriptForRetaining(expression)) {
             
             [weak self](result: AnyObject?, error: NSError?)->Void in
             

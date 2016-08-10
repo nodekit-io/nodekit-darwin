@@ -29,7 +29,9 @@ public class NKScriptSource: NSObject {
     public let filename: String
     
     public let namespace: String?
-
+    
+    public var context: NKScriptContext?
+    
     public init(source: String, asFilename: String, namespace: String? = nil, cleanup: String? = nil) {
     
         self.filename = asFilename
@@ -63,6 +65,36 @@ public class NKScriptSource: NSObject {
             self.source = source + "\r\n//# sourceURL=" + filename + "\r\n"
         
         }
+
+    }
+    
+    deinit {
+        
+        eject()
+        
+    }
+    
+    internal func inject(context: NKScriptContext) {
+        
+        self.context = context
+        
+        context.evaluateJavaScript(source, completionHandler: nil)
+        
+        NKLogging.log("+E\(context.id) Injected \(filename) ")
+        
+    }
+    
+    private func eject() {
+        
+        guard let context = context else { return }
+        
+        if let cleanup = cleanup {
+            
+            context.evaluateJavaScript(cleanup, completionHandler: nil)
+            
+        }
+        
+        self.context =  nil
 
     }
 

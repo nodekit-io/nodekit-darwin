@@ -22,7 +22,7 @@ class NKC_Timer: NSObject, NKScriptExport {
 
     class func attachTo(context: NKScriptContext) {
         
-        context.NKloadPlugin(NKC_Timer.self, namespace: "io.nodekit.platform.Timer", options: [String:AnyObject]())
+        context.loadPlugin(NKC_Timer.self, namespace: "io.nodekit.platform.Timer", options: [String:AnyObject]())
         
     }
 
@@ -41,11 +41,9 @@ class NKC_Timer: NSObject, NKScriptExport {
         }
     
     }
-
-    class func scriptNameForSelector(selector: Selector) -> String? {
     
-        return selector == #selector(NKC_Timer.init) ? "" : nil
-    
+    class func rewriteScriptNameForKey(name: String) -> String? {
+        return (name == "init" ? "" : nil)
     }
 
     /* NKTimer

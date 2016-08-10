@@ -22,46 +22,45 @@ import Foundation
 import ObjectiveC
 import WebKit
 
-extension WKWebView: NKScriptContext, NKScriptContextHost {
-
-    public var NKid: Int { get { return objc_getAssociatedObject(self, unsafeAddressOf(NKJSContextId)) as! Int; } }
-
-    public func NKgetScriptContext(id: Int, options: [String: AnyObject] = Dictionary<String, AnyObject>(),
-        delegate cb: NKScriptContextDelegate) -> Void {
-     
-        NKLogging.log("+NodeKit Nitro JavaScript Engine E\(id)")
-
-        self.navigationDelegate = NKWKWebViewDelegate(id: id, webView: self, delegate: cb)
-        
-        self.UIDelegate = NKWKWebViewUIDelegate(webView: self)
-
-        objc_setAssociatedObject(self, unsafeAddressOf(NKJSContextId), id, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        
-        self.NKPrepareEnvironment()
-            
-        cb.NKScriptEngineDidLoad(self)
-    }
+public class NKWKContext: NSObject {
     
-    private func NKPrepareEnvironment() -> Void {
+    private let _wkContext: WKWebView
+    private let _id: Int
+    
+    internal init(_ context: WKWebView, id: Int) {
+        _wkContext = context
+        _id = id
+
+        super.init()
         
-        let context = self;
+        objc_setAssociatedObject(context, unsafeAddressOf(NKWKContext), self, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
+    }
+
+    internal func prepareEnvironment() -> Void {
         
         let handler: WKScriptMessageHandler = WKWebViewLogger.current
         
-        context.configuration.userContentController.addScriptMessageHandler(handler, name: "NKScriptingBridgeLog")
+        _wkContext.configuration.userContentController.addScriptMessageHandler(handler, name: "NKScriptingBridgeLog")
         
         let appjs = NKStorage.getResource("lib-scripting.nkar/lib-scripting/init_nitro.js", NKScriptChannel.self)
         
         let script = "function loadinit(){\n" + appjs! + "\n}\n" + "loadinit();" + "\n"
         
-        context.NKinjectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.scripting/init_nitro.js", namespace: "io.nodekit.scripting.init"))
+        self.injectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.scripting/init_nitro.js", namespace: "io.nodekit.scripting.init"))
         
-        NKStorage.attachTo(context)
+        NKStorage.attachTo(self)
 
     }
+}
 
+extension NKWKContext: NKScriptContext {
 
-    public func NKloadPlugin(object: AnyObject, namespace: String, options: Dictionary<String, AnyObject> = Dictionary<String, AnyObject>() ) -> Void {
+    public var id: Int {
+        get { return self._id }
+    }
+
+    public func loadPlugin(object: AnyObject, namespace: String, options: Dictionary<String, AnyObject> = Dictionary<String, AnyObject>() ) -> Void {
 
         let mainThread: Bool = (options["MainThread"] as? Bool) ?? false
 
@@ -99,30 +98,40 @@ extension WKWebView: NKScriptContext, NKScriptContextHost {
         
     }
 
-    public func NKinjectJavaScript(script: NKScriptSource) -> Void {
+    public func injectJavaScript(script: NKScriptSource) -> Void {
         
-        let item = NKWKUserScript(context: (self as WKWebView), script: script)
+        let wkscript = WKUserScript(source: script.source,
+                                     injectionTime: WKUserScriptInjectionTime.AtDocumentStart,
+                                     forMainFrameOnly: true)
         
-        objc_setAssociatedObject(self, unsafeAddressOf(item), item, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    
+        _wkContext.configuration.userContentController.addUserScript(wkscript)
+
+        objc_setAssociatedObject(script, unsafeAddressOf(wkscript), wkscript, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
+        objc_setAssociatedObject(self, unsafeAddressOf(script), script, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
+        script.inject(self)
+        
     }
 
-    public func NKevaluateJavaScript(javaScriptString: String,
+    public func evaluateJavaScript(javaScriptString: String,
         completionHandler: ((AnyObject?,
         NSError?) -> Void)?) {
-    
-        self.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+        
+        if _wkContext.URL != nil {
+            
+            self.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+        
+        } else {
+            
+            completionHandler?(nil, nil)
+        
+        }
     
     }
     
- 
-    public static func NKcurrentContext() -> NKScriptContext! {
-    
-        return NSThread.currentThread().threadDictionary.objectForKey("nk.CurrentContext") as? NKScriptContext
-    
-    }
 
-    public func NKserialize(object: AnyObject?) -> String {
+    public func serialize(object: AnyObject?) -> String {
     
         var obj: AnyObject? = object
         
@@ -184,11 +193,11 @@ extension WKWebView: NKScriptContext, NKScriptContextHost {
        
         } else if let a = obj as? [AnyObject] {
         
-            return "[" + a.map(self.NKserialize).joinWithSeparator(", ") + "]"
+            return "[" + a.map(self.serialize).joinWithSeparator(", ") + "]"
        
         } else if let d = obj as? [String: AnyObject] {
         
-            return "{" + d.keys.map {"\"\($0)\": \(self.NKserialize(d[$0]!))"}.joinWithSeparator(", ") + "}"
+            return "{" + d.keys.map {"\"\($0)\": \(self.serialize(d[$0]!))"}.joinWithSeparator(", ") + "}"
        
         } else if obj === NSNull() {
         
@@ -206,20 +215,20 @@ extension WKWebView: NKScriptContext, NKScriptContextHost {
 
 }
 
-extension WKWebView: NKScriptContentController {
+extension NKWKContext: NKScriptContentController {
 
-    internal func NKaddScriptMessageHandler (scriptMessageHandler: NKScriptMessageHandler, name: String) {
+    internal func addScriptMessageHandler (scriptMessageHandler: NKScriptMessageHandler, name: String) {
     
         let handler: WKScriptMessageHandler = NKWKMessageHandler(name: name, messageHandler: scriptMessageHandler, context: self)
        
-        self.configuration.userContentController.addScriptMessageHandler(handler, name: name)
+        self._wkContext.configuration.userContentController.addScriptMessageHandler(handler, name: name)
   
     }
 
     
-    internal func NKremoveScriptMessageHandlerForName (name: String) {
+    internal func removeScriptMessageHandlerForName (name: String) {
     
-        self.configuration.userContentController.removeScriptMessageHandlerForName(name)
+        self._wkContext.configuration.userContentController.removeScriptMessageHandlerForName(name)
     
     }
 
