@@ -80,7 +80,7 @@ public class NKScriptValue: NSObject {
     }
 
     // Async JavaScript object operations
-    public func constructWithArguments(arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)?) {
+    public func constructWithArguments(arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)? = nil) {
     
         let exp = "new " + scriptForCallingMethod(nil, arguments: arguments)
         
@@ -88,7 +88,7 @@ public class NKScriptValue: NSObject {
     
     }
    
-    public func callWithArguments(arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)?) {
+    public func callWithArguments(arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)? = nil) {
     
         dispatch_async(NKScriptContextFactory.defaultQueue) {() -> Void in
         
@@ -100,7 +100,7 @@ public class NKScriptValue: NSObject {
     
     }
   
-    public func invokeMethod(method: String!, withArguments arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)?) {
+    public func invokeMethod(method: String!, withArguments arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)? = nil) {
     
         dispatch_async(NKScriptContextFactory.defaultQueue) {() -> Void in
             

@@ -262,7 +262,7 @@ public class NKScriptValueNative: NKScriptValue {
     }
 
     // override methods of NKScriptValue
-    override public func invokeMethod(method: String!, withArguments arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)?) {
+    override public func invokeMethod(method: String!, withArguments arguments: [AnyObject]!, completionHandler: ((AnyObject?, NSError?) -> Void)? = nil) {
     
         if (proxy == nil) {NSException(name: "already disposed", reason: nil, userInfo: nil).raise();}
         
