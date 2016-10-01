@@ -258,15 +258,15 @@ class NKE_Dialog: NSObject, NKE_DialogProtocol {
         
         case "info":
         
-            msgBox.alertStyle = .InformationalAlertStyle
+            msgBox.alertStyle = .Informational
             
         case "error":
             
-            msgBox.alertStyle = .CriticalAlertStyle
+            msgBox.alertStyle = .Critical
       
         case "warning":
         
-            msgBox.alertStyle = .WarningAlertStyle
+            msgBox.alertStyle = .Warning
         
         default: break
         

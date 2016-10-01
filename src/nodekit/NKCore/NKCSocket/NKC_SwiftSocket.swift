@@ -351,15 +351,13 @@ class NKC_SwiftSocket: NSObject {
             queue = dispatch_queue_create("io.nodekit.platform.socket", DISPATCH_QUEUE_CONCURRENT)
         }
         
-        guard let listenSource = dispatch_source_create(
+        let listenSource = dispatch_source_create(
             DISPATCH_SOURCE_TYPE_READ,
             UInt(fd),
             0,
             queue
             )
-            else {
-                throw NKC_SwiftSocketError.DispatchFailed(errno)
-        }
+        
         self.listenSource = listenSource;
         
         listenSource.onEvent {  _, _  in
@@ -546,9 +544,7 @@ class NKC_SwiftSocket: NSObject {
             queue = dispatch_get_main_queue()
         }
         
-        guard let asyncData = dispatch_data_create(buffer,bufsize, queue,nil) else {
-            return false
-        }
+        let asyncData = dispatch_data_create(buffer,bufsize, queue,nil)
         
         _write(asyncData)
         return true
@@ -566,9 +562,7 @@ class NKC_SwiftSocket: NSObject {
             queue = dispatch_get_main_queue()
         }
         
-        guard let asyncData = dispatch_data_create(buffer,bufsize, queue,nil) else {
-            return false
-        }
+        let asyncData = dispatch_data_create(buffer,bufsize, queue,nil) 
         
         _write(asyncData)
         return true

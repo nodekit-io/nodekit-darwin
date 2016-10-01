@@ -24,7 +24,7 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
 
         if (request.URL!.host == nil) { return false;}
 
-        if ((request.URL!.scheme.caseInsensitiveCompare("internal") == NSComparisonResult.OrderedSame)
+        if ((request.URL!.scheme!.caseInsensitiveCompare("internal") == NSComparisonResult.OrderedSame)
         || (request.URL!.host?.caseInsensitiveCompare("internal") == NSComparisonResult.OrderedSame)) {
 
             return true

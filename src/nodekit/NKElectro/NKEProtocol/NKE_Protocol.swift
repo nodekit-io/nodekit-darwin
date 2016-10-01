@@ -166,7 +166,7 @@ class NKE_ProtocolCustom: NSURLProtocol {
 
         guard let host = request.URL?.host?.lowercaseString else {return false;}
     
-        guard let scheme = request.URL?.scheme.lowercaseString else {return false;}
+        guard let scheme = request.URL?.scheme?.lowercaseString else {return false;}
 
         return (NKE_ProtocolCustom.registeredSchemes.contains(scheme) || NKE_ProtocolCustom.registeredSchemes.contains(host))
    
@@ -194,7 +194,7 @@ class NKE_ProtocolCustom: NSURLProtocol {
 
         guard let host = request.URL?.host?.lowercaseString else {return;}
         
-        guard let scheme = request.URL?.scheme.lowercaseString else {return;}
+        guard let scheme = request.URL?.scheme?.lowercaseString else {return;}
         
         req["host"] = host
         

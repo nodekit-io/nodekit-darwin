@@ -46,7 +46,7 @@ extension NKE_BrowserWindow {
                 (NSHeight(windowRect) - height)/2,
                 width, height)
             
-            let window = NSWindow(contentRect: frameRect, styleMask: NSTitledWindowMask | NSClosableWindowMask | NSResizableWindowMask, backing: NSBackingStoreType.Buffered, defer: false, screen: NSScreen.mainScreen())
+            let window = NSWindow(contentRect: frameRect, styleMask: [NSTitledWindowMask , NSClosableWindowMask , NSResizableWindowMask], backing: NSBackingStoreType.Buffered, defer: false, screen: NSScreen.mainScreen())
             
             objc_setAssociatedObject(self, unsafeAddressOf(NSWindow), window, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             
@@ -273,7 +273,7 @@ class NKE_Popover : NSObject {
             
             statusButton.action = #selector(NKE_Popover.onPress(_:))
             
-            statusButton.sendActionOn(Int((NSEventMask.RightMouseDownMask).rawValue))
+            statusButton.sendActionOn(NSEventMask(rawValue: UInt64((NSEventMask.RightMouseDown).rawValue)))
          
             let dummyControl = DummyControl()
             
@@ -340,7 +340,7 @@ class NKE_Popover : NSObject {
             
             popover.showRelativeToRect(NSZeroRect, ofView: statusButton, preferredEdge: NSRectEdge.MinY)
             
-            popoverMonitor = NSEvent.addGlobalMonitorForEventsMatchingMask(.LeftMouseDownMask, handler: {
+            popoverMonitor = NSEvent.addGlobalMonitorForEventsMatchingMask(.LeftMouseDown, handler: {
                 
                 (event: NSEvent) -> Void in
                 

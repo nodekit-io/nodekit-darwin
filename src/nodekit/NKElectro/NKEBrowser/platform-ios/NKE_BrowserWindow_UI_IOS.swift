@@ -95,9 +95,9 @@ extension NKE_BrowserWindow: UIWebViewDelegate {
     }
 
     func webView(webView: UIWebView,
-        didFailLoadWithError error: NSError?) {
+        didFailLoadWithError error: NSError) {
     
-        self._events.emit("did-fail-loading", (self._id,  error?.description ?? ""))
+        self._events.emit("did-fail-loading", (self._id,  error.description ?? ""))
     
     }
 
