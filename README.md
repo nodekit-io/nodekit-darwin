@@ -19,12 +19,18 @@ See [nodekit-io/nodekit-android](https://github.com/nodekit-io/nodekit-android) 
 [![{NK} Roadmap](https://img.shields.io/badge/OpenSource-roadmap-DE3B30.svg?style=flat-square)](http://roadmap.nodekit.io)
 [![@Contact](https://img.shields.io/badge/Contact-@nodekitio-4DA6FD.svg?style=flat-square)](https://twitter.com/nodekitio)
 
-## Sample Application (using Frameworks)
+## Sample Application (using Command Line Tool)
+
+Note: Command Line Tooling coming soon:
 
 ``` bash
-git clone https://github.com/nodekit-io/nodekit-sample.git
-cd nodekit-sample
-carthage update
+npm install nodekit -g 
+nodekit create myapp io.nodekit.myapp myapp
+cd myapp
+nodekit platform add ios
+nodekit platform add macos
+nodekit build
+nodekit run macos
 ```
 
 ## Tests and Sample Application (Full Build)
@@ -108,18 +114,16 @@ Just use Safari Web Inspector to set breakpoints, inspect variables, etc. in bot
 
 ## Supports
 
-iOS 8+, 9+
-OS X 10.9, 10.10, 10.11
-Swift and Objective-C source (we wrote it nearly all in Swift 2.x)
-Windows 10 Universal Platform (October 2015 update or more recent)
-Node.js ~0.12.x
+* iOS 8+, 9+, 10+
+* macOS 10.9, 10.10, 10.11, 10.12
+* Android 4.4+, 5.0+, 6.0+
+* Windows 10 Universal Platform (October 2015 update or more recent)
+* Node.js ~0.12.x
 
+## Still In development
 
-## Still In Development
-
-Android
-Windows 7, Vista, 8, 8.1 for desktop applications
-Node.js 4.x/5.x updates (we run a very stable 0.12.x for broadest package compatibility, and are currently testing the 4.x LTS version in a development branch).
+* Windows 7, Vista, 8, 8.1 for desktop applications
+* Node.js 4.x/5.x updates (we run a very stable 0.12.x for broadest package compatibility, and are currently testing the 4.x LTS version in a development branch).
 
 ## License
 
@@ -145,6 +149,8 @@ Apache 2.0
 We went for platform specific code to allow searching by language on GitHub to show up appropriately (e.g., trending repositories in Swift, C#), to allow separate version numbers for minor platform-specific changes, and because the repositories are in essence not dependent on each other, but rather complementary language ports with the same functionality and API.
 
 ## News
+* (October 2016) Command line tooling added for Android
+* (September 2016) Initial Android release (NKScripting and NKElectro only)
 * (March 2016) Added sample application, a beautiful lightweight chat application to highlight how to use {NK} NodeKit 
 * (February 2016) Split platform versions into their own repositories on GitHub
 * (February 2016) Initial release of NKScripting using the Chakra engine on Windows 10 platforms;  other engines coming
@@ -154,5 +160,7 @@ We went for platform specific code to allow searching by language on GitHub to s
 * (December 2015) Updated for Swift 2.0 and refactored for iOS and OS X.
 * Master branch contains Node.js v0.12.x (working).   
 * Node.js V4.x branch available but not in accelerated development.
+
+
 
 
