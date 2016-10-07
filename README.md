@@ -1,5 +1,5 @@
 ![http://nodekit.io](https://raw.githubusercontent.com/nodekit-io/nodekit/master/docs/images/banner.png?v02)
-*{NK} NodeKit* is the universal, open-source, embedded engine that provides a full Node.js instance inside desktop and mobile applications for OS X, iOS, Android, and Windows.  
+*{NK} NodeKit* is the universal, open-source, embedded engine that provides a full Node.js instance inside desktop and mobile applications for macOS, iOS, Android, Fire OS, and Windows.  
 
 For application developers, the backend can be written in pure Node javascript code, the front-end in the architecture of your choice including but not limited to Atom Electron API, Facebook React, Express, etc.)
 
@@ -87,9 +87,9 @@ It is the foundation of {NK} NodeKit and can be used without {NK} Electro or {NK
 
 ## Distribution
 
-The {NK} NodeKit repository contains an XCode project with all the above components (zero dependencies) that compiles to an iOS 8 + and OS X 10.9 + dynamic framework.  Versions for Windows 10 and Android are in active development.
+The {NK} NodeKit repository contains an XCode project with all the above components (zero dependencies) that compiles to an iOS 8 + and macOS 10.9 + dynamic framework.  Versions for Windows 10 and Android are in active development.
 
-The single framework file (containing binary code and embedded resources like the core Node.js javascript code) can just be included in any iOS or OS X application.    See the sample app for an example.   You can thus compile and create your own projects;  no app store consumer really needs to know how you built it unless you want to tell them or modify the {NK} NodeKit source. 
+The single framework file (containing binary code and embedded resources like the core Node.js javascript code) can just be included in any iOS or macOS application.    See the sample app for an example.   You can thus compile and create your own projects;  no app store consumer really needs to know how you built it unless you want to tell them or modify the {NK} NodeKit source. 
 
 ## Is it really Node ?
 
@@ -157,7 +157,7 @@ We went for platform specific code to allow searching by language on GitHub to s
 * (February 2016) Added [roadmap](http://roadmap.nodekit.io) for tracking contributions and future plans
 * (February 2016) Removed the last of the Objective-C and C code;  the entire framework on Darwin platforms is now pure Swift 2.x including the rewritten POSIX sockets layer that makes full use of GCD, is non blocking, and contains no external dependencies;  we may end up releasing as `{NK} Sockets` as while there are lots of good Objective-C libraries, there are fewer Swift versions (and almost none without a tiny C dependency which we've eliminated) and we had to cobble this together from a few complementary sources. 
 * (January 2016) Updated to use all core darwin JavaScript Engines, harmonized the API to industry standard (e.g, Electron subset for front end, JavaScriptCore like for back end) and refactored out {NK} Scripting and {NK} Electro and associated docs in the process
-* (December 2015) Updated for Swift 2.0 and refactored for iOS and OS X.
+* (December 2015) Updated for Swift 2.0 and refactored for iOS and macOS.
 * Master branch contains Node.js v0.12.x (working).   
 * Node.js V4.x branch available but not in accelerated development.
 
