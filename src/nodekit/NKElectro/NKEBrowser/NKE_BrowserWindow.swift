@@ -1,7 +1,7 @@
 /*
 * nodekit.io
 *
-* Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
+* Copyright (c) 2016-7 OffGrid Networks. All Rights Reserved.
 * Portions Copyright (c) 2013 GitHub, Inc. under MIT License
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,11 +57,14 @@ class NKE_BrowserWindow: NSObject {
         
         // PARSE & STORE OPTIONS
         
+        NSLog("BROWSERWINDOW");
+        
         self._options["nk.InstallElectro"] = options["nk.InstallElectro"] as? Bool ?? true
+        self._options["nk.ScriptContextDelegate"] = options["nk.ScriptContextDelegate"] as? NKScriptContextDelegate
         
         let allowCustomProtocol: Bool = options[NKEBrowserOptions.nkAllowCustomProtocol] as? Bool ?? false
         
-        let defaultBrowser: String = allowCustomProtocol ? NKEBrowserType.UIWebView.rawValue : NKEBrowserType.WKWebView.rawValue
+        let defaultBrowser: String = allowCustomProtocol ? NKEBrowserType.UIWebView.rawValue : NKEBrowserType.UIWebView.rawValue
         
         self._browserType = NKEBrowserType(rawValue: (options[NKEBrowserOptions.nkBrowserType] as? String) ?? defaultBrowser)!
 
@@ -190,13 +193,18 @@ extension NKE_BrowserWindow: NKScriptContextDelegate {
     
         NKLogging.log("+E\(context.id) Renderer Loaded")
 
-        if (!(self._options["nk.InstallElectro"] as! Bool)) { return;}
-        
         self._context = context
 
         // INSTALL JAVASCRIPT ENVIRONMENT ON RENDERER CONTEXT
         
-        NKElectro.bootToRenderer(context)
+        if (self._options["nk.InstallElectro"] as! Bool)
+        {
+             NKElectro.bootToRenderer(context)
+        }
+        
+        (self._options["nk.ScriptContextDelegate"] as? NKScriptContextDelegate)?.NKScriptEngineDidLoad(context)
+        
+      
     
     }
 
@@ -213,6 +221,8 @@ extension NKE_BrowserWindow: NKScriptContextDelegate {
             UIScriptEnvironmentReady()
         
         }
+        
+          (self._options["nk.ScriptContextDelegate"] as? NKScriptContextDelegate)?.NKScriptEngineReady(context)
        
         NKLogging.log("+E\(id) Renderer Ready")
         

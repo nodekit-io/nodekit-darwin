@@ -149,6 +149,7 @@ Apache 2.0
 We went for platform specific code to allow searching by language on GitHub to show up appropriately (e.g., trending repositories in Swift, C#), to allow separate version numbers for minor platform-specific changes, and because the repositories are in essence not dependent on each other, but rather complementary language ports with the same functionality and API.
 
 ## News
+* (January 2017) Minor updates for Darwin Hosting and updated to Swift 2.3 / XCode 8.0
 * (October 2016) Command line tooling added for Android
 * (September 2016) Initial Android release (NKScripting and NKElectro only)
 * (March 2016) Added sample application, a beautiful lightweight chat application to highlight how to use {NK} NodeKit 
@@ -160,7 +161,3 @@ We went for platform specific code to allow searching by language on GitHub to s
 * (December 2015) Updated for Swift 2.0 and refactored for iOS and macOS.
 * Master branch contains Node.js v0.12.x (working).   
 * Node.js V4.x branch available but not in accelerated development.
-
-
-
-

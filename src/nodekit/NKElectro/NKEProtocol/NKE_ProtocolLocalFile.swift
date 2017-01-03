@@ -1,7 +1,7 @@
 /*
 * nodekit.io
 *
-* Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
+* Copyright (c) 2016-7 OffGrid Networks. All Rights Reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
 
         if (request.URL!.host == nil) { return false;}
 
-        if ((request.URL!.scheme!.caseInsensitiveCompare("internal") == NSComparisonResult.OrderedSame)
-        || (request.URL!.host?.caseInsensitiveCompare("internal") == NSComparisonResult.OrderedSame)) {
+        if ((request.URL!.scheme!.caseInsensitiveCompare("renderer") == NSComparisonResult.OrderedSame)
+        || (request.URL!.host?.caseInsensitiveCompare("renderer") == NSComparisonResult.OrderedSame)) {
 
             return true
         
@@ -55,7 +55,7 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
     
         let client: NSURLProtocolClient! = self.client
 
-        if (request.URL!.absoluteString == "internal://close") || (request.URL!.absoluteString == "http://internal/close") {
+        if (request.URL!.absoluteString == "renderer://close") || (request.URL!.absoluteString == "http://renderer/close") {
 
             exit(0)
         
@@ -67,11 +67,14 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
 
         if (urlDecode.exists()) {
             
-            let data: NSData! = NKStorage.getResourceData(urlDecode.resourcePath as! String)
+            
+            let path: String = (urlDecode.resourcePath as! String)
+            
+            let data: NSData! = NKStorage.getResourceData(path)
        
             let response: NSURLResponse = NSURLResponse(URL: request.URL!, MIMEType: urlDecode.mimeType as String?, expectedContentLength: data.length, textEncodingName: urlDecode.textEncoding as String?)
 
-            client.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: NSURLCacheStoragePolicy.AllowedInMemoryOnly)
+            client.URLProtocol(self, didReceiveResponse: response, cacheStoragePolicy: NSURLCacheStoragePolicy.NotAllowed)
 
             client.URLProtocol(self, didLoadData: data)
             

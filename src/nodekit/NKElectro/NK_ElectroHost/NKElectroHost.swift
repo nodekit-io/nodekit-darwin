@@ -1,7 +1,7 @@
 /*
 * nodekit.io
 *
-* Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
+* Copyright (c) 2016-7 OffGrid Networks. All Rights Reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -57,6 +57,7 @@ import Foundation
     var context: NKScriptContext?
     
     private var scriptContextDelegate: NKScriptContextDelegate?
+    private var uiHostWindow: NKE_BrowserWindow?
     
     public func start(inout options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate? = nil) {
     
@@ -64,8 +65,47 @@ import Foundation
         
         options["Engine"] = options["Engine"] ?? NKEngineType.JavaScriptCore.rawValue
         
-        NKScriptContextFactory().createScriptContext(options, delegate: self)
-    
+        if (options["preloadURL"] as? String != nil)
+        {
+            var uiOptions: [String: AnyObject] =  [
+                
+                
+                "nk.InstallElectro": false,  /* Do not install ElectroRenderer, instead install full Electro here */
+                "nk.ScriptContextDelegate": self
+            ]
+            
+            if ((options["nk.allowCustomProtocol"]) != nil) {
+                uiOptions["nk.allowCustomProtocol"] = options["nk.allowCustomProtocol"] }
+            
+            if ((options["nk.taskBarPopup"]) != nil) {
+                uiOptions["nk.taskBarPopup"] = options["nk.taskBarPopup"] }
+        
+            if ((options["nk.taskBarIcon"]) != nil) {
+                uiOptions["nk.taskBarIcon"] = options["nk.taskBarIcon"] }
+        
+            if ((options["width"]) != nil) {
+                uiOptions["width"] = options["width"] }
+            
+            if ((options["height"]) != nil) {
+                uiOptions["height"] = options["height"] }
+            
+            if ((options["preloadURL"]) != nil) {
+                uiOptions["preloadURL"] = options["preloadURL"] }
+            
+            if ((options["Engine"]) != nil) {
+                uiOptions["Engine"] = options["Engine"] }
+            
+            if ((options["title"]) != nil) {
+                uiOptions["title"] = options["title"] }
+            
+            uiHostWindow = NKE_BrowserWindow(options: uiOptions)
+
+            
+        } else
+        {
+            NKScriptContextFactory().createScriptContext(options, delegate: self)
+        }
+        
     }
     
     public func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {

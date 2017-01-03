@@ -1,7 +1,7 @@
 /*
 * nodekit.io
 *
-* Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
+* Copyright (c) 2016-7 OffGrid Networks. All Rights Reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -38,9 +38,11 @@ class NKE_ProtocolFileDecode: NSObject {
     
         resourcePath = nil
 
-        var _fileTypes: [NSString: NSString] = ["html": "text/html" ,
-            "js" : "application/javascript" ,
-            "css": "text/css" ]
+        var _fileTypes: [NSString: NSString] = [
+            "html": "text/html" ,
+            "js" : "text/plain" ,
+            "css": "text/css",
+            "svg": "image/svg+xml"]
 
         urlPath = (url.path! as NSString).stringByDeletingLastPathComponent
         
@@ -48,6 +50,8 @@ class NKE_ProtocolFileDecode: NSObject {
         {
             urlPath = urlPath.substringFromIndex(1)
         }
+        
+        urlPath = ("renderer.nkar" as NSString).stringByAppendingPathComponent(urlPath as String)
 
         fileExtension = url.pathExtension!.lowercaseString
         
