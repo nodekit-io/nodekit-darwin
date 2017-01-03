@@ -98,13 +98,23 @@ BootstrapModule.loadSource = function(id) {
 
 BootstrapModule._cache = {};
 
+BootstrapModule._symlink = {};
+
+BootstrapModule.ln = function(source, dest) {
+    BootstrapModule._symlink[source] = dest;
+}
+
 BootstrapModule.prototype.require = function(id)
 {
     if (id == 'native_module') {
         return BootstrapModule;
     }
     
-    if (id[0] == ".")
+    if (BootstrapModule._symlink[id])
+    {
+        id = BootstrapModule._symlink[id];
+    }
+    else if (id[0] == ".")
     {
         id = _absolutePath(this.__dirname + '/', id);
     }
@@ -186,6 +196,22 @@ BootstrapModule.getCached = function(id) {
     return BootstrapModule._cache[id];
 };
 
+
+BootstrapModule.loadFromSource = function(id, source) {
+    
+    var module = new BootstrapModule(id);
+    
+    var source = BootstrapModule.wrap(source);
+    
+    var fn = BootstrapModule.runInThisContext(source, { filename: module.__filename , displayErrors: true});
+    
+    fn(module.exports, module.require.bind(module), module, module.__filename, module.__dirname);
+    
+    module.loaded = true;
+    
+    return module.exports;
+}
+
 BootstrapModule.runInThisContext = function(code, options) {
     options = options || {};
     
@@ -234,6 +260,8 @@ BootstrapModule.prototype.load = function() {
     this.loaded = true;
     
 };
+
+
 
 BootstrapModule.prototype.compile = function() {
     var source = BootstrapModule.getSource(this.id);

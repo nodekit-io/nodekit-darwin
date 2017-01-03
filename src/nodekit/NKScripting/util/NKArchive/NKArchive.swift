@@ -29,15 +29,15 @@ public class NKArchive {
     init(path: String, _cdirs: [String: NKAR_CentralDirectory]) {
         
         self.path = path
-     
+        
         self._cdirs = _cdirs
-    
+        
     }
     
     static func createFromPath(path: String) -> (NKArchive, NSData)? {
         
         guard let data = NSFileManager.defaultManager().contentsAtPath(path)
-    
+            
             else { return nil }
         
         let bytes = unsafeBitCast(data.bytes, UnsafePointer<UInt8>.self)
@@ -53,7 +53,7 @@ public class NKArchive {
             else { return nil }
         
         return (NKArchive(path: path, _cdirs: _cdirs), data)
-
+        
     }
     
 }
@@ -61,7 +61,7 @@ public class NKArchive {
 public extension NKArchive {
     
     private func getDirectory_(filename: String) -> NKAR_CentralDirectory? {
-       
+        
         let cdir = _cdirs[filename]
         
         if (cdir != nil) { return cdir }
@@ -112,7 +112,7 @@ public extension NKArchive {
     func exists(filename: String) -> Bool {
         
         if (self.getDirectory_(filename) != nil) {return true} else { return false }
-
+        
     }
     
     var files: [String] {
@@ -132,7 +132,7 @@ public extension NKArchive {
         var folder = module
         
         if !folder.hasSuffix("/") {
-          folder += "/"
+            folder += "/"
         }
         
         return self.getDirectory_(folder) != nil
@@ -145,7 +145,7 @@ public extension NKArchive {
         
         guard let cdir = self.getDirectory_(filename)
             ?? self.getDirectory_(filename + "/")
-          else { return storageItem }
+            else { return storageItem }
         
         storageItem["birthtime"] = NSDate(timeIntervalSince1970: Double(cdir.lastmodUnixTimestamp))
         
@@ -162,21 +162,26 @@ public extension NKArchive {
     
     func getDirectory(foldername: String) -> [String] {
         
+        var foldername = foldername;
+        
+        if (foldername.characters.last != "/")
+        {
+            foldername = foldername + "/";
+        }
+        
         let depth = (foldername as NSString).pathComponents.count + 1
         
         let items = self.files.filter({(item: String) -> Bool in
-                return item.lowercaseString.hasPrefix(foldername.lowercaseString) &&
-                   ((item as NSString).pathComponents.count == depth)
-                
-            })
+            return item.lowercaseString.hasPrefix(foldername.lowercaseString) &&
+                ((item as NSString).pathComponents.count == depth) &&
+                (item.characters.last == "/")
+        })
         
         return items.map({(item: String) -> String in
             return (item as NSString).lastPathComponent
         })
-
+        
     }
-    
-    
 }
 
 

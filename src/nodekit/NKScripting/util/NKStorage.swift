@@ -19,6 +19,18 @@
 
 import Foundation
 
+@objc public protocol NKStorageExport: NKScriptExport {
+    
+    func getSourceSync(module: String) -> String
+    
+    func existsSync(module: String) -> Bool
+    
+    func statSync(module: String) -> Dictionary<String, AnyObject>
+    
+    func getDirectorySync(module: String) -> [String]
+
+}
+
 public class NKStorage: NSObject {
     
     // PUBLIC METHODS NATIVE SIDE ONLY
@@ -335,12 +347,11 @@ public class NKStorage: NSObject {
     
 }
 
-extension NKStorage:  NKScriptExport {
-    
+extension NKStorage:  NKStorageExport {
     
     // PUBLIC METHODS, ACCESSIBLE FROM JAVASCRIPT
     
-    public func getSourceSync(module: String) -> String {
+   public func getSourceSync(module: String) -> String {
         
         guard let data = NKStorage.getResourceData(module) else { return "" }
         
@@ -348,13 +359,13 @@ extension NKStorage:  NKScriptExport {
         
     }
     
-    public func existsSync(module: String) -> Bool {
+   public func existsSync(module: String) -> Bool {
         
         return NKStorage.exists(module)
         
     }
     
-    public func statSync(module: String) -> Dictionary<String, AnyObject> {
+   public func statSync(module: String) -> Dictionary<String, AnyObject> {
         
         if module.lowercaseString.rangeOfString(".nkar/") != nil {
             
@@ -424,7 +435,7 @@ extension NKStorage:  NKScriptExport {
         return storageItem
     }
     
-    public func getDirectorySync(module: String) -> [String] {
+   public func getDirectorySync(module: String) -> [String] {
         
         if module.lowercaseString.rangeOfString(".nkar/") != nil {
             
@@ -451,23 +462,8 @@ extension NKStorage:  NKScriptExport {
     
     class func attachTo(context: NKScriptContext) {
         
-        context.loadPlugin(NKStorage(), namespace: "io.nodekit.scripting.storage", options: [String:AnyObject]())
+        context.loadPlugin(NKStorage(), namespace: "io.nodekit.scripting.storage", options: ["js": "lib-scripting.nkar/lib-scripting/native_module.js"])
         
-    }
-    
-    public func rewriteGeneratedStub(stub: String, forKey: String) -> String {
-        
-        switch (forKey) {
-            
-        case ".global":
-            
-            return NKStorage.getPluginWithStub(stub, "lib-scripting.nkar/lib-scripting/native_module.js", NKStorage.self)
-            
-        default:
-            
-            return stub
-            
-        }
     }
     
     public class func isExcludedFromScript(name: String) -> Bool {

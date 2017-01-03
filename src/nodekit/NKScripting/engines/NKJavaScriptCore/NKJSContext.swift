@@ -45,13 +45,30 @@ public class NKJSContext: NSObject {
         scriptingBridge.setObject(unsafeBitCast(logjs, AnyObject.self), forKeyedSubscript: "log")
         _jsContext.setObject(unsafeBitCast(scriptingBridge, AnyObject.self), forKeyedSubscript: "NKScriptingBridge")
         
-        let appjs = NKStorage.getResource("lib-scripting.nkar/lib-scripting/init_jsc.js", NKScriptChannel.self)
+        let appjs = NKStorage.getResource("lib-scripting.nkar/lib-scripting/init_jsc.js", NKJSContext.self)
+
         
         let script = "function loadinit(){\n" + appjs! + "\n}\n" + "loadinit();" + "\n"
         
         self.injectJavaScript(NKScriptSource(source: script, asFilename: "io.nodekit.scripting/init_jsc", namespace: "io.nodekit.scripting.init"))
         
+        guard let source2 = NKStorage.getResource("lib-scripting.nkar/lib-scripting/promise.js", NKJSContext.self) else {
+            NKLogging.die("Failed to read provision script: promise")
+        }
+        
+        self.injectJavaScript(NKScriptSource(source: source2, asFilename: "io.nodekit.scripting/NKScripting/promise.js", namespace: "Promise"))
+        
+        
         NKStorage.attachTo(self)
+        
+        let setTimeout: @convention(block) (JSValue, Int) -> () =
+            { callback, timeout in
+                let timeVal = Int64(Double(timeout) * Double(NSEC_PER_MSEC))
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeVal), dispatch_get_main_queue(), { callback.callWithArguments(nil)})
+        }
+        
+        self._jsContext.setObject(unsafeBitCast(setTimeout, AnyObject.self), forKeyedSubscript: "setTimeout")
+
     }
 }
 
@@ -70,14 +87,15 @@ extension NKJSContext: NKScriptContext {
         switch bridge {
         
         case .JSExport:
-        
+
             self.setObjectForNamespace(object, namespace: namespace)
             
             NKLogging.log("+Plugin object \(object) is bound to \(namespace) with JSExport channel")
             
             objc_setAssociatedObject(self, unsafeAddressOf(object), object, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+   
+            break
             
-            return
         default:
             
             let channel: NKScriptChannel
@@ -98,6 +116,13 @@ extension NKJSContext: NKScriptContext {
             
             objc_setAssociatedObject(self, unsafeAddressOf(pluginValue), pluginValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
+        
+        guard let jspath: String = options["js"] as? String else { return; }
+        
+        guard let js = NKStorage.getResource(jspath, object.dynamicType) else { return; }
+        
+        self.injectJavaScript(NKScriptSource(source: js, asFilename: jspath))
+        
     }
 
     public func injectJavaScript(script: NKScriptSource) -> Void {
@@ -231,6 +256,8 @@ extension NKJSContext: NKScriptContext {
         })
         
         jsv.setObject(object, forKeyedSubscript: lastItem)
+
+
     }
 }
 
