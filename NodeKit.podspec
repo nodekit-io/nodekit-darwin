@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/nodekit-io/nodekit"
   s.license      = { :type => 'APACHE-2', :file => 'LICENSE' }
   s.author       = { "OffGrid Networks" => 'admin@offgridn.com' }
-  s.source       = { :git => "https://github.com/nodekit-io/nodekit-darwin.git", :tag => "v0.8.1" }
+  s.source       = { :git => "https://github.com/nodekit-io/nodekit-darwin.git", :tag => "v0.8.7" }
 
   s.ios.deployment_target = '9.0'
   s.osx.deployment_target = '10.11'
