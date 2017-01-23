@@ -61,8 +61,11 @@ public class NKJSContext: NSObject {
         
         NKStorage.attachTo(self)
         
-        let setTimeout: @convention(block) (JSValue, Int) -> () =
+        let setTimeout: @convention(block) (JSValue, Int64) -> () =
             { callback, timeout in
+                
+                let timeout = (timeout < 0) ? 0 : timeout
+                
                 let timeVal = Int64(Double(timeout) * Double(NSEC_PER_MSEC))
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeVal), dispatch_get_main_queue(), { callback.callWithArguments(nil)})
         }
