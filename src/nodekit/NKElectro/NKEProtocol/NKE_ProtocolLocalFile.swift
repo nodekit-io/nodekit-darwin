@@ -24,8 +24,8 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
 
         if (request.URL!.host == nil) { return false;}
 
-        if ((request.URL!.scheme!.caseInsensitiveCompare("renderer") == NSComparisonResult.OrderedSame)
-        || (request.URL!.host?.caseInsensitiveCompare("renderer") == NSComparisonResult.OrderedSame)) {
+        if ((request.URL!.scheme!.caseInsensitiveCompare("app") == NSComparisonResult.OrderedSame)
+        || (request.URL!.host?.caseInsensitiveCompare("app") == NSComparisonResult.OrderedSame)) {
 
             return true
         
@@ -55,7 +55,7 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
     
         let client: NSURLProtocolClient! = self.client
 
-        if (request.URL!.absoluteString == "renderer://close") || (request.URL!.absoluteString == "http://renderer/close") {
+        if (request.URL!.absoluteString == "app://close") || (request.URL!.absoluteString == "http://localhost/close") {
 
             exit(0)
         

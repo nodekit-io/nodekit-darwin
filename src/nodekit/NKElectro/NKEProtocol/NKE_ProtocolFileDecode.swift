@@ -51,7 +51,7 @@ class NKE_ProtocolFileDecode: NSObject {
             urlPath = urlPath.substringFromIndex(1)
         }
         
-        urlPath = ("renderer.nkar" as NSString).stringByAppendingPathComponent(urlPath as String)
+        urlPath = ("app.nkar" as NSString).stringByAppendingPathComponent(urlPath as String)
 
         fileExtension = url.pathExtension!.lowercaseString
         

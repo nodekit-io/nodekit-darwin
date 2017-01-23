@@ -52,7 +52,7 @@ class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
             let splash: [String: AnyObject] = (NKEAppDelegate.options?["nk.splashWindow"] as? [String: AnyObject]) ??  [
                 "nk.browserType": "UIWebView",
                 "title": "",
-                "preloadURL": "renderer://localhost/splash.nkar/splash/views/StartupSplash.html",
+                "preloadURL": "app://localhost/splash.nkar/splash/views/StartupSplash.html",
                 "width": 800,
                 "height": 600,
                 "nk.InstallElectro": false
