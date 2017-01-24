@@ -1,7 +1,7 @@
 /*
 * nodekit.io
 *
-* Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
+* Copyright (c) 2016-7 OffGrid Networks. All Rights Reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -25,22 +25,29 @@ import WebKit
 import UIKit
 
 extension NKE_BrowserWindow {
+  
 
     internal func UIScriptEnvironmentReady() -> Void {
 
         (self._webView as! UIWebView).delegate = self
-        
         self._events.emit("did-finish-load", self._id)
+        
+        
+        (self._webView as! UIWebView).hidden = false
     
     }
 
     internal func createUIWebView(options: Dictionary<String, AnyObject>) -> Int {
-
-        let id = NKScriptContextFactory.sequenceNumber
+        
+        hookKeyboard()
+        
+         let id = NKScriptContextFactory.sequenceNumber
 
         let createBlock = {() -> Void in
 
             let window = self.createWindow(options) as! UIWindow
+            
+            window.backgroundColor =  UIColor.init(netHex: 0x2A91F6)
     
             self._window = window
 
@@ -49,6 +56,12 @@ extension NKE_BrowserWindow {
             // create WebView
             
             let webView: UIWebView = UIWebView(frame: CGRect.zero)
+            
+            webView.contentMode = UIViewContentMode.Redraw
+            
+            webView.scalesPageToFit = false
+            
+            webView.scrollView.scrollEnabled = true
             
             self._webView = webView
 
@@ -63,12 +76,21 @@ extension NKE_BrowserWindow {
             let url = NSURL(string: urlAddress as String)
 
             let requestObj: NSURLRequest = NSURLRequest(URL: url!)
+
             
             webView.loadRequest(requestObj)
             
             window.rootViewController?.view.backgroundColor = UIColor(netHex: 0x2690F6)
+            
+            self._recognizer = UITapGestureRecognizer(target: self, action:#selector(self.dismissTheView))
+            
+            window.addGestureRecognizer((self._recognizer as! UITapGestureRecognizer))
+            
+            webView.hidden = true
         
         }
+        
+   
 
         if (NSThread.isMainThread()) {
         
@@ -82,6 +104,11 @@ extension NKE_BrowserWindow {
 
         return id
     
+    }
+    
+    func dismissTheView(sender:UITapGestureRecognizer) {
+        
+        (self._webView as! UIWebView).endEditing( true);
     }
 
 }

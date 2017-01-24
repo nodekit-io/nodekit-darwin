@@ -1,7 +1,7 @@
 /*
 * nodekit.io
 *
-* Copyright (c) 2016 OffGrid Networks. All Rights Reserved.
+* Copyright (c) 2016-7 OffGrid Networks. All Rights Reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import Foundation
 import WebKit
 
 extension NKE_BrowserWindow {
-
+    
     internal func WKScriptEnvironmentReady() -> Void {
   
         (self._webView as! WKWebView).navigationDelegate = self
@@ -33,7 +33,9 @@ extension NKE_BrowserWindow {
     }
 
     internal func createWKWebView(options: Dictionary<String, AnyObject>) -> Int {
-
+        
+        hookKeyboard()
+        
         let id = NKScriptContextFactory.sequenceNumber
 
         let createBlock = {() -> Void in
