@@ -44,7 +44,9 @@ class NKEAppDelegate: UIResponder, UIApplicationDelegate, NKScriptContextDelegat
         
         var options = NKEAppDelegate.options ?? Dictionary<String, AnyObject>()
         
-        _nodekit!.start(&options, delegate: self)
+        options["nk.ScriptContextDelegate"] = self
+        
+        _nodekit!.start(&options)
        
         NKEventEmitter.global.emit("nk.ApplicationDidFinishLaunching", ())
         

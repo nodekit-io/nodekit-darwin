@@ -20,13 +20,17 @@ import Cocoa
 
 class NKEHostMain {
     
-      class func start(options: Dictionary<String, AnyObject>, delegate nkScriptDelegate: NKScriptContextDelegate?) {
+      class func start(inout options: Dictionary<String, AnyObject>) {
+        
+        options["platform"] = "macos"
+        
+        NKElectroHost.mergePackageOptions(&options)
      
         let app      = NSApplication.sharedApplication()
         
         NKEAppDelegate.options = options;
         
-        NKEAppDelegate.delegate = nkScriptDelegate;
+        NKEAppDelegate.delegate = options["nk.ScriptContextDelegate"] as? NKScriptContextDelegate
         
         let nsDelegate = NKEAppDelegate(app: app)
         
@@ -43,7 +47,6 @@ class NKEHostMain {
                app.setActivationPolicy(.Regular)
             
         }
-     
         
         atexit_b { app.setActivationPolicy(.Prohibited); return }
         

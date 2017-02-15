@@ -22,11 +22,16 @@ import UIKit
 
 public class NKEHostMain {
 
-    public class func start (options: Dictionary<String, AnyObject>, delegate: NKScriptContextDelegate?) {
+    public class func start (inout options: Dictionary<String, AnyObject>) {
+        
+        options["platform"] = "ios"
+        
+        NKElectroHost.mergePackageOptions(&options)
         
         NKEAppDelegate.options = options;
     
-        NKEAppDelegate.delegate = delegate;
+        NKEAppDelegate.delegate = options["nk.ScriptContextDelegate"] as? NKScriptContextDelegate
+     
 
         UIApplicationMain(Process.argc, Process.unsafeArgv, NSStringFromClass(UIApplication),
                           

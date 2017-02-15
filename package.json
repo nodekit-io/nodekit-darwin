@@ -1,6 +1,6 @@
 {
   "name": "nodekit-darwin",
-  "version": "0.8.7",
+  "version": "0.8.12",
   "description": "The universal, open-source, embedded engine that provides a full Node.js instance inside desktop and mobile applications for OS X, iOS, Android, and Windows.",
   "main": "index.js",
   "scripts": {

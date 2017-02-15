@@ -19,6 +19,10 @@
 
 import Foundation
 
+#if os(iOS)
+    import UIKit
+#endif
+
 class NKE_BrowserWindow: NSObject {
     
     internal var _events: NKEventEmitter = NKEventEmitter()

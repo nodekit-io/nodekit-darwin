@@ -39,20 +39,16 @@ class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
         
         let testMode = (NKEAppDelegate.options?["nk.Test"] as? Bool) ?? false
         
-        let noSplash = (NKEAppDelegate.options?["nk.NoSplash"] as? Bool) ?? false
+        let noSplash = (NKEAppDelegate.options?["nk.NoSplash"] as? Bool) ?? true
         
-        if (!testMode && !noSplash)
-            
-        {
-            
+        if (!testMode && !noSplash) {
             
             NKStorage.includeBundle(NSBundle(forClass: NKElectro.self))
-        
-            
+           
             let splash: [String: AnyObject] = (NKEAppDelegate.options?["nk.splashWindow"] as? [String: AnyObject]) ??  [
                 "nk.browserType": "UIWebView",
                 "title": "",
-                "preloadURL": "app://localhost/splash.nkar/splash/views/StartupSplash.html",
+                "preloadURL": "app://splash.nkar/splash/views/StartupSplash.html",
                 "width": 800,
                 "height": 600,
                 "nk.InstallElectro": false
@@ -70,7 +66,9 @@ class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
     
         var options = NKEAppDelegate.options ?? Dictionary<String, AnyObject>()
         
-        nodekit.start(&options, delegate: self)
+        options["nk.ScriptContextDelegate"] = self
+        
+        nodekit.start(&options)
         
         NKEventEmitter.global.emit("nk.ApplicationDidFinishLaunching", ())
      
@@ -85,8 +83,12 @@ class NKEAppDelegate: NSObject, NSApplicationDelegate, NKScriptContextDelegate {
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
-    
-        return false
+        
+        if let main = NKEAppDelegate.options?["main"] as? String where main.hasPrefix("app:") {
+            return true;
+        }
+        
+        return false;
     
     }
     

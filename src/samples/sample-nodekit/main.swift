@@ -50,7 +50,7 @@ NSUserDefaults.standardUserDefaults().synchronize()
     }
 } */
 
-NKElectroHost.start([String: AnyObject](), delegate: myNKDelegate() )
-
+var options : [String: AnyObject] = ["nk.ScriptContextDelegate" : myNKDelegate()]
+NKElectroHost.start(&options)
 
 

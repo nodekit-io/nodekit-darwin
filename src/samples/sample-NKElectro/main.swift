@@ -26,15 +26,10 @@ import NKScripting
 class myNKDelegate: NSObject, NKScriptContextDelegate {
     
     func NKScriptEngineDidLoad(context: NKScriptContext) -> Void {
-        
         SamplePlugin.attachTo(context)
-        // NodeKit.attachTo(context)
-        
-        context.injectJavaScript(NKScriptSource(source: "process.bootstrap('app/index.js');", asFilename: "boot"))
-     }
+    }
     
     func NKScriptEngineReady(context: NKScriptContext) -> Void {
-    
          NKEventEmitter.global.emit("nk.jsApplicationReady", "" as AnyObject)
     }
 }
@@ -43,8 +38,5 @@ NSUserDefaults.standardUserDefaults().setBool(true, forKey: "WebKitDeveloperExtr
 
 NSUserDefaults.standardUserDefaults().synchronize()
 
-NKElectroHost.start([
-    "nk.NoSplash": true,
-    "nk.NoTaskBar": true,
-    "Engine" : NKEngineType.JavaScriptCore.rawValue
-    ], delegate: myNKDelegate() )
+var options : [String: AnyObject] = ["nk.ScriptContextDelegate" : myNKDelegate()]
+NKElectroHost.start(&options)

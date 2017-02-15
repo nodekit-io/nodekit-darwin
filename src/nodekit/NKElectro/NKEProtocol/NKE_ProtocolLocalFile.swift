@@ -61,7 +61,7 @@ class NKE_ProtocolLocalFile: NSURLProtocol {
         
         }
         
-        NKLogging.log("+URL: \(request.URL!.absoluteString)")
+        NKLogging.log("+URL: \(request.URL!.absoluteString!)")
 
         let urlDecode = NKE_ProtocolFileDecode(url: request.URL!)
 
