@@ -106,33 +106,48 @@ BootstrapModule.ln = function(source, dest) {
 
 BootstrapModule.prototype.require = function(id)
 {
-    if (id == 'native_module') {
-        return BootstrapModule;
-    }
-    
-    if (BootstrapModule._symlink[id])
-    {
-        id = BootstrapModule._symlink[id];
-    }
-    else if (id[0] == ".")
-    {
-        id = _absolutePath(this.__dirname + '/', id);
-    }
-    
-    var cached = BootstrapModule.getCached(id);
-    if (cached) {
-        return cached.exports;
-    }
-    
-    process.moduleLoadList.push('BootstrapModule ' + id);
-    
-    var bootstrapModule = new BootstrapModule(id);
-    
-    bootstrapModule.cache();
-    
-    bootstrapModule.load();
-    
-    return bootstrapModule.exports;
+  if (id == 'native_module') {
+      return BootstrapModule;
+  }
+  
+  if (id[0] == ".")
+  {
+      id = _absolutePath(this.__dirname + '/', id);
+  }
+  
+  var cached;
+  
+  var isPossibleDirectoryRequire = id.indexOf('index.js') == -1;
+  var directoryIndexId = id + '/index.js';
+  
+  if (isPossibleDirectoryRequire) {
+      
+      cached = BootstrapModule.getCached(directoryIndexId);
+      
+      if (cached) {
+          return cached.exports
+      }
+  }
+  
+  var cached = BootstrapModule.getCached(id);
+  if (cached) {
+      return cached.exports;
+  }
+  
+  process.moduleLoadList.push('BootstrapModule ' + id);
+  
+  var bootstrapModule = new BootstrapModule(id);
+  
+  bootstrapModule.cache();
+  
+  bootstrapModule.load();
+  
+  if (Object.keys(bootstrapModule.exports).length == 0 && isPossibleDirectoryRequire) {
+      
+      return BootstrapModule.require(directoryIndexId)
+  }
+  
+  return bootstrapModule.exports;
 };
 
 BootstrapModule.require = BootstrapModule.prototype.require
