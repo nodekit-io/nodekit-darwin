@@ -15,3 +15,7 @@
  */
 
 io.nodekit.test.logconsole("STARTING SAMPLE SCRIPTING APPLICATION");
+
+var subIndex = require("./subdirectory")
+
+io.nodekit.test.logconsole("got sub index.js " + subIndex);
