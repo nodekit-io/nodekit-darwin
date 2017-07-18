@@ -110,7 +110,11 @@ BootstrapModule.prototype.require = function(id)
       return BootstrapModule;
   }
   
-  if (id[0] == ".")
+  if (BootstrapModule._symlink[id])
+  {
+      id = BootstrapModule._symlink[id];
+  }
+  else if (id[0] == ".")
   {
       id = _absolutePath(this.__dirname + '/', id);
   }
